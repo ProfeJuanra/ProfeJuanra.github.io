@@ -63,6 +63,14 @@ const PRESENTACIONES = {
       canva: "https://www.canva.com/design/DAG0oHo60Gk/oaKnXLwIdpSaQRMDGtkKLg/view?embed" },
   ],
 
+  // Apartado «Bloques temáticos para la PAU»
+  "historia-espana-pau": [
+    { titulo: "Esquema-resumen del curso",
+      descripcion: "Siglos XIX y XX: los momentos clave que entran en la PAU.",
+      vista: "img/materiales/canva-bloques-pau.jpg",
+      canva: "https://www.canva.com/design/DAGlcoBpmLE/1PE6wkujJ09IKfFZCKQNRA/view?embed" },
+  ],
+
 };
 
 // Galería «Imágenes de la historia»: fotos de hemeroteca e investigación.
