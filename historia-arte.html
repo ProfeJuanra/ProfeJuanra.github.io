@@ -10,7 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="estilo.css">
+<script>/* Carga siempre la versión más reciente del estilo */document.write('<link rel="stylesheet" href="estilo.css?v=' + Date.now() + '">');</script>
+<noscript><link rel="stylesheet" href="estilo.css"></noscript>
 </head>
 <body data-pagina="historia-arte">
 <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -28,7 +29,9 @@
 </div>
 </main>
 <div id="pie"></div>
-<script src="contenidos.js"></script>
-<script src="comun.js"></script>
+<script>/* Carga siempre la versión más reciente de los contenidos */
+var v = Date.now();
+document.write('<script src="contenidos.js?v=' + v + '"><\/script><script src="comun.js?v=' + v + '"><\/script>');
+</script>
 </body>
 </html>
