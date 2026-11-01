@@ -12,7 +12,7 @@
     const oc = new THREE.OrbitControls(camera, lienzo);
     oc.target.set(-2, 0, 0);
     oc.maxPolarAngle = Math.PI * 0.48;
-    oc.minDistance = 2.5; oc.maxDistance = 450;
+    oc.minDistance = 2.5; oc.maxDistance = 600;
     oc.enableDamping = true; oc.dampingFactor = 0.08;
     oc.screenSpacePanning = false;
     oc.addEventListener('change', ctx.pedirRender);
@@ -161,7 +161,8 @@
     let vuelo = null;
     ctx.volarA = function (cam, obj, dur) {
       if (p.activo) ctx.alternarPaseo(false);
-      vuelo = { t: 0, dur: ctx.vueloInstantaneo ? 0.001 : (dur || 1.4), c0: camera.position.clone(), o0: oc.target.clone(), c1: cam.clone(), o1: obj.clone() };
+      const lejos = camera.position.distanceTo(cam);
+      vuelo = { t: 0, dur: ctx.vueloInstantaneo ? 0.001 : (dur || Math.min(4, Math.max(1.4, lejos / 700))), c0: camera.position.clone(), o0: oc.target.clone(), c1: cam.clone(), o1: obj.clone() };
       ctx.pedirRender();
     };
     // Vista en coordenadas del plano: [x, y, altura, tx, ty, taltura]
@@ -175,7 +176,7 @@
       vuelo.t += dt / vuelo.dur;
       const t = Math.min(1, vuelo.t), k = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       // Arco suave: sube un poco a mitad de camino para no atravesar objetos
-      const arco = Math.sin(Math.PI * t) * Math.min(25, vuelo.c0.distanceTo(vuelo.c1) * 0.25);
+      const arco = Math.sin(Math.PI * t) * Math.min(260, vuelo.c0.distanceTo(vuelo.c1) * 0.25);
       camera.position.lerpVectors(vuelo.c0, vuelo.c1, k); camera.position.y += arco;
       oc.target.lerpVectors(vuelo.o0, vuelo.o1, k);
       oc.update();
