@@ -197,3 +197,12 @@ button.ficha{font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer
 .galeria::after{content:'';flex:999 1 0}
 .foto figcaption b{font-size:.95rem}
 @media (max-width:620px){.foto{flex:1 1 100%}}
+
+/* Mosaico de fotos bajo la cabecera */
+.mosaico{background:var(--azul);overflow:hidden;border-top:1px solid rgba(255,255,255,.08);position:relative}
+.mosaico::after{content:'';position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--t1) 0 25%,var(--t2) 25% 50%,var(--t3) 50% 75%,var(--t4) 75%)}
+.mosaico-fila{display:flex;gap:4px;padding:6px 0 10px;width:max-content}
+.tesela{flex:none;height:78px;padding:0;border:0;background:#f4f1ea;border-radius:4px;overflow:hidden;cursor:zoom-in;opacity:.82;transition:opacity .2s,transform .2s}
+.tesela img{height:100%;width:auto;filter:sepia(.25) contrast(1.05)}
+.tesela:hover,.tesela:focus-visible{opacity:1;transform:translateY(-2px)}
+@media (max-width:620px){.tesela{height:54px}}
