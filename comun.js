@@ -69,11 +69,68 @@
     if (url) { a.href = url; a.target = '_blank'; a.rel = 'noopener'; }
   });
 
-  // ---- Unidades con sus materiales ----
+  // ---- Materiales: apartado general y unidades ----
   const NOMBRE_TIPO = { pdf: 'PDF', presentacion: 'Presentación', video: 'Vídeo', actividad: 'Actividad', enlace: 'Enlace' };
+  // Enlaces de Classroom o Drive: solo los abren los alumnos con su cuenta
+  const esPrivado = (url) => /classroom\.google\.com|drive\.google\.com|docs\.google\.com/.test(url || '');
+  const candado = () => el('span', { class: 'candado' }, '🔒 Solo alumnos');
+
+  // Dibuja una lista de materiales: con vista previa en fichas, sin ella en lista
+  function pintarMateriales(mats, destino) {
+    const conVista = mats.filter(m => m.vista);
+    const sinVista = mats.filter(m => !m.vista);
+    if (conVista.length) {
+      const rejilla = el('div', { class: 'fichas' });
+      for (const m of conVista) {
+        const tipo = (m.tipo || 'enlace').toLowerCase();
+        const info = el('div', { class: 'info' },
+          el('span', { class: 'tipo ' + tipo }, NOMBRE_TIPO[tipo] || tipo),
+          el('h3', {}, m.titulo || 'Material'));
+        if (m.descripcion) info.append(el('p', {}, m.descripcion));
+        if (esPrivado(m.enlace)) info.append(candado());
+        info.append(el('span', { class: 'abrir' }, esPrivado(m.enlace) ? 'Abrir en Classroom →' : 'Abrir →'));
+        rejilla.append(el('a', { class: 'ficha', href: m.enlace || '#', target: '_blank', rel: 'noopener' },
+          el('img', { src: m.vista, alt: '', loading: 'lazy' }), info));
+      }
+      destino.append(rejilla);
+    }
+    if (sinVista.length) {
+      const lista = el('ul', { class: 'materiales' });
+      for (const m of sinVista) {
+        const tipo = (m.tipo || 'enlace').toLowerCase();
+        const a = el('a', { href: m.enlace || '#', target: '_blank', rel: 'noopener' },
+          el('span', { class: 'tipo ' + tipo }, NOMBRE_TIPO[tipo] || tipo),
+          el('span', { class: 'nombre' }, m.titulo || 'Material'));
+        if (esPrivado(m.enlace)) a.append(candado());
+        lista.append(el('li', {}, a));
+      }
+      destino.append(lista);
+    }
+  }
+
+  // Aviso de «Solo alumnos», una vez por página, antes del primer material privado
+  let avisoPuesto = false;
+  function aviso(antesDe, mats) {
+    if (avisoPuesto || !mats.some(m => esPrivado(m.enlace))) return;
+    antesDe.before(el('p', { class: 'nota-alumnos' },
+      '🔒 Los materiales marcados como «Solo alumnos» se abren en Google Classroom. Entra con tu cuenta de Educarex para verlos y descargarlos.'));
+    avisoPuesto = true;
+  }
+
+  // Apartado «Materiales» (materiales generales de la asignatura)
+  document.querySelectorAll('[data-materiales]').forEach(caja => {
+    const mats = (typeof MATERIALES !== 'undefined' && MATERIALES[caja.dataset.materiales]) || [];
+    if (!mats.length) return;               // si no hay, el apartado queda oculto
+    aviso(caja, mats);
+    pintarMateriales(mats, caja);
+    caja.closest('section').hidden = false;
+  });
+
+  // Unidades o bloques, cada uno desplegable con sus materiales
   document.querySelectorAll('[data-unidades]').forEach(caja => {
     const unidades = MATERIAS[caja.dataset.unidades] || [];
-    unidades.forEach((u, i) => {
+    aviso(caja, unidades.flatMap(u => u.materiales || []));
+    unidades.forEach(u => {
       const det = el('details', { class: 'unidad' });
       const sum = el('summary', {}, el('span', { class: 't' }, u.titulo));
       if (u.bloque) sum.append(el('small', {}, u.bloque));
@@ -82,15 +139,7 @@
       if (mats.length === 0) {
         dentro.append(el('p', { class: 'vacio' }, 'Los materiales de esta unidad aparecerán aquí muy pronto.'));
       } else {
-        const lista = el('ul', { class: 'materiales' });
-        for (const m of mats) {
-          const tipo = (m.tipo || 'enlace').toLowerCase();
-          const a = el('a', { href: m.enlace || '#', target: '_blank', rel: 'noopener' },
-            el('span', { class: 'tipo ' + tipo }, NOMBRE_TIPO[tipo] || tipo),
-            el('span', {}, m.titulo || 'Material'));
-          lista.append(el('li', {}, a));
-        }
-        dentro.append(lista);
+        pintarMateriales(mats, dentro);
       }
       det.append(sum, dentro);
       caja.append(det);

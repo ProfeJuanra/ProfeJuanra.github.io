@@ -12,6 +12,15 @@
   · titulo: lo que verán tus alumnos
   · enlace: o un archivo subido a la carpeta «materiales»
             o una dirección de internet (YouTube, Drive, Genially…) que empiece por https://
+            Si es un enlace de Google Classroom o de Drive, la web lo marca
+            «Solo alumnos»: solo lo abren tus alumnos con su cuenta de Educarex.
+  · vista (opcional): imagen de vista previa, por ejemplo "img/materiales/u1-apuntes.jpg"
+  · descripcion (opcional): una frase que explica el material
+
+  Ejemplo de material de Classroom con vista previa:
+
+      { tipo: "pdf", titulo: "Apuntes: el relieve", descripcion: "Resumen con mapas.",
+        vista: "img/materiales/u2-apuntes.jpg", enlace: "https://classroom.google.com/..." },
 
   No borres las comas ni las comillas. Si algo falla, pídeselo a Claude.
 */
@@ -24,6 +33,22 @@ const WEB = {
   instagram: "https://www.instagram.com/juan_barbado/",
 };
 
+// Apartado «Materiales» de cada asignatura (materiales generales, no de una unidad)
+const MATERIALES = {
+
+  "historia-espana": [
+    { tipo: "pdf", titulo: "Cuestiones breves resumidas",
+      descripcion: "Resumen de las cuestiones breves para preparar la PAU.",
+      vista: "img/materiales/cuestiones-breves.jpg",
+      enlace: "https://classroom.google.com/w/MjUzNTEwOTg1OTZa/t/all" },
+  ],
+
+  "1eso": [
+  ],
+
+};
+
+// Unidades o bloques de cada asignatura, con sus materiales
 const MATERIAS = {
 
   "1eso": [
