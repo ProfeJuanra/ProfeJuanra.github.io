@@ -11,3 +11,4 @@
 - Todos los modelos 3D, texturas y gráficos SVG son de creación propia: los genera el código del proyecto.
 - No hay modelos ni imágenes de terceros, ni imágenes generadas por IA.
 - No hay sonidos.
+- Para la ropa, los peinados y las posturas de las figuras se usó como **referencia visual** una ilustración de un poblado calcolítico aportada por J. R. Marcos [COMPLETAR: autoría]. No se ha copiado: las figuras son de creación propia.
