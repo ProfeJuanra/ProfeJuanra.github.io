@@ -89,148 +89,127 @@
     return m;
   }
 
-  // Figura de unos 1,6 m mirando hacia +Z local. Devuelve el grupo con articulaciones.
+  // Medidas de la cabeza del cuerpo base (para ajustar pelo y barba)
+  let MED = null;
+  function medidas() {
+    if (MED) return MED;
+    const C = V.cuerpo, hb = C.huesos, cab = hb.find(h => h.n === 'head').p;
+    let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9, z0 = 1e9, z1 = -1e9;
+    for (let i = 0; i < C.zona.length; i++) {
+      if (C.zona[i] !== 0) continue;
+      const x = C.pos[i * 3], y = C.pos[i * 3 + 1], z = C.pos[i * 3 + 2];
+      if (y < cab[1] - 0.02) continue;
+      x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); z0 = Math.min(z0, z); z1 = Math.max(z1, z);
+    }
+    const g = (n) => hb.find(h => h.n === n).p;
+    // Mentón: el punto más bajo de la cara, en la línea central y por delante
+    let menton = 1e9, frente = -1e9;
+    for (let i = 0; i < C.zona.length; i++) {
+      const x = C.pos[i * 3], y = C.pos[i * 3 + 1], z = C.pos[i * 3 + 2];
+      if (C.zona[i] === 0 && Math.abs(x) < 0.015 && z > cab[2] + 0.05) { menton = Math.min(menton, y); frente = Math.max(frente, z); }
+    }
+    MED = {
+      menton: menton - cab[1], frenteZ: frente - cab[2],
+      cab, alto: y1,
+      centro: [(x0 + x1) / 2 - cab[0], (y0 + y1) / 2 - cab[1] + 0.02, (z0 + z1) / 2 - cab[2]],
+      radio: [(x1 - x0) / 2, (y1 - y0) / 2, (z1 - z0) / 2],
+      cintura: g('spine_01')[1], pelvis: g('pelvis'), muslo: g('thigh_l')[1],
+    };
+    return MED;
+  }
+
+  // Persona de unos 1,6 m mirando hacia +Z local. Cuerpo base de MakeHuman (CC0) con esqueleto.
   function persona(alto, i, opciones) {
     const o = opciones || {};
-    const k = alto / 1.6;
+    const M = medidas();
+    const k = alto / M.alto;
+    const estilo = o.estilo || 'tunica';   // tunica | sinMangas | faldellin (torso descubierto)
+    const colPiel = PIELES[i % PIELES.length], colRopa = o.color || ROPAS[i % ROPAS.length];
+    const colPelo = o.canas ? 0x8a847c : PELOS[i % PELOS.length];
     const raiz = new THREE.Group();
     const cuerpo = new THREE.Group(); cuerpo.scale.setScalar(k); raiz.add(cuerpo);
-    const piel = mPiel(PIELES[i % PIELES.length]), ropa = mRopa(o.color || ROPAS[i % ROPAS.length]), pelo = mPelo(o.canas ? 0x6f6a64 : PELOS[i % PELOS.length]);
-    const estilo = o.estilo || 'tunica';   // tunica | sinMangas | faldellin (torso descubierto)
-    const CADERA = 0.86;
-    // Piernas: muslo + rodilla + espinilla + pie
-    const piernas = [], rodillas = [];
-    [-0.085, 0.085].forEach(x => {
-      const muslo = new THREE.Group(); muslo.position.set(x, CADERA, 0);
-      muslo.add(capsula(0.068, 0.052, 0.44, piel));
-      const rod = new THREE.Group(); rod.position.y = -0.43; muslo.add(rod);
-      rod.add(capsula(0.05, 0.04, 0.42, piel));
-      const pie = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 6), o.descalzo ? piel : mCuero());
-      pie.scale.set(0.9, 0.6, 2.1); pie.position.set(0, -0.42, 0.045); pie.castShadow = true;
-      rod.add(pie);
-      cuerpo.add(muslo); piernas.push(muslo); rodillas.push(rod);
+    const malla = V.crearCuerpo({
+      piel: colPiel, ropa: colRopa, calzado: !o.descalzo,
+      vestido: { tronco: estilo !== 'faldellin', brazo: estilo === 'tunica' ? (o.mangaLarga ? 1 : 0.45) : 0, muslo: estilo === 'faldellin' ? 0.25 : 0.5 },
     });
-    // Tronco (pivote en la cadera)
-    const tronco = new THREE.Group(); tronco.position.y = CADERA; cuerpo.add(tronco);
-    const largoTunica = o.tunicaLarga ? -0.62 : -0.42;
-    // Cuerpo de la túnica (sigue al tronco) y falda (cuelga de la cadera, siempre vertical)
-    const pecho = [[0.001, 0.56], [0.1, 0.555], [0.17, 0.5], [0.185, 0.38], [0.16, 0.2], [0.145, 0.1], [0.15, 0.05]];
-    const tunica = perfil(pecho, estilo === 'faldellin' ? piel : ropa, 14);
-    tronco.add(tunica);
-    const largoFalda = estilo === 'faldellin' ? -0.3 : largoTunica;
-    const falda = perfil([[0.152, 0.12], [0.175, 0.0], [0.205, -0.2], [0.235, largoFalda + 0.02], [0.24, largoFalda]], ropa, 18);
-    // Bajo irregular y deshilachado (tejido gastado)
+    cuerpo.add(malla);
+    const H = malla.userData.huesos, a = malla.userData.angA;
+    H.upperarm_l.rotation.z = -a; H.upperarm_r.rotation.z = a;   // brazos junto al cuerpo
+    H.thigh_l.rotation.z = 0.05; H.thigh_r.rotation.z = -0.05;   // piernas algo más juntas
+    if (o.nino) H.head.scale.setScalar(1.14);                    // cabeza proporcionalmente mayor
+    const ropa = mRopa(colRopa), pelo = mPelo(colPelo);
+    // Falda de la túnica o faldellín: cuelga de la pelvis, siempre vertical
+    const pel = H.pelvis, base = M.pelvis;
+    const yCint = M.cintura - base[1] + 0.03;
+    const largo = estilo === 'faldellin' ? 0.3 : (o.tunicaLarga ? 0.72 : 0.5);
+    const falda = perfil([[0.145, yCint], [0.17, yCint - 0.1], [0.19, yCint - 0.25], [0.22, yCint - largo + 0.02], [0.225, yCint - largo]], ropa, 18);
     const pf = falda.geometry.attributes.position;
     for (let v = 0; v < pf.count; v++) {
-      if (pf.getY(v) < largoFalda + 0.03) pf.setY(v, pf.getY(v) + 0.035 * Math.abs(Math.sin(v * 2.3 + i)) - 0.01);
+      if (pf.getY(v) < yCint - largo + 0.03) pf.setY(v, pf.getY(v) + 0.035 * Math.abs(Math.sin(v * 2.3 + i)) - 0.01);   // bajo gastado
+      pf.setZ(v, pf.getZ(v) * 0.82 + 0.01);                                                                       // sección ovalada
     }
     falda.geometry.computeVertexNormals();
     falda.material = falda.material.clone(); falda.material.side = THREE.DoubleSide;
-    falda.position.y = CADERA; cuerpo.add(falda);
-    const cinto = new THREE.Mesh(new THREE.TorusGeometry(0.148, 0.018, 5, 16), mCuero());
-    cinto.rotation.x = Math.PI / 2; cinto.position.y = 0.1; tronco.add(cinto);
-    const cuello = capsula(0.045, 0.045, 0.1, piel); cuello.position.y = 0.64; tronco.add(cuello);
-    // Cabeza
-    const cabeza = new THREE.Group(); cabeza.position.y = 0.69; tronco.add(cabeza);
-    const craneo = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 12), piel);
-    craneo.scale.set(0.9, 1.12, 1.0); craneo.position.y = 0.04; craneo.castShadow = true; cabeza.add(craneo);
-    const nariz = new THREE.Mesh(new THREE.ConeGeometry(0.016, 0.04, 6), piel);
-    nariz.rotation.x = Math.PI / 2 + 0.3; nariz.position.set(0, 0.035, 0.1); cabeza.add(nariz);
-    [-0.033, 0.033].forEach(x => { const e = new THREE.Mesh(new THREE.SphereGeometry(0.011, 6, 4), mOjo()); e.position.set(x, 0.065, 0.085); cabeza.add(e); });
-    [-0.088, 0.088].forEach(x => { const or = new THREE.Mesh(new THREE.SphereGeometry(0.02, 6, 4), piel); or.scale.set(0.5, 1, 0.8); or.position.set(x, 0.045, 0); cabeza.add(or); });
-    // Pelo: casquete irregular, más bajo por detrás y con flequillo desigual
-    const gCab = new THREE.SphereGeometry(0.108, 18, 10, 0, Math.PI * 2, 0, Math.PI * 0.52);
+    pel.add(falda);
+    const cinto = new THREE.Mesh(new THREE.TorusGeometry(0.142, 0.014, 5, 18), mCuero());
+    cinto.rotation.x = Math.PI / 2; cinto.scale.set(1, 0.84, 1); cinto.position.set(0, yCint - 0.01, 0.01); pel.add(cinto);
+    // Pelo, sujeto al hueso de la cabeza
+    const cab = H.head, c = M.centro, r = M.radio;
+    const gCab = new THREE.SphereGeometry(1, 20, 12, 0, Math.PI * 2, 0, Math.PI * 0.56);
     const pc = gCab.attributes.position;
     for (let v = 0; v < pc.count; v++) {
       const x = pc.getX(v), y = pc.getY(v), z = pc.getZ(v);
-      const atras = z < 0 ? -z / 0.108 : 0;
-      pc.setXYZ(v, x * (1 + 0.04 * Math.sin(i + x * 60)), y - atras * 0.03 + 0.006 * Math.sin(x * 90 + i), z);
+      pc.setXYZ(v, x * (1 + 0.04 * Math.sin(i + x * 9)), y + 0.05 * Math.sin(x * 14 + i) * (z > 0 ? 1 : 0.3), z);
     }
     gCab.computeVertexNormals();
     const cabello = new THREE.Mesh(gCab, pelo);
-    cabello.scale.set(1.02, 1.2, 1.1); cabello.position.set(0, 0.05, -0.01); cabello.rotation.x = -0.3;   // flequillo justo por encima de los ojos
-    cabello.castShadow = true; cabeza.add(cabello);
-    [-0.08, 0.08].forEach(x => { const c = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 6), pelo); c.scale.set(0.6, 1.4, 1.3); c.position.set(x, 0.035, -0.02); cabeza.add(c); });   // pelo sobre las orejas
-    const nuca = new THREE.Mesh(new THREE.SphereGeometry(0.085, 12, 8, 0, Math.PI * 2, Math.PI * 0.35, Math.PI * 0.4), pelo);
-    nuca.scale.set(1.05, 1.1, 1); nuca.position.set(0, 0.03, -0.035); cabeza.add(nuca);   // pelo de la nuca
-    [-0.03, 0.03].forEach(x => { const c = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.007, 0.01), pelo); c.position.set(x, 0.088, 0.088); c.rotation.z = x > 0 ? -0.15 : 0.15; cabeza.add(c); });   // cejas
-    if (o.peloLargo) {          // melena o trenza a la espalda
-      const melena = perfil([[0.001, 0.08], [0.085, 0.06], [0.08, -0.1], [0.05, -0.26], [0.001, -0.3]], pelo, 10);
-      melena.scale.set(1.05, 1, 0.55); melena.position.set(0, 0.0, -0.06); cabeza.add(melena);
+    cabello.scale.set(r[0] * 1.16, r[1] * 1.08, r[2] * 1.16);
+    cabello.position.set(c[0], c[1] + r[1] * 0.16, c[2] - r[2] * 0.05);
+    cabello.rotation.x = -0.25;   // el flequillo queda en la frente, por encima de los ojos
+    cabello.castShadow = true; cab.add(cabello);
+    if (o.peloLargo) {
+      const melena = perfil([[0.001, 0.02], [r[0] * 0.95, 0.0], [r[0] * 0.9, -0.16], [r[0] * 0.55, -0.32], [0.001, -0.36]], pelo, 12);
+      melena.scale.set(1.05, 1, 0.5); melena.position.set(c[0], c[1] + r[1] * 0.35, c[2] - r[2] * 0.55); cab.add(melena);
     }
-    if (o.recogido) {           // pelo recogido en la nuca
+    if (o.recogido) {
       const mono = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 8), pelo);
-      mono.scale.set(1, 0.9, 0.8); mono.position.set(0, 0.04, -0.11); cabeza.add(mono);
+      mono.position.set(c[0], c[1] + r[1] * 0.1, c[2] - r[2] * 1.05); cab.add(mono);
     }
     if (o.barba) {
-      // Barba: solo la mandíbula (mitad delantera e inferior de la cabeza)
-      const barba = new THREE.Mesh(new THREE.SphereGeometry(0.094, 14, 8, Math.PI * 0.08, Math.PI * 0.84, Math.PI * 0.6, Math.PI * 0.32), pelo);
-      barba.scale.set(0.95, 1.12, 1.04); barba.position.set(0, 0.04, 0.004); cabeza.add(barba);
+      // Barba: casquete inferior y delantero, apoyado en el mentón
+      const rb = r[0] * 0.92;
+      const barba = new THREE.Mesh(new THREE.SphereGeometry(rb, 14, 8, Math.PI * 0.1, Math.PI * 0.8, Math.PI * 0.42, Math.PI * 0.42), pelo);
+      barba.scale.set(1.02, 1.0, 1.12);
+      barba.position.set(c[0], M.menton + rb * 1.02, c[2] + r[2] * 0.16); cab.add(barba);
     }
-    // Brazos: hombro + codo + antebrazo + mano
-    const brazos = [], codos = [], manos = [];
-    [-0.205, 0.205].forEach(x => {
-      const b = new THREE.Group(); b.position.set(x, 0.5, 0);
-      if (estilo === 'tunica') { const manga = perfil([[0.001, 0.04], [0.07, 0.02], [0.065, -0.14], [0.06, -0.16]], ropa, 9); b.add(manga); }
-      b.add(capsula(0.047, 0.042, 0.3, o.mangaLarga ? ropa : piel));
-      const codo = new THREE.Group(); codo.position.y = -0.29; b.add(codo);
-      codo.add(capsula(0.042, 0.033, 0.26, piel));
-      if (o.mangaLarga) { const pu = perfil([[0.046, 0.02], [0.044, -0.17], [0.04, -0.19]], ropa, 9); codo.add(pu); }
-      const mano = new THREE.Group(); mano.position.y = -0.27; codo.add(mano);
-      const palma = new THREE.Mesh(new THREE.SphereGeometry(0.038, 8, 6), piel);
-      palma.scale.set(0.75, 1.15, 0.5); palma.position.y = -0.03; palma.castShadow = true; mano.add(palma);
-      tronco.add(b); brazos.push(b); codos.push(codo); manos.push(mano);
-    });
-    fusionar(cuerpo);
-    raiz.userData.art = { cuerpo, tronco, cabeza, brazos, codos, manos, piernas, rodillas, k };
+    raiz.userData.art = {
+      cuerpo, k, H,
+      tronco: H.spine_02, cabeza: H.head,
+      brazos: [H.upperarm_l, H.upperarm_r], codos: [H.lowerarm_l, H.lowerarm_r], manos: [H.hand_l, H.hand_r],
+      piernas: [H.thigh_l, H.thigh_r], rodillas: [H.calf_l, H.calf_r],
+      cabezaArriba: new THREE.Vector3(c[0], c[1] + r[1] * 1.1, c[2]),
+    };
     return raiz;
-  }
-
-  // Une las mallas hijas directas de cada articulación que comparten material (menos llamadas de dibujo)
-  function fusionar(grupo) {
-    const porMat = new Map();
-    for (const h of grupo.children.slice()) {
-      if (h.isMesh && !h.children.length) {
-        if (!porMat.has(h.material)) porMat.set(h.material, []);
-        porMat.get(h.material).push(h);
-      } else if (h.isGroup) fusionar(h);
-    }
-    porMat.forEach((mallas, mat) => {
-      if (mallas.length < 2) return;
-      const pos = [], nor = [], uv = [];
-      mallas.forEach(m => {
-        m.updateMatrix();
-        const g = (m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone()).applyMatrix4(m.matrix);
-        pos.push(...g.attributes.position.array); nor.push(...g.attributes.normal.array);
-        if (g.attributes.uv) uv.push(...g.attributes.uv.array); else for (let i = 0; i < g.attributes.position.count; i++) uv.push(0, 0);
-        grupo.remove(m);
-      });
-      const g = new THREE.BufferGeometry();
-      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-      g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
-      g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
-      const u = new THREE.Mesh(g, mat); u.castShadow = true; u.receiveShadow = true;
-      grupo.add(u);
-    });
   }
 
   // Posturas (grados). Brazos y muslos: negativo = hacia delante. Codos: negativo = flexión.
   // Rodillas: positivo = flexión. bajar: descenso de la cadera (m).
   const POSTURAS = {
     pie: { tronco: 0, brazos: [4, -4], codos: [-10, -10], piernas: [0, 0], rodillas: [3, 3], bajar: 0 },
-    moler: { tronco: 42, brazos: [-58, -58], codos: [-25, -25], piernas: [-8, -8], rodillas: [98, 98], bajar: 0.39 },   // de rodillas
-    sentado: { tronco: 18, brazos: [-50, -30], codos: [-55, -60], piernas: [-125, -112], rodillas: [108, 98], bajar: 0.74 },
+    moler: { tronco: 42, brazos: [-58, -58], codos: [-25, -25], piernas: [-8, -8], rodillas: [98, 98], bajar: 0.49 },   // de rodillas
+    sentado: { tronco: 18, brazos: [-50, -30], codos: [-55, -60], piernas: [-125, -112], rodillas: [108, 98], bajar: 0.8 },
     tejer: { tronco: 0, brazos: [-95, -85], codos: [-45, -40], piernas: [0, 6], rodillas: [4, 6], bajar: 0 },
     segar: { tronco: 58, brazos: [-75, -45], codos: [-20, -45], piernas: [-22, 12], rodillas: [28, 12], bajar: 0.07 },
     vara: { tronco: 4, brazos: [-18, 6], codos: [-62, -12], piernas: [4, -6], rodillas: [4, 6], bajar: 0 },
-    agachado: { tronco: 48, brazos: [-70, -60], codos: [-30, -35], piernas: [-100, -95], rodillas: [122, 118], bajar: 0.47 },
+    agachado: { tronco: 48, brazos: [-70, -60], codos: [-30, -35], piernas: [-100, -95], rodillas: [122, 118], bajar: 0.5 },
     hachar: { tronco: 12, brazos: [-150, -140], codos: [-20, -25], piernas: [-14, 12], rodillas: [14, 6], bajar: 0.02 },
     cargar: { tronco: 0, brazos: [-165, -165], codos: [-55, -55], piernas: [8, -8], rodillas: [5, 10], bajar: 0 },   // cesta sobre la cabeza
   };
   function posar(p, nombre) {
-    const a = p.userData.art, s = POSTURAS[nombre];
-    a.tronco.rotation.x = s.tronco * D2R;
-    a.cabeza.rotation.x = -Math.min(35, s.tronco * 0.45) * D2R;    // la cabeza compensa algo la inclinación
+    const a = p.userData.art, s = POSTURAS[nombre], H = a.H;
+    const t = s.tronco * D2R;                     // la inclinación se reparte por la columna
+    H.spine_01.rotation.x = t * 0.4; H.spine_02.rotation.x = t * 0.35; H.spine_03.rotation.x = t * 0.25;
+    H.head.rotation.x = -Math.min(35, s.tronco * 0.5) * D2R;
     for (let i = 0; i < 2; i++) {
       a.brazos[i].rotation.x = s.brazos[i] * D2R;
       a.codos[i].rotation.x = s.codos[i] * D2R;
@@ -372,11 +351,11 @@
       const a = 2.2 + i * 0.5, r = 1.25;
       añadir(situar(vasija(tp, COLORES_CER[c]), hg.x + Math.cos(a) * r, hg.y + Math.sin(a) * r, undefined, undefined, 0.01), N.DOC, 'Cerámica a mano: ' + tp);
     });
-    gente(hg.x + 1.3, hg.y + 0.6, hg.x, hg.y, 'sentado', 1.25, { estilo: 'sinMangas', descalzo: true });   // niño o niña junto al fuego
+    gente(hg.x + 1.3, hg.y + 0.6, hg.x, hg.y, 'sentado', 1.25, { estilo: 'sinMangas', descalzo: true, nino: true });   // niño o niña junto al fuego
 
     // 2. Taller de sílex (PDI 6): talla sentada, núcleos y lascas; trabajo de la madera con hacha de gabro
     const tx = -6, ty = -4;
-    const tallador = gente(tx, ty, tx + 1, ty + 0.3, 'sentado', 1.62, { barba: true, peloLargo: true, estilo: 'faldellin', descalzo: true });
+    const tallador = gente(tx, ty, tx + 1, ty + 0.3, 'sentado', 1.62, { barba: true, peloLargo: true, estilo: 'sinMangas', descalzo: true });
     anim.push(t => { tallador.userData.art.brazos[0].rotation.x = (-55 + 22 * Math.max(0, Math.sin(t * 3.2))) * D2R; });
     for (let i = 0; i < 26; i++) {
       const a = V.azar() * 6.28, r = 0.3 + V.azar() * 0.7;
@@ -386,7 +365,7 @@
     const tronco = cil(0.16, 0.18, 1.6, 0x6e5640, 7); tronco.rotation.z = Math.PI / 2;
     const leño = new THREE.Group(); leño.add(tronco);
     añadir(situar(leño, -9, -7, -8, -7, 0.16), N.DED, 'Tronco para trabajar');
-    const hachero = gente(-9, -6.1, -9, -7, 'hachar', 1.66, { barba: true, estilo: 'faldellin' });
+    const hachero = gente(-9, -6.1, -9, -7, 'hachar', 1.66, { barba: true, estilo: 'sinMangas' });
     const hx = hacha(); hx.position.set(0, 0.06, 0.1); hx.rotation.x = Math.PI;
     hachero.userData.art.manos[1].add(hx); hx.position.set(0, -0.02, 0); hx.rotation.x = Math.PI;
     añadir(hachero, N.HIP, 'Persona');
@@ -403,16 +382,16 @@
     añadir(situar(cesta(0.22), 13.4, 9.3), N.DED, 'Cesta con barro');
     // 5. Llevar grano al silo abierto 22
     const portador = gente(19.6, 9.6, 18.1, 7.9, 'cargar', 1.6, { peloLargo: true, mangaLarga: true });
-    const cs = cesta(0.2); cs.position.set(0, 0.86, 0); portador.userData.art.tronco.add(cs);
+    const cs = cesta(0.2); cs.position.copy(portador.userData.art.cabezaArriba); portador.userData.art.cabeza.add(cs);
     // 6. Limpiar la zanja (trabajo colectivo de mantenimiento)
-    gente(3.3, -11.5, 3.6, -12.5, 'agachado', 1.62, { estilo: 'faldellin', descalzo: true, peloLargo: true });
+    gente(3.3, -11.5, 3.6, -12.5, 'agachado', 1.62, { estilo: 'sinMangas', descalzo: true, peloLargo: true });
     gente(4.6, -9.6, 3.4, -11, 'pie', 1.7, { barba: true, canas: true });
     añadir(situar(cesta(0.24), 4.2, -10.4), N.DED, 'Cesta para sacar tierra');
 
     // 7. Siega del trigo con hoces de sílex en el campo norte, con gavillas
     for (let i = 0; i < 3; i++) {
       const sx = -22 + i * 5, sy = 57.5;
-      const seg = gente(sx, sy, sx + 0.2, sy + 2, 'segar', 1.6 + i * 0.04, [{ estilo: 'sinMangas' }, { peloLargo: true, recogido: true, tunicaLarga: true }, { estilo: 'faldellin', barba: true }][i]);
+      const seg = gente(sx, sy, sx + 0.2, sy + 2, 'segar', 1.6 + i * 0.04, [{ estilo: 'sinMangas' }, { peloLargo: true, recogido: true, tunicaLarga: true }, { estilo: 'sinMangas', barba: true }][i]);
       const h = hoz(); h.position.set(0, -0.05, 0.03); seg.userData.art.manos[0].add(h);
       anim.push(t => { seg.userData.art.brazos[0].rotation.y = 0.5 * Math.sin(t * 1.8 + i); });
     }
