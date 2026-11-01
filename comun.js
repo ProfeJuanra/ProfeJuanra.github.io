@@ -263,19 +263,16 @@
     const fotos = (typeof GALERIA !== 'undefined' && GALERIA[clave]) || [];
     if (!fotos.length) { tira.remove(); return; }
     const fila = el('div', { class: 'mosaico-fila' });
-    // Se repiten las fotos las veces necesarias para llenar pantallas anchas
-    for (let vuelta = 0; vuelta < 3; vuelta++) {
-      fotos.forEach((f, i) => {
-        const b = el('button', { class: 'tesela', type: 'button', title: (f.fecha ? f.fecha + ' · ' : '') + (f.titulo || ''),
-          'aria-label': 'Ver en grande: ' + (f.titulo || 'imagen'), tabindex: vuelta ? '-1' : '0' },
-          el('img', { src: f.mini || f.imagen, alt: '', width: f.ancho || 300, height: f.alto || 200 }));
-        if (vuelta) b.setAttribute('aria-hidden', 'true');
-        b.addEventListener('click', () => {
-          if (abrirGaleria[clave]) abrirGaleria[clave](i);
-        });
-        fila.append(b);
+    // Cada foto aparece una sola vez (las primeras 45, por orden de fecha)
+    fotos.slice(0, 45).forEach((f, i) => {
+      const b = el('button', { class: 'tesela', type: 'button', title: (f.fecha ? f.fecha + ' · ' : '') + (f.titulo || ''),
+        'aria-label': 'Ver en grande: ' + (f.titulo || 'imagen') },
+        el('img', { src: f.mini || f.imagen, alt: '', width: f.ancho || 300, height: f.alto || 200, loading: i < 20 ? 'eager' : 'lazy' }));
+      b.addEventListener('click', () => {
+        if (abrirGaleria[clave]) abrirGaleria[clave](i);
       });
-    }
+      fila.append(b);
+    });
     tira.append(fila);
   });
 
