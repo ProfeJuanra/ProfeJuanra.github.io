@@ -191,3 +191,9 @@ button.ficha{font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer
 @media (max-width:620px){.visor-canva figure{width:calc(100vw - 16px)}}
 [data-presentaciones] .fichas{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
 [data-presentaciones] .ficha img{aspect-ratio:16/9;object-position:center}
+
+/* Galería con muchas fotos: filas justificadas de altura parecida */
+.foto{flex:var(--prop) 1 calc(var(--prop) * 250px);min-width:200px}
+.galeria::after{content:'';flex:999 1 0}
+.foto figcaption b{font-size:.95rem}
+@media (max-width:620px){.foto{flex:1 1 100%}}
