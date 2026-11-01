@@ -19,6 +19,38 @@
 <main id="contenido">
 <header class="cabecera"><img src="img/cabecera-historia-espana.png" alt="" width="2400" height="600"><h1><span class="nivel">2º Bachillerato</span>Historia de España</h1></header>
 <div class="mosaico" data-mosaico="historia-espana" aria-label="Navalmoral en imágenes y a través de la prensa"></div>
+<nav class="secciones" aria-label="Secciones de la asignatura"><div class="contenedor">
+  <button class="boton-seccion" type="button" data-panel="panel-t-c" aria-expanded="false" aria-controls="panel-t-c">Comentario de fuentes históricas</button>
+  <button class="boton-seccion" type="button" data-panel="panel-t-pau" aria-expanded="false" aria-controls="panel-t-pau">Bloques temáticos para la PAU</button>
+  <button class="boton-seccion" type="button" data-panel="panel-t-ev" aria-expanded="false" aria-controls="panel-t-ev">Evaluación</button>
+  <button class="boton-seccion" type="button" data-panel="panel-t-g" aria-expanded="false" aria-controls="panel-t-g">Navalmoral en imágenes y prensa</button>
+</div></nav>
+<div class="contenedor paneles">
+  <section class="seccion panel" id="panel-t-c" aria-labelledby="t-c" hidden>
+    <div class="etiqueta">Aprende a comentar</div>
+    <h2 id="t-c">Comentario de fuentes históricas</h2>
+    <p class="intro" style="margin-bottom:18px">Presentaciones para aprender a comentar textos, mapas, imágenes y otras fuentes. Pulsa una para verla aquí mismo.</p>
+    <div data-presentaciones="historia-espana"></div>
+  </section>
+  <section class="seccion panel" id="panel-t-pau" aria-labelledby="t-pau" hidden>
+    <div class="etiqueta">Prepara la PAU</div>
+    <h2 id="t-pau">Bloques temáticos para la PAU</h2>
+    <p class="intro" style="margin-bottom:18px">Los temas que entran en la PAU de Historia de España, resumidos en un esquema. Pulsa para verlo aquí mismo.</p>
+    <div data-presentaciones="historia-espana-pau"></div>
+  </section>
+  <section class="seccion panel" id="panel-t-ev" aria-labelledby="t-ev" hidden>
+    <div class="etiqueta">Evaluación</div>
+    <h2 id="t-ev">Criterios</h2>
+    <p class="intro" style="margin-bottom:18px">Aquí se muestran los <b>criterios de evaluación</b> de Historia de España, agrupados según la <b>competencia específica</b> a la que están asociados. Cada criterio incluye ejemplos de cómo se trabajará y evaluará a lo largo del curso: acciones evaluables, indicadores de logro, actividades y tareas, y las técnicas e instrumentos de evaluación. Pulsa en un criterio para verlo completo.</p>
+    <div class="evaluacion" data-evaluacion="historia-espana"></div>
+  </section>
+  <section class="seccion panel" id="panel-t-g" aria-labelledby="t-g" hidden>
+    <div class="etiqueta">Fotografías antiguas</div>
+    <h2 id="t-g">Navalmoral en imágenes y a través de la prensa</h2>
+    <p class="intro" style="margin-bottom:18px">Calles, edificios y gentes de Navalmoral de la Mata, junto a portadas y recortes de prensa de la época, ordenados por fecha. Muchas fotografías proceden de la revista <i>Punto de Encuentro</i> (originales de José Mª Guedes). Pulsa una imagen para verla en grande.</p>
+    <div class="galeria" data-galeria="historia-espana"></div>
+  </section>
+</div>
 <div class="contenedor">
   <section class="seccion">
     <p class="intro">Los grandes procesos de la historia de España, con especial atención a los siglos XIX y XX, y la preparación de la PAU. Pulsa en cada bloque para ver sus materiales.</p>
@@ -27,30 +59,6 @@
     <div class="etiqueta">Temario</div>
     <h2 id="t-u">Bloques</h2>
     <div class="unidades" data-unidades="historia-espana"></div>
-  </section>
-  <section class="seccion" aria-labelledby="t-c" hidden>
-    <div class="etiqueta">Aprende a comentar</div>
-    <h2 id="t-c">Comentario de fuentes históricas</h2>
-    <p class="intro" style="margin-bottom:18px">Presentaciones para aprender a comentar textos, mapas, imágenes y otras fuentes. Pulsa una para verla aquí mismo.</p>
-    <div data-presentaciones="historia-espana"></div>
-  </section>
-  <section class="seccion" aria-labelledby="t-pau" hidden>
-    <div class="etiqueta">Prepara la PAU</div>
-    <h2 id="t-pau">Bloques temáticos para la PAU</h2>
-    <p class="intro" style="margin-bottom:18px">Los temas que entran en la PAU de Historia de España, resumidos en un esquema. Pulsa para verlo aquí mismo.</p>
-    <div data-presentaciones="historia-espana-pau"></div>
-  </section>
-  <section class="seccion" aria-labelledby="t-ev" hidden>
-    <div class="etiqueta">Evaluación</div>
-    <h2 id="t-ev">Criterios</h2>
-    <p class="intro" style="margin-bottom:18px">Aquí se muestran los <b>criterios de evaluación</b> de Historia de España, agrupados según la <b>competencia específica</b> a la que están asociados. Cada criterio incluye ejemplos de cómo se trabajará y evaluará a lo largo del curso: acciones evaluables, indicadores de logro, actividades y tareas, y las técnicas e instrumentos de evaluación. Pulsa en un criterio para verlo completo.</p>
-    <div class="evaluacion" data-evaluacion="historia-espana"></div>
-  </section>
-  <section class="seccion" aria-labelledby="t-g" hidden>
-    <div class="etiqueta">Fotografías antiguas</div>
-    <h2 id="t-g">Navalmoral en imágenes y a través de la prensa</h2>
-    <p class="intro" style="margin-bottom:18px">Calles, edificios y gentes de Navalmoral de la Mata, junto a portadas y recortes de prensa de la época, ordenados por fecha. Muchas fotografías proceden de la revista <i>Punto de Encuentro</i> (originales de José Mª Guedes). Pulsa una imagen para verla en grande.</p>
-    <div class="galeria" data-galeria="historia-espana"></div>
   </section>
   <section class="seccion">
     <div class="botones">

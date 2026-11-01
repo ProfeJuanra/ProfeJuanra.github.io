@@ -216,8 +216,7 @@
         const rej = el('div', { class: 'ev-rejilla' });
         [bloque('Acciones evaluables', c.acciones), bloque('Indicadores de logro', c.indicadores),
          bloque('Actividades y tareas', c.actividades, 'ancho'),
-         bloque('Técnicas de evaluación', c.tecnicas), bloque('Instrumentos de evaluación', c.instrumentos),
-         bloque('Conexión con Extremadura', c.notas, 'ancho ev-notas')].forEach(b => b && rej.append(b));
+         bloque('Técnicas de evaluación', c.tecnicas), bloque('Instrumentos de evaluación', c.instrumentos)].forEach(b => b && rej.append(b));
         dentro.append(rej);
         det.append(dentro);
         grupo.append(det);
@@ -318,6 +317,24 @@
       fila.append(b);
     });
     tira.append(fila);
+  });
+
+  // ---- Botones de secciones: cada uno despliega su apartado ----
+  document.querySelectorAll('.boton-seccion').forEach(boton => {
+    const panel = document.getElementById(boton.dataset.panel);
+    if (!panel || panel.hidden) { boton.remove(); return; }   // apartado sin contenido
+    boton.addEventListener('click', () => {
+      const abrir = !panel.classList.contains('abierto');
+      document.querySelectorAll('.boton-seccion').forEach(b => {
+        b.setAttribute('aria-expanded', 'false');
+        document.getElementById(b.dataset.panel)?.classList.remove('abierto');
+      });
+      if (abrir) {
+        panel.classList.add('abierto');
+        boton.setAttribute('aria-expanded', 'true');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   });
 
   // ---- Pie ----

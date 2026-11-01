@@ -226,9 +226,7 @@ button.ficha{font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer
 .ev-criterio summary .t{display:flex;flex-direction:column}
 .ev-criterio[open] .ev-resumen{display:none}
 .ev-dentro{position:relative;padding:4px 18px 18px}
-.ev-dentro::after{content:'';position:absolute;inset:0;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='190'%3E%3Ctext x='150' y='105' text-anchor='middle' transform='rotate(-24 150 95)' font-family='Poppins,Arial,sans-serif' font-size='24' font-weight='700' fill='%230d1033' fill-opacity='.08'%3EProfe JuanRa%3C/text%3E%3C/svg%3E");
-  background-repeat:repeat}
+.ev-dentro::after{content:'';position:absolute;inset:0;pointer-events:none;background:url('img/marca-agua.png') center/min(320px,70%) no-repeat;opacity:.09}
 .ev-texto{margin:0 0 14px;font-size:.96rem}
 .ev-rejilla{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .ev-bloque{background:rgba(238,241,248,.72);border-radius:12px;padding:12px 14px}
@@ -240,3 +238,15 @@ button.ficha{font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer
 .ev-notas{background:rgba(255,240,224,.75);border-left:4px solid var(--naranja)}
 @media (max-width:640px){.ev-rejilla{grid-template-columns:1fr}.ev-dentro{padding:4px 12px 14px}}
 @media print{.evaluacion{display:none}}
+
+/* ---------- Botones de secciones bajo la cabecera ---------- */
+.secciones{background:var(--blanco);border-bottom:1px solid var(--linea)}
+.secciones .contenedor{display:flex;flex-wrap:wrap;gap:8px;padding-top:14px;padding-bottom:14px}
+.boton-seccion{font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;border:2px solid var(--azul);background:var(--blanco);color:var(--azul);padding:8px 16px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s}
+.boton-seccion::after{content:'';width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .2s}
+.boton-seccion:hover{background:var(--gris)}
+.boton-seccion[aria-expanded="true"]{background:var(--azul);color:#fff}
+.boton-seccion[aria-expanded="true"]::after{transform:rotate(-135deg) translateY(-2px)}
+.panel:not(.abierto){display:none}
+.paneles .panel{padding-bottom:12px;border-bottom:1px solid var(--linea)}
+@media (max-width:520px){.boton-seccion{font-size:.84rem;padding:7px 13px}}
