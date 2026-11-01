@@ -48,6 +48,29 @@ const MATERIALES = {
 
 };
 
+// Galería «Imágenes de la historia»: fotos de hemeroteca e investigación.
+// Para añadir una foto: súbela a img/galeria (versión grande y «-mini») y copia un bloque.
+// ancho y alto: medidas de la foto (sirven para que todas queden a la misma altura).
+const GALERIA = {
+
+  "historia-espana": [
+    { imagen: "img/galeria/1931-hospital-antipaludico.jpg",
+      mini: "img/galeria/1931-hospital-antipaludico-mini.jpg", ancho: 1800, alto: 1200,
+      fecha: "1931",
+      titulo: "Hospital antipalúdico",
+      fuente: "España Médica, 1931",
+      bloque: "Segunda República y Guerra Civil" },
+    { imagen: "img/galeria/1933-estampa-campesinos.jpg",
+      mini: "img/galeria/1933-estampa-campesinos-mini.jpg", ancho: 1280, alto: 1800,
+      fecha: "28 de enero de 1933",
+      titulo: "«Los campesinos extremeños invaden las tierras»",
+      texto: "Portada de la revista Estampa sobre la ocupación de fincas en Navalmoral de la Mata.",
+      fuente: "Estampa, nº 264 · Biblioteca Nacional de España",
+      bloque: "Segunda República y Guerra Civil" },
+  ],
+
+};
+
 // Unidades o bloques de cada asignatura, con sus materiales
 const MATERIAS = {
 

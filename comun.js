@@ -146,6 +146,60 @@
     });
   });
 
+  // ---- Galería de imágenes con visor a pantalla completa ----
+  document.querySelectorAll('[data-galeria]').forEach(caja => {
+    const fotos = (typeof GALERIA !== 'undefined' && GALERIA[caja.dataset.galeria]) || [];
+    if (!fotos.length) return;
+    caja.closest('section').hidden = false;
+
+    const visor = el('dialog', { class: 'visor', 'aria-label': 'Imagen ampliada' });
+    const vImg = el('img', { alt: '' });
+    const vPie = el('div', { class: 'visor-pie' });
+    const cerrar = el('button', { class: 'visor-cerrar', type: 'button', 'aria-label': 'Cerrar' }, '✕');
+    const ant = el('button', { class: 'visor-flecha ant', type: 'button', 'aria-label': 'Anterior' }, '‹');
+    const sig = el('button', { class: 'visor-flecha sig', type: 'button', 'aria-label': 'Siguiente' }, '›');
+    visor.append(cerrar, ant, el('figure', {}, vImg, vPie), sig);
+    document.body.append(visor);
+    let actual = 0;
+    const pie = (f, destino) => {
+      destino.replaceChildren();
+      destino.append(el('span', { class: 'fecha' }, f.fecha || ''), el('b', {}, f.titulo || ''));
+      if (f.texto) destino.append(el('span', { class: 'texto' }, f.texto));
+      if (f.fuente) destino.append(el('span', { class: 'fuente' }, 'Fuente: ' + f.fuente));
+    };
+    const mostrar = (i) => {
+      actual = (i + fotos.length) % fotos.length;
+      const f = fotos[actual];
+      vImg.src = f.imagen; vImg.alt = f.titulo || '';
+      pie(f, vPie);
+    };
+    const abrir = (i) => { mostrar(i); visor.showModal(); };
+    cerrar.addEventListener('click', () => visor.close());
+    ant.addEventListener('click', () => mostrar(actual - 1));
+    sig.addEventListener('click', () => mostrar(actual + 1));
+    visor.addEventListener('click', e => { if (e.target === visor) visor.close(); });
+    visor.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') mostrar(actual - 1);
+      if (e.key === 'ArrowRight') mostrar(actual + 1);
+    });
+    if (fotos.length < 2) { ant.hidden = true; sig.hidden = true; }
+
+    fotos.forEach((f, i) => {
+      const prop = (f.ancho && f.alto) ? f.ancho / f.alto : 1.4;
+      const fig = el('figure', { class: 'foto' });
+      fig.style.setProperty('--prop', prop.toFixed(3));
+      const boton = el('button', { class: 'foto-boton', type: 'button', 'aria-label': 'Ampliar: ' + (f.titulo || 'imagen') },
+        el('img', { src: f.mini || f.imagen, alt: f.titulo || '', loading: 'lazy', width: f.ancho || '', height: f.alto || '' }),
+        el('span', { class: 'lupa', 'aria-hidden': 'true' }, '⤢ Ampliar'));
+      boton.addEventListener('click', () => abrir(i));
+      const cap = el('figcaption', {});
+      pie(f, cap);
+      if (f.bloque) cap.append(el('span', { class: 'bloque' }, f.bloque));
+      fig.append(boton, cap);
+      caja.append(fig);
+    });
+  });
+
   // ---- Pie ----
   const pieHueco = document.getElementById('pie');
   if (pieHueco) {
