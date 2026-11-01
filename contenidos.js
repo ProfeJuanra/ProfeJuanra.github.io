@@ -201,6 +201,10 @@ const MATERIAS = {
     { titulo: "4. El medio físico de España y de Extremadura", bloque: "Geografía", materiales: [
     ]},
     { titulo: "5. La Prehistoria", bloque: "Historia", materiales: [
+      { tipo: "actividad", titulo: "Reconstrucción 3D: el poblado de la Isla de Valdecañas",
+        descripcion: "Pasea por un poblado de la Edad del Cobre del Campo Arañuelo, hacia el 2900 a. C.",
+        vista: "img/materiales/poblado-valdecanas.jpg",
+        enlace: "materiales/1eso/poblado-valdecanas/index.html" },
     ]},
     { titulo: "6. Mesopotamia y Egipto", bloque: "Historia", materiales: [
     ]},
