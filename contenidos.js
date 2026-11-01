@@ -37,10 +37,6 @@ const WEB = {
 const MATERIALES = {
 
   "historia-espana": [
-    { tipo: "pdf", titulo: "Cuestiones breves resumidas",
-      descripcion: "Resumen de las cuestiones breves para preparar la PAU.",
-      vista: "img/materiales/cuestiones-breves.jpg",
-      enlace: "https://classroom.google.com/w/MjUzNTEwOTg1OTZa/t/all" },
   ],
 
   "1eso": [
@@ -168,6 +164,10 @@ const MATERIAS = {
 
   "historia-espana": [
     { titulo: "Raíces históricas: de la Prehistoria al siglo XVIII", bloque: "hasta 1788", materiales: [
+      { tipo: "pdf", titulo: "Cuestiones breves resumidas",
+        descripcion: "Resumen de las cuestiones breves para preparar la PAU.",
+        vista: "img/materiales/cuestiones-breves.jpg",
+        enlace: "https://classroom.google.com/w/MjUzNTEwOTg1OTZa/t/all" },
     ]},
     { titulo: "Crisis del Antiguo Régimen", bloque: "1788–1833", materiales: [
     ]},
