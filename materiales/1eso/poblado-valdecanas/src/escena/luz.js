@@ -26,6 +26,7 @@
     const sc = sol.shadow.camera;
     sc.left = -70; sc.right = 70; sc.top = 70; sc.bottom = -70; sc.near = 10; sc.far = 400;
     sol.shadow.bias = -0.0006;
+    sol.shadow.radius = 3;
     sol.shadow.normalBias = 0.04;
     scene.add(sol, sol.target);
 
@@ -39,18 +40,29 @@
     scene.add(cielo);
     scene.fog = new THREE.Fog(0xd9e2e6, 300, 2600);
 
+    const dirSol = new THREE.Vector3(), centro = new THREE.Vector3(), ultimo = new THREE.Vector3(1e9, 0, 0);
+    function colocarSol(forzar) {
+      if (ctx.paseo && ctx.paseo.activo) centro.copy(ctx.camera.position);
+      else if (ctx.orbita) centro.copy(ctx.orbita.target);
+      if (!forzar && centro.distanceToSquared(ultimo) < 16) return;
+      ultimo.copy(centro);
+      sol.target.position.copy(centro);
+      sol.position.copy(centro).add(dirSol);
+      sol.target.updateMatrixWorld();
+      ctx.pedirRender && ctx.pedirRender();
+    }
     ctx.fijarHora = function (hora) {
       const { alt, az } = V.posicionSol(hora);
       const d = 220;
       const ca = Math.cos(alt);
       // Dirección hacia el sol: este = +X, norte = -Z
-      sol.position.set(Math.sin(az) * ca * d, Math.max(Math.sin(alt), 0.02) * d, -Math.cos(az) * ca * d);
-      sol.target.position.set(0, 0, 0);
+      dirSol.set(Math.sin(az) * ca, Math.max(Math.sin(alt), 0.02), -Math.cos(az) * ca).multiplyScalar(d);
+      colocarSol(true);
       const altG = alt * 180 / Math.PI;
       const tarde = 1 - V.paso(4, 25, altG);       // 1 al amanecer o atardecer
       sol.color.copy(mezclaColor(0xfff3dc, 0xff9a52, tarde));
-      sol.intensity = 0.2 + 0.7 * V.paso(-2, 30, altG);
-      hemi.intensity = 0.2 + 0.32 * V.paso(-4, 35, altG);
+      sol.intensity = 0.3 + 1.35 * V.paso(-2, 30, altG);
+      hemi.intensity = 0.3 + 0.55 * V.paso(-4, 35, altG);
       const cenit = mezclaColor(0x5d8fc4, 0x34507a, tarde);
       const horizonte = mezclaColor(0xdfe8ec, 0xf2b07a, tarde);
       if (altG < 0) { cenit.lerp(new THREE.Color(0x1d2840), 0.6); horizonte.lerp(new THREE.Color(0x6a5a6a), 0.5); }
@@ -67,6 +79,8 @@
       ctx.pedirRender && ctx.pedirRender();
     };
     ctx.sol = sol;
+    // La zona de sombras sigue a la cámara (así también hay sombras junto al dolmen)
+    ctx.animadores.push(() => { colocarSol(false); return false; });
     ctx.fijarHora(ctx.horaInicial || 10.5);
   };
 })(window.VALDE);

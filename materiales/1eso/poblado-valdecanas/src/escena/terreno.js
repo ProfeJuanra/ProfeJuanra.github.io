@@ -28,9 +28,12 @@
       const a = j * (nx + 1) + i, b = a + 1, c = a + nx + 1, d = c + 1;
       idx.push(a, c, b, b, c, d);
     }
+    const uvs = new Float32Array((nx + 1) * (ny + 1) * 2);
+    for (let q = 0, w = 0; q < pos.length; q += 3, w += 2) { uvs[w] = pos[q] / 3; uvs[w + 1] = pos[q + 2] / 3; }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    g.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
     g.setIndex(idx);
     g.computeVertexNormals();
     return g;
@@ -43,10 +46,14 @@
     tierra: [0.54, 0.42, 0.29],    // tierra pisada del poblado
     arcilla: [0.62, 0.50, 0.36],
     orilla: [0.52, 0.47, 0.37],
+    ladera: [0.58, 0.49, 0.36],
   };
 
   function colorGeneral(x, y, h) {
     let c = mezcla(C.pasto, C.verde, 0.35 + 0.35 * V.fbm(x / 40 + 3, y / 40));
+    // Laderas de la meseta: suelo más pobre, con más tierra y piedra a la vista
+    const pend = Math.hypot(V.altura(x + 2, y) - V.altura(x - 2, y), V.altura(x, y + 2) - V.altura(x, y - 2)) / 4;
+    c = mezcla(c, C.ladera, V.paso(0.08, 0.3, pend) * 0.75);
     const dr = Math.abs(y - V.yRio(x));
     c = mezcla(c, C.verde, 1 - V.paso(40, 90, dr));            // ribera
     if (y < -16) {                                              // fondo de la vaguada
@@ -77,7 +84,19 @@
   V.construirTerreno = function (ctx) {
     const { scene } = ctx;
     const S = V.SITIO;
-    const matTierra = new THREE.MeshLambertMaterial({ vertexColors: true });
+    // Textura de detalle (hierba seca, tierra y piedrecillas) que se multiplica por los colores del relieve
+    const detalle = V.texturaCanvas(256, 256, (g, w, h) => {
+      g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h);
+      for (let i = 0; i < 5000; i++) {
+        const v = 150 + Math.random() * 105 | 0;
+        g.fillStyle = `rgb(${v},${v},${v * 0.92 | 0})`;
+        const x = Math.random() * w, y = Math.random() * h;
+        if (Math.random() < 0.7) g.fillRect(x, y, 1, 2 + Math.random() * 4); else g.fillRect(x, y, 2, 2);
+      }
+    }, [1, 1]);
+    detalle.wrapS = detalle.wrapT = THREE.RepeatWrapping;
+    detalle.encoding = THREE.LinearEncoding;
+    const matTierra = new THREE.MeshLambertMaterial({ vertexColors: true, map: detalle });
 
     // Relieve general: 900 × 900 m
     const segGeneral = ctx.calidad === 'baja' ? 8 : 6.5;
@@ -199,20 +218,10 @@
     // Llanura intermedia entre el relieve modelado y las sierras
     const anillo = new THREE.RingGeometry(440, R, 64, 1);
     anillo.rotateX(-Math.PI / 2);
-    anillo.translate(0, -6, 0);
+    anillo.translate(0, -12, 0);
     const llano = new THREE.Mesh(anillo, new THREE.MeshBasicMaterial({ color: 0x8f8a5c }));
     llano.name = 'llanura-lejana';
     scene.add(V.marcar(llano, N.HIP, 'Llanura del Campo Arañuelo (esquemática)'));
 
-    // Dolmen de Guadalperal: túmulo a escala real, a unos 3 km al oeste [VERIFICAR distancia y dirección].
-    // A esa distancia casi no se ve: el marcador del punto de interés 10 señala su dirección.
-    const dolmen = new THREE.Group();
-    const tumulo = new THREE.Mesh(new THREE.SphereGeometry(13, 16, 6, 0, Math.PI * 2, 0, Math.PI / 2),
-      new THREE.MeshLambertMaterial({ color: 0x8d8461 }));
-    tumulo.scale.y = 0.3;
-    dolmen.add(tumulo);
-    dolmen.position.set(-3000, -7, 150);
-    dolmen.name = 'dolmen-guadalperal';
-    scene.add(V.marcar(dolmen, N.HIP, 'Dolmen de Guadalperal (posición documentada; visibilidad hipotética)'));
   }
 })(window.VALDE);

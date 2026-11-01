@@ -31,7 +31,24 @@
   function arboleda(ctx, puntos, def) {
     const gTronco = new THREE.CylinderGeometry(def.tronco[0] * 0.7, def.tronco[0], def.tronco[1], 5, 1, true);
     gTronco.translate(0, def.tronco[1] / 2, 0);
-    const gCopa = new THREE.IcosahedronGeometry(1, 0);
+    // Copa formada por tres volúmenes irregulares (silueta más natural que una sola esfera)
+    const gCopa = (function () {
+      const partes = [[0, 0, 0, 1], [0.45, -0.15, 0.25, 0.7], [-0.4, -0.1, -0.3, 0.72]];
+      const pos = [];
+      partes.forEach(([dx, dy, dz, s], n) => {
+        const g = new THREE.IcosahedronGeometry(1, 0).toNonIndexed();
+        const p = g.attributes.position;
+        for (let i = 0; i < p.count; i++) {
+          const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+          const k = 1 + 0.12 * Math.sin(x * 5 + n) * Math.cos(z * 4 - n);
+          pos.push(dx + x * s * k, dy + y * s * k * 0.9, dz + z * s * k);
+        }
+      });
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      g.computeVertexNormals();
+      return g;
+    })();
     const mT = new THREE.InstancedMesh(gTronco, V.mat(def.colorTronco, { flatShading: true }), puntos.length);
     const mC = new THREE.InstancedMesh(gCopa, V.mat(0xffffff, { flatShading: true }), puntos.length);  // el color va en cada instancia
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3();
@@ -57,7 +74,7 @@
     const P = V.paso;
 
     // Encinas: dominan lejos del poblado; claros abiertos alrededor
-    const encinas = sembrar(ctx, Math.round(700 * f), 40000, (x, y, r) => {
+    const encinas = sembrar(ctx, Math.round(560 * f), 40000, (x, y, r) => {
       const d = Math.hypot(x, y - 10);
       const dr = Math.abs(y - V.yRio(x));
       if (dr < 55 || d < 70) return 0;
@@ -78,13 +95,13 @@
     const ribera = sembrar(ctx, Math.round(420 * f), 40000, (x, y, r) => {
       const dr = Math.abs(y - V.yRio(x));
       let ok = dr > 33 && dr < 70;
-      if (y < -40 && y > -230 && Math.abs(x - V.ejeVaguada(y)) < 9) ok = true;
+      if (y < -40 && y > -160 && Math.abs(x - V.ejeVaguada(y)) < 9) ok = true;
       return ok && r < 0.85 ? 0.8 + 0.6 * V.azar() : 0;
     });
     arboleda(ctx, ribera, { tronco: [0.25, 3.6], copa: [2.4, 4.2, 2.4], colorTronco: 0x6b6252, colorCopa: 0x7f9a4c, etiqueta: 'Bosque de ribera' });
 
     // Matorral de jara y retama en los bordes de los claros
-    const mato = sembrar(ctx, Math.round(900 * f), 40000, (x, y, r) => {
+    const mato = sembrar(ctx, Math.round(650 * f), 40000, (x, y, r) => {
       const d = Math.hypot(x, y - 10);
       if (Math.abs(y - V.yRio(x)) < 38 || d < 48) return 0;
       return r < 0.2 + 0.5 * (1 - Math.abs(P(70, 200, d) - 0.5) * 2) ? 0.5 + 0.6 * V.azar() : 0;

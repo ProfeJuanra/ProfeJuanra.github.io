@@ -40,32 +40,40 @@ window.VALDE = window.VALDE || {};
     return t * t * (3 - 2 * t);
   };
 
-  // --- Relieve (HIPÓTESIS: no hay topografía anterior al embalse) ---
-  // Terraza casi llana con leve caída al sur; vaguada que recoge la zanja; el Tajo a ~250 m al sur.
-  V.yRio = function (x) { return -262 + 12 * Math.sin(x / 95) + 6 * Math.sin(x / 37 + 1); };
-  V.NIVEL_AGUA = -9.0;
-  V.ejeVaguada = function (y) { return -0.6 + 0.28 * (y + 24) + 6 * Math.sin(y / 40); };
+  // --- Relieve ---
+  // El poblado está en lo alto de una pequeña meseta con el Tajo al sur (testimonio del excavador,
+  // J. R. Marcos, 01/11/2026). La forma de la meseta, su altura (~16 m sobre la vega) y la distancia
+  // al río (~180 m) son HIPÓTESIS [VERIFICAR]: no hay topografía anterior al embalse.
+  V.yRio = function (x) { return -182 + 14 * Math.sin(x / 110) + 6 * Math.sin(x / 41 + 1); };
+  V.NIVEL_AGUA = -17.5;
+  V.ALTURA_MESETA = 16;
+  V.ejeVaguada = function (y) { return -0.6 + 0.28 * (y + 24) + 5 * Math.sin(y / 40); };
+
+  // 1 en lo alto de la meseta, 0 fuera (borde irregular)
+  V.enMeseta = function (x, y) {
+    const e = Math.hypot((x - 5) / 150, (y - 25) / 122) + 0.1 * V.fbm(x / 55, y / 55);
+    return 1 - V.paso(0.98, 1.32, e);
+  };
 
   V.altura = function (x, y) {
     const P = V.paso;
-    let h = 0.004 * y;                              // terraza: el norte algo más alto
-    h -= 7.6 * P(-40, -235, y);                     // bajada hacia el río
-    h += 2.5 * P(40, 420, y);                       // suave subida hacia el norte
-    h += 13 * P(-300, -430, y);                     // ladera de la otra orilla
-    // ondulaciones lejos del sitio (el sector excavado se mantiene casi llano)
-    const r = Math.hypot(x, y);
-    h += V.fbm(x / 70, y / 70) * 1.6 * P(45, 160, r);
+    const m = V.enMeseta(x, y);
+    // Alrededor: la llanura queda unos 8 m más baja al norte y la vega del Tajo, ~16 m al sur
+    const fuera = -8 - 8 * P(-20, -120, y) + 1.2 * V.fbm(x / 80, y / 80) + 20 * P(-250, -400, y);
+    let h = m * (0.003 * y) + (1 - m) * fuera;
     h += V.fbm(x / 9, y / 9) * 0.05;
-    // vaguada
+    const r = Math.hypot(x, y - 10);
+    h += V.fbm(x / 40, y / 40) * 0.8 * P(60, 140, r) * m;     // el sector excavado queda casi llano
+    // vaguada: recoge la zanja y corta el borde sur de la meseta
     if (y < -16) {
-      const prof = 0.7 * P(-16, -30, y) + 2.2 * P(-30, -150, y);
-      const ancho = 5 + 0.07 * (-y);
+      const prof = 0.7 * P(-16, -30, y) + 3.5 * P(-30, -110, y) * m;
+      const ancho = 5 + 0.08 * (-y);
       const dx = (x - V.ejeVaguada(y)) / ancho;
       h -= prof * Math.exp(-dx * dx);
     }
     // cauce del Tajo
     const dr = Math.abs(y - V.yRio(x));
-    h -= 3.2 * (1 - P(28, 52, dr));
+    h -= 3.0 * (1 - P(26, 48, dr));
     return h;
   };
 
@@ -119,6 +127,7 @@ window.VALDE = window.VALDE || {};
   // Altura del suelo en cualquier punto: detalle dentro del sector, relieve general fuera
   V.alturaSitioOGeneral = function (x, y) {
     const S = V.SITIO;
+    if (V.DOLMEN && V.alturaDolmen !== undefined && Math.hypot(x - V.DOLMEN.x, y - V.DOLMEN.y) < 140) return V.alturaDolmen;
     return (x > S.x0 && x < S.x1 && y > S.y0 && y < S.y1) ? V.alturaSitio(x, y) : V.altura(x, y);
   };
 
