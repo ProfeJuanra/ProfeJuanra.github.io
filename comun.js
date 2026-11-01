@@ -184,6 +184,50 @@
     caja.append(rejilla);
   });
 
+  // ---- Criterios de evaluación (solo lectura, con marca de agua) ----
+  document.querySelectorAll('[data-evaluacion]').forEach(caja => {
+    const lista = (typeof EVALUACION !== 'undefined' && EVALUACION[caja.dataset.evaluacion]) || [];
+    if (!lista.length) return;
+    caja.closest('section').hidden = false;
+    const conHtml = (tag, clase, h) => { const e = el(tag, clase ? { class: clase } : {}); e.innerHTML = h; return e; };
+    const bloque = (titulo, items, clase) => {
+      if (!items || !items.length) return null;
+      const ul = el('ul', {});
+      items.forEach(h => ul.append(conHtml('li', '', h)));
+      if (items.every(h => /^(<b>)?\s*\d+\./.test(h))) ul.className = 'numerada';
+      return el('div', { class: 'ev-bloque ' + (clase || '') }, el('h4', {}, titulo), ul);
+    };
+    // Agrupar por competencia específica
+    const grupos = new Map();
+    lista.forEach(c => {
+      if (!grupos.has(c.competencia)) grupos.set(c.competencia, []);
+      grupos.get(c.competencia).push(c);
+    });
+    grupos.forEach((crits, num) => {
+      const texto = crits.map(c => c.textoCompetencia).sort((a, b) => b.length - a.length)[0];
+      const grupo = el('div', { class: 'ev-competencia' },
+        el('div', { class: 'ev-ce' }, el('span', { class: 'ev-num' }, 'CE ' + num),
+          el('div', {}, el('h3', {}, 'Competencia específica ' + num), el('p', {}, texto))));
+      crits.forEach(c => {
+        const det = el('details', { class: 'unidad ev-criterio' });
+        det.append(el('summary', {}, el('span', { class: 't' }, el('b', {}, 'Criterio ' + c.codigo), ' ', el('span', { class: 'ev-resumen' }, c.criterio))));
+        const dentro = el('div', { class: 'ev-dentro' });
+        dentro.append(el('p', { class: 'ev-texto' }, el('b', {}, 'Criterio ' + c.codigo + '. '), c.criterio));
+        const rej = el('div', { class: 'ev-rejilla' });
+        [bloque('Acciones evaluables', c.acciones), bloque('Indicadores de logro', c.indicadores),
+         bloque('Actividades y tareas', c.actividades, 'ancho'),
+         bloque('Técnicas de evaluación', c.tecnicas), bloque('Instrumentos de evaluación', c.instrumentos),
+         bloque('Conexión con Extremadura', c.notas, 'ancho ev-notas')].forEach(b => b && rej.append(b));
+        dentro.append(rej);
+        det.append(dentro);
+        grupo.append(det);
+      });
+      caja.append(grupo);
+    });
+    // Solo lectura: sin menú contextual, sin copiar ni arrastrar
+    ['contextmenu', 'copy', 'cut', 'dragstart'].forEach(ev => caja.addEventListener(ev, e => e.preventDefault()));
+  });
+
   // ---- Galería de imágenes con visor a pantalla completa ----
   const abrirGaleria = {};
   document.querySelectorAll('[data-galeria]').forEach(caja => {
