@@ -242,9 +242,10 @@ button.ficha{font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer
 /* ---------- Botones de secciones bajo la cabecera ---------- */
 .secciones{background:var(--blanco);border-bottom:1px solid var(--linea)}
 .secciones .contenedor{display:flex;flex-wrap:wrap;gap:8px;padding-top:14px;padding-bottom:14px}
-.boton-seccion{font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;border:2px solid var(--azul);background:var(--blanco);color:var(--azul);padding:8px 16px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s}
+.boton-seccion,.boton-enlace{text-decoration:none;font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;border:2px solid var(--azul);background:var(--blanco);color:var(--azul);padding:8px 16px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s}
 .boton-seccion::after{content:'';width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .2s}
-.boton-seccion:hover{background:var(--gris)}
+.boton-seccion:hover,.boton-enlace:hover{background:var(--gris)}
+.boton-enlace::after{content:'↗';font-weight:700}
 .boton-seccion[aria-expanded="true"]{background:var(--azul);color:#fff}
 .boton-seccion[aria-expanded="true"]::after{transform:rotate(-135deg) translateY(-2px)}
 .panel:not(.abierto){display:none}
