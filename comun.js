@@ -146,6 +146,44 @@
     });
   });
 
+  // ---- Presentaciones de Canva: se ven en la propia web, sin descargar ----
+  document.querySelectorAll('[data-presentaciones]').forEach(caja => {
+    const lista = (typeof PRESENTACIONES !== 'undefined' && PRESENTACIONES[caja.dataset.presentaciones]) || [];
+    if (!lista.length) return;
+    caja.closest('section').hidden = false;
+
+    const visor = el('dialog', { class: 'visor visor-canva', 'aria-label': 'Presentación' });
+    const marco = el('div', { class: 'marco' });
+    const titulo = el('b', {});
+    const cerrar = el('button', { class: 'visor-cerrar', type: 'button', 'aria-label': 'Cerrar' }, '✕');
+    visor.append(cerrar, el('figure', {}, marco, el('div', { class: 'visor-pie' }, titulo)));
+    document.body.append(visor);
+    const cerrarVisor = () => { visor.close(); };
+    visor.addEventListener('close', () => marco.replaceChildren());   // para el iframe al cerrar
+    cerrar.addEventListener('click', cerrarVisor);
+    visor.addEventListener('click', e => { if (e.target === visor) cerrarVisor(); });
+
+    const rejilla = el('div', { class: 'fichas' });
+    for (const p of lista) {
+      const listo = /^https:\/\/www\.canva\.com\/design\/[^/]+\/[^/]+\/view/.test(p.canva || '');
+      const info = el('div', { class: 'info' },
+        el('span', { class: 'tipo presentacion' }, 'Presentación'),
+        el('h3', {}, p.titulo));
+      if (p.descripcion) info.append(el('p', {}, p.descripcion));
+      info.append(el('span', { class: 'abrir' }, listo ? 'Ver presentación →' : 'Disponible muy pronto'));
+      const ficha = el('button', { class: 'ficha', type: 'button' }, el('img', { src: p.vista, alt: '', loading: 'lazy' }), info);
+      if (!listo) { ficha.disabled = true; ficha.classList.add('pronto'); }
+      ficha.addEventListener('click', () => {
+        const url = p.canva.split('?')[0] + '?embed';
+        marco.replaceChildren(el('iframe', { src: url, title: p.titulo, loading: 'lazy', allow: 'fullscreen', allowfullscreen: '' }));
+        titulo.textContent = p.titulo;
+        visor.showModal();
+      });
+      rejilla.append(ficha);
+    }
+    caja.append(rejilla);
+  });
+
   // ---- Galería de imágenes con visor a pantalla completa ----
   document.querySelectorAll('[data-galeria]').forEach(caja => {
     const fotos = (typeof GALERIA !== 'undefined' && GALERIA[caja.dataset.galeria]) || [];

@@ -48,6 +48,23 @@ const MATERIALES = {
 
 };
 
+// Presentaciones de Canva que se ven DENTRO de la web (sin botón de descarga).
+// canva: el enlace de «Insertar» de Canva (termina en /view?embed). Nunca el de edición.
+const PRESENTACIONES = {
+
+  "historia-espana": [
+    { titulo: "Paso a paso para comentar fuentes históricas",
+      descripcion: "Textos, imágenes, fotografías, gráficas y viñetas.",
+      vista: "img/materiales/canva-paso-a-paso.jpg",
+      canva: "https://www.canva.com/design/DAHWgBHCTUE/J7J_lf2FREfFNLQbRrUung/view?embed" },
+    { titulo: "Esquema para comentar textos y mapas históricos",
+      descripcion: "Clasificación, análisis, contextualización y valoración crítica.",
+      vista: "img/materiales/canva-esquema.jpg",
+      canva: "https://www.canva.com/design/DAG0oHo60Gk/oaKnXLwIdpSaQRMDGtkKLg/view?embed" },
+  ],
+
+};
+
 // Galería «Imágenes de la historia»: fotos de hemeroteca e investigación.
 // Para añadir una foto: súbela a img/galeria (versión grande y «-mini») y copia un bloque.
 // ancho y alto: medidas de la foto (sirven para que todas queden a la misma altura).
