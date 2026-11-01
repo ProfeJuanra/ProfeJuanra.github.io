@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Valdecañas en texto</title>
+<meta name="description" content="Todas las fichas de la reconstrucción del poblado calcolítico de la Isla de Valdecañas, sin 3D.">
+<link rel="icon" href="assets/icono.svg" type="image/svg+xml">
+<link rel="stylesheet" href="src/estilo.css">
+<style>
+  body { overflow: auto; }
+  main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin: 0 0 4px; }
+  .sub { color: var(--suave); margin: 0 0 16px; }
+  .aviso3d { background: var(--acento-fondo); border-radius: 10px; padding: 10px 14px; }
+  img.ancha { width: 100%; height: auto; border: 1px solid var(--borde); border-radius: 10px; background: #fbf8f1; }
+  .ficha { border-top: 2px solid var(--borde); padding-top: 12px; margin-top: 28px; }
+  .ficha h2 { margin: 0 0 4px; }
+  .ficha h3 { font-size: 1rem; margin: 14px 0 4px; }
+  .facil { font-size: 1.2rem; line-height: 1.7; }
+  .fuente { font-size: .88rem; color: var(--suave); }
+  dl.glosario dt { font-weight: 700; margin-top: 8px; }
+  dl.glosario dd { margin: 0 0 0 0; }
+  .niveles li { margin: 4px 0; }
+  .toc { columns: 2; padding-left: 20px; }
+  @media (max-width: 600px) { .toc { columns: 1; } }
+  .selector { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 0; }
+  .oculto { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <p id="aviso" class="aviso3d" hidden>Tu navegador no puede mostrar la escena 3D. Aquí tienes toda la información en texto.</p>
+  <h1 id="t"></h1>
+  <p class="sub" id="s"></p>
+  <p><a href="index.html">← Volver a la reconstrucción 3D</a></p>
+  <p id="intro"></p>
+
+  <h2>Cómo leer esta reconstrucción</h2>
+  <ul class="niveles" id="niveles"></ul>
+
+  <h2>Plano del poblado</h2>
+  <img class="ancha" src="docs/plano.svg" alt="Plano esquemático del sector excavado: la cabaña 31 al oeste; la zanja de drenaje en diagonal hacia la vaguada al sur; los silos agrupados al este de la zanja; el hogar 11/4 al sureste; tres cabañas hipotéticas; y la numeración de los diez puntos de interés.">
+
+  <h2>Dónde y cuándo</h2>
+  <img class="ancha" src="assets/mapa-situacion.svg" alt="Croquis del Campo Arañuelo con los ríos Tajo y Tiétar, el embalse de Valdecañas y la zona aproximada del yacimiento entre El Gordo y Berrocalejo.">
+  <p class="fuente">Croquis sin escala exacta. No se indica el punto exacto del yacimiento para protegerlo.</p>
+  <img class="ancha" src="assets/linea-tiempo.svg" alt="Línea del tiempo: Neolítico hasta hacia 3200 a. C.; Calcolítico de 3200 a 2200 a. C.; Edad del Bronce de 2200 a 850 a. C.; Edad del Hierro desde 850 a. C. Valdecañas se sitúa a finales del IV milenio y en la primera mitad del III milenio a. C.">
+
+  <h2>Puntos de interés</h2>
+  <p>Elige el nivel de lectura:</p>
+  <div class="selector" role="group" aria-label="Nivel de lectura">
+    <button type="button" data-nivel="todo" aria-pressed="true">Todo</button>
+    <button type="button" data-nivel="basico" aria-pressed="false">Básico</button>
+    <button type="button" data-nivel="ampliacion" aria-pressed="false">Ampliación</button>
+    <button type="button" data-nivel="facil" aria-pressed="false">Lectura fácil</button>
+  </div>
+  <ol class="toc" id="toc"></ol>
+  <div id="fichas"></div>
+
+  <h2 id="glosario-t" class="ficha">Glosario</h2>
+  <dl class="glosario" id="glosario"></dl>
+
+  <p class="fuente">Reconstrucción basada en la excavación de 2008 (dirección: D. A. Lara Montero; equipo: J. A. Valiente De Santis y J. R. Marcos Barbado). Las fuentes de cada ficha aparecen al final de la misma. Modelos y gráficos de creación propia.</p>
+</main>
+<script src="src/datos/fichas.js"></script>
+<script>
+(function (V) {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  if (new URLSearchParams(location.search).get('sin3d')) $('aviso').hidden = false;
+  $('t').textContent = V.intro.titulo;
+  $('s').textContent = V.intro.subtitulo;
+  $('intro').textContent = V.intro.texto;
+  const nombres = { 1: 'Documentado', 2: 'Deducido', 3: 'Hipótesis' };
+  $('niveles').innerHTML = [1, 2, 3].map(n => `<li><span class="chip n${n}">${nombres[n]}</span> ${esc(V.niveles[n].desc)}</li>`).join('');
+  $('toc').innerHTML = V.fichas.map(f => `<li><a href="#f${f.n}">${esc(f.titulo)}</a></li>`).join('');
+  $('fichas').innerHTML = V.fichas.map(f => `
+    <section class="ficha" id="f${f.n}" aria-labelledby="h${f.n}">
+      <h2 id="h${f.n}">${f.n}. ${esc(f.titulo)}</h2>
+      <p>${f.nivel.map(n => `<span class="chip n${n}">${nombres[n]}</span>`).join(' ')} ${esc(f.nivelTexto)}</p>
+      <div data-bloque="basico"><h3>Básico</h3><p>${esc(f.basico)}</p></div>
+      <div data-bloque="ampliacion"><h3>Ampliación</h3><p>${esc(f.ampliacion)}</p></div>
+      <div data-bloque="facil"><h3>Lectura fácil</h3><div class="facil">${f.facil.split(/(?<=\.)\s+/).map(s => `<p>${esc(s)}</p>`).join('')}</div></div>
+      <p class="fuente">Fuente: ${esc(f.fuente)}</p>
+    </section>`).join('');
+  $('glosario').innerHTML = V.glosario.map(([t, d]) => `<dt>${esc(t)}</dt><dd>${esc(d)}</dd>`).join('');
+  document.querySelector('.selector').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const n = b.dataset.nivel;
+    document.querySelectorAll('.selector button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    document.querySelectorAll('[data-bloque]').forEach(d => d.classList.toggle('oculto', n !== 'todo' && d.dataset.bloque !== n));
+  });
+})(window.VALDE);
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Poblado de Valdecañas</title>
+<meta name="description" content="Reconstrucción virtual del asentamiento de la Edad del Cobre de la Isla de Valdecañas (Cáceres), hacia el 2900 a. C.">
+<link rel="icon" href="assets/icono.svg" type="image/svg+xml">
+<link rel="stylesheet" href="src/estilo.css">
+</head>
+<body>
+<a class="saltar" href="texto.html">Ir al modo solo texto (sin 3D)</a>
+<div id="escena" aria-label="Escena 3D del poblado. Usa la lista de puntos de interés para explorarla con el teclado."></div>
+<div id="cargando" role="status">Cargando el poblado…</div>
+<noscript><p class="aviso">Esta reconstrucción necesita JavaScript. Puedes leer todas las fichas en <a href="texto.html">el modo solo texto</a>.</p></noscript>
+
+<header id="cabecera" class="tarjeta">
+  <h1 id="titulo">Poblado de la Isla de Valdecañas</h1>
+  <p class="sub" id="subtitulo"></p>
+  <details id="intro-det">
+    <summary>¿Qué estoy viendo?</summary>
+    <p id="intro-texto"></p>
+  </details>
+</header>
+
+<nav id="barra" class="tarjeta" aria-label="Herramientas">
+  <button type="button" id="b-pasear" aria-pressed="false" title="Paseo a pie (tecla P)"><span aria-hidden="true">🚶</span><span class="et">Pasear</span></button>
+  <button type="button" id="b-evidencia" aria-pressed="false" title="Capa de evidencia (tecla E)"><span aria-hidden="true">◐</span><span class="et">Evidencia</span></button>
+  <button type="button" id="b-comparar" aria-pressed="false" title="Comparar 2008 y la reconstrucción (tecla C)"><span aria-hidden="true">⇆</span><span class="et">2008 / entonces</span></button>
+  <button type="button" id="b-mapa" title="Mapa y línea del tiempo (tecla M)"><span aria-hidden="true">🗺</span><span class="et">Mapa y tiempo</span></button>
+  <button type="button" id="b-captura" title="Guardar una imagen PNG"><span aria-hidden="true">📷</span><span class="et">Captura</span></button>
+  <button type="button" id="b-ayuda" title="Ayuda (tecla H)"><span aria-hidden="true">?</span><span class="et">Ayuda</span></button>
+  <label class="hora" title="Hora del día (21 de junio)"><span aria-hidden="true">☀</span>
+    <span class="et">Hora</span>
+    <input type="range" id="r-hora" min="6" max="21" step="0.25" value="10.5" aria-label="Hora del día">
+    <output id="o-hora">10:30</output>
+  </label>
+</nav>
+
+<nav id="lista-pdi" class="tarjeta" aria-label="Puntos de interés">
+  <h2>Puntos de interés</h2>
+  <ol id="pdi-ol"></ol>
+  <button type="button" id="b-vista-general" class="enlace">Vista general</button>
+</nav>
+
+<aside id="panel" class="tarjeta" role="dialog" aria-modal="false" aria-labelledby="panel-titulo" hidden>
+  <button type="button" class="cerrar" id="panel-cerrar" aria-label="Cerrar ficha">×</button>
+  <p class="num" id="panel-num"></p>
+  <h2 id="panel-titulo"></h2>
+  <p class="nivel" id="panel-nivel"></p>
+  <div class="pestanas" role="tablist" aria-label="Nivel de lectura">
+    <button type="button" role="tab" id="t-basico" aria-selected="true" aria-controls="panel-texto">Básico</button>
+    <button type="button" role="tab" id="t-ampliacion" aria-selected="false" aria-controls="panel-texto">Ampliación</button>
+    <button type="button" role="tab" id="t-facil" aria-selected="false" aria-controls="panel-texto">Lectura fácil</button>
+  </div>
+  <div id="panel-texto" role="tabpanel" tabindex="0"></div>
+  <div id="panel-extra"></div>
+  <p class="fuente" id="panel-fuente"></p>
+  <div class="nav-fichas">
+    <button type="button" id="panel-ant">← Anterior</button>
+    <button type="button" id="panel-sig">Siguiente →</button>
+  </div>
+</aside>
+
+<div id="leyenda" class="tarjeta" hidden>
+  <h2>Nivel de evidencia</h2>
+  <ul>
+    <li><span class="muestra doc"></span><b>Documentado</b>: hallado en Valdecañas</li>
+    <li><span class="muestra ded"></span><b>Deducido</b>: por otros yacimientos de la época</li>
+    <li><span class="muestra hip"></span><b>Hipótesis</b>: propuesta razonada</li>
+  </ul>
+</div>
+
+<div id="comparador" class="tarjeta" hidden>
+  <label for="r-comparar">Excavación de 2008 <span aria-hidden="true">◀ ▶</span> Reconstrucción (hacia 2900 a. C.)</label>
+  <input type="range" id="r-comparar" min="0" max="1" step="0.005" value="0.5">
+</div>
+
+<div id="mando" hidden aria-hidden="true"><div id="mando-bola"></div></div>
+<p id="aviso-paseo" class="tarjeta" hidden>Paseo a pie: <b>W A S D</b> o flechas para andar · arrastra para mirar · <b>P</b> para salir</p>
+
+<dialog id="d-ayuda" aria-labelledby="ayuda-t">
+  <h2 id="ayuda-t">Cómo se usa</h2>
+  <ul>
+    <li><b>Girar la vista:</b> arrastra con el ratón o con un dedo. <b>Acercar:</b> rueda del ratón o pellizco. <b>Desplazar:</b> botón derecho o dos dedos.</li>
+    <li><b>Puntos de interés:</b> pulsa un número en la escena o en la lista. Cada ficha tiene tres niveles: básico, ampliación y lectura fácil.</li>
+    <li><b>Pasear:</b> recorre el poblado a la altura de una persona. Teclado: W A S D o flechas; Mayúsculas para correr. En pantalla táctil, usa el mando redondo.</li>
+    <li><b>Evidencia:</b> colorea cada elemento según lo seguros que estamos de él.</li>
+    <li><b>2008 / entonces:</b> mueve el deslizador para comparar lo que se excavó en 2008 con la reconstrucción.</li>
+    <li><b>Teclado:</b> Tab recorre los botones y puntos; Intro abre; Esc cierra. Teclas rápidas: P, E, C, M, H y los números 1 a 9 (0 = punto 10).</li>
+  </ul>
+  <p>¿Prefieres leer sin 3D? <a href="texto.html">Modo solo texto</a>.</p>
+  <p><label><input type="checkbox" id="c-calidad"> Calidad baja (para equipos lentos o móviles)</label></p>
+  <form method="dialog"><button>Cerrar</button></form>
+</dialog>
+
+<dialog id="d-mapa" aria-labelledby="mapa-t">
+  <h2 id="mapa-t">Dónde y cuándo</h2>
+  <div class="dos">
+    <figure><img src="assets/mapa-situacion.svg" alt="Croquis del Campo Arañuelo con el río Tajo, el embalse de Valdecañas, Navalmoral de la Mata, El Gordo y Berrocalejo, y la zona aproximada del yacimiento."><figcaption>Croquis de situación (sin escala exacta). No se indica el punto exacto del yacimiento para protegerlo.</figcaption></figure>
+    <figure><img src="assets/linea-tiempo.svg" alt="Línea del tiempo: Neolítico hasta hacia 3200 a. C.; Calcolítico entre 3200 y 2200 a. C.; Edad del Bronce entre 2200 y 850 a. C.; Edad del Hierro desde 850 a. C. Valdecañas se sitúa al principio del Calcolítico."><figcaption>Fechas aproximadas (a. C. calibrados); cambian según la región.</figcaption></figure>
+  </div>
+  <form method="dialog"><button>Cerrar</button></form>
+</dialog>
+
+<p id="avisos" class="vh" aria-live="polite"></p>
+
+<script src="src/vendor/three.min.js"></script>
+<script src="src/vendor/OrbitControls.js"></script>
+<script src="src/datos/estructuras.js"></script>
+<script src="src/datos/fichas.js"></script>
+<script src="src/escena/comun.js"></script>
+<script src="src/escena/terreno.js"></script>
+<script src="src/escena/vegetacion.js"></script>
+<script src="src/escena/luz.js"></script>
+<script src="src/escena/estructuras.js"></script>
+<script src="src/escena/cabanas.js"></script>
+<script src="src/escena/vida.js"></script>
+<script src="src/interfaz/controles.js"></script>
+<script src="src/interfaz/pdi.js"></script>
+<script src="src/interfaz/panel.js"></script>
+<script src="src/interfaz/evidencia.js"></script>
+<script src="src/interfaz/comparar.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
