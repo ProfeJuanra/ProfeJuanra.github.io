@@ -20,6 +20,8 @@
   const renderer = new THREE.WebGLRenderer({ antialias: calidad !== 'baja', logarithmicDepthBuffer: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, calidad === 'baja' ? 1.25 : 1.5));
   renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;   // luz más natural, sin colores quemados
+  renderer.toneMappingExposure = 0.92;
   renderer.shadowMap.enabled = calidad !== 'baja';
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.localClippingEnabled = true;
@@ -46,7 +48,7 @@
 
   // Construcción por fases
   V.plano = window.VALDE.plano;
-  const fases = ['construirTerreno', 'construirVegetacion', 'construirLuz', 'construirEstructuras', 'construirCabanas', 'construirVida', 'construirInterfaz', 'construirEvidencia', 'construirComparacion'];
+  const fases = ['construirTerreno', 'construirVegetacion', 'construirLuz', 'construirEstructuras', 'construirCabanas', 'construirVida', 'construirDolmen', 'construirInterfaz', 'construirEvidencia', 'construirComparacion'];
   for (const f of fases) if (typeof V[f] === 'function') V[f](ctx);
 
   // Controles orbitales por defecto (la interfaz puede sustituirlos)
