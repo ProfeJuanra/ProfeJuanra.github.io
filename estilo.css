@@ -63,7 +63,7 @@ h1,h2,h3{line-height:1.15;margin:0;text-wrap:balance}
 .seccion:last-child{padding-bottom:48px}
 .etiqueta{font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--rosa);margin-bottom:4px}
 .seccion h2{font-size:clamp(1.3rem,2.6vw,1.75rem);font-weight:700;margin-bottom:16px}
-.intro{font-size:1.06rem;color:var(--texto-2);max-width:68ch;margin:0}
+.intro{font-size:1.06rem;color:var(--texto-2);margin:0;text-align:justify;-webkit-hyphens:auto;hyphens:auto}
 .rejilla{display:grid;gap:18px}
 .r3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .r2{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -250,3 +250,6 @@ button.ficha{font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer
 .panel:not(.abierto){display:none}
 .paneles .panel{padding-bottom:12px;border-bottom:1px solid var(--linea)}
 @media (max-width:520px){.boton-seccion{font-size:.84rem;padding:7px 13px}}
+
+/* Textos largos justificados a todo el ancho */
+.aviso p,.ev-ce p,.ev-texto{text-align:justify;-webkit-hyphens:auto;hyphens:auto}
