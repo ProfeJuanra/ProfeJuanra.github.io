@@ -238,6 +238,23 @@
       fig.append(boton, cap);
       caja.append(fig);
     });
+
+    // Galerías largas: se enseñan unas cuantas y el resto con «Ver más fotos»
+    const tanda = 24;
+    if (fotos.length > tanda) {
+      const figuras = [...caja.children];
+      let visibles = tanda;
+      const mas = el('button', { class: 'boton oscuro ver-mas', type: 'button' });
+      const poner = () => {
+        figuras.forEach((f, i) => { f.hidden = i >= visibles; });
+        const quedan = fotos.length - visibles;
+        mas.textContent = 'Ver más fotos (quedan ' + quedan + ')';
+        mas.hidden = quedan <= 0;
+      };
+      mas.addEventListener('click', () => { visibles += tanda; poner(); });
+      caja.after(el('div', { class: 'ver-mas-caja' }, mas));
+      poner();
+    }
   });
 
   // ---- Mosaico de fotos bajo la cabecera (de lado a lado) ----

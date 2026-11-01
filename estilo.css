@@ -206,3 +206,8 @@ button.ficha{font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer
 .tesela img{height:100%;width:auto;filter:sepia(.25) contrast(1.05)}
 .tesela:hover,.tesela:focus-visible{opacity:1;transform:translateY(-2px)}
 @media (max-width:620px){.tesela{height:54px}}
+
+/* Botón «Ver más fotos» de las galerías largas */
+.foto[hidden]{display:none}
+.ver-mas-caja{display:flex;justify-content:center;margin-top:22px}
+.ver-mas{border:0;cursor:pointer;font-family:inherit}
