@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" font-family="system-ui, sans-serif">
+  <title>Croquis de situación del yacimiento de la Isla de Valdecañas</title>
+  <desc>Croquis esquemático, sin escala exacta, del Campo Arañuelo entre los ríos Tajo y Tiétar.</desc>
+  <rect width="600" height="400" fill="#f3ecdc"/>
+  <!-- Sierra de Gredos al norte -->
+  <path d="M250 18 l25 -10 l20 8 l18 -12 l22 10 l20 -6 l25 12 l25 -8 l30 14" fill="none" stroke="#8a8f99" stroke-width="3"/>
+  <text x="330" y="40" font-size="14" fill="#5c6270" text-anchor="middle">Sierra de Gredos</text>
+  <!-- Río Tiétar -->
+  <path d="M590 70 C 480 90, 380 110, 280 140 S 110 210, 40 262" fill="none" stroke="#5b8fa8" stroke-width="3"/>
+  <text x="440" y="96" font-size="13" fill="#3d6f86" font-style="italic">río Tiétar</text>
+  <!-- Río Tajo con el embalse de Valdecañas -->
+  <path d="M590 300 C 520 296, 470 300, 440 296" fill="none" stroke="#5b8fa8" stroke-width="3"/>
+  <path d="M440 296 C 400 285, 360 300, 320 292 C 280 286, 250 300, 215 296 L 210 304 C 250 312, 290 300, 320 306 C 360 314, 400 300, 442 306 Z" fill="#9ec3d4" stroke="#5b8fa8" stroke-width="2"/>
+  <path d="M210 300 C 160 305, 110 290, 40 262" fill="none" stroke="#5b8fa8" stroke-width="3"/>
+  <text x="520" y="320" font-size="13" fill="#3d6f86" font-style="italic">río Tajo</text>
+  <text x="300" y="332" font-size="12" fill="#3d6f86" text-anchor="middle">embalse de Valdecañas (desde 1963)</text>
+  <!-- Localidades -->
+  <g font-size="13" fill="#2b2620">
+    <circle cx="255" cy="200" r="5" fill="#2b2620"/><text x="263" y="196">Navalmoral de la Mata</text>
+    <circle cx="398" cy="262" r="4" fill="#2b2620"/><text x="372" y="252">El Gordo</text>
+    <circle cx="470" cy="270" r="4" fill="#2b2620"/><text x="478" y="266">Berrocalejo</text>
+  </g>
+  <!-- Zona aproximada del yacimiento: se omite el punto exacto -->
+  <circle cx="430" cy="298" r="22" fill="#cc79a7" fill-opacity="0.25" stroke="#a24e80" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="430" y="352" font-size="13" fill="#7a2f5c" text-anchor="middle" font-weight="700">Isla de Valdecañas (zona aproximada)</text>
+  <line x1="430" y1="320" x2="430" y2="338" stroke="#7a2f5c"/>
+  <!-- Dolmen -->
+  <rect x="381" y="288" width="9" height="9" fill="#5a4330" transform="rotate(45 385.5 292.5)"/>
+  <text x="374" y="284" font-size="12" fill="#5a4330" text-anchor="end">dolmen de Guadalperal</text>
+  <!-- Direcciones -->
+  <text x="20" y="390" font-size="12" fill="#555">← hacia Cáceres</text>
+  <text x="580" y="390" font-size="12" fill="#555" text-anchor="end">hacia Talavera y Madrid →</text>
+  <g transform="translate(560 40)"><polygon points="0,-18 7,6 0,1 -7,6" fill="#2b2620"/><text y="22" font-size="13" text-anchor="middle" font-weight="700">N</text></g>
+  <text x="20" y="24" font-size="12" fill="#555">Croquis sin escala exacta</text>
+  <text x="52" y="254" font-size="11" fill="#3d6f86" font-style="italic">confluencia</text>
+</svg>
