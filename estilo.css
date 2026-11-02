@@ -254,3 +254,11 @@ button.ficha{font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer
 
 /* Textos largos justificados a todo el ancho */
 .aviso p,.ev-ce p,.ev-texto{text-align:justify;-webkit-hyphens:auto;hyphens:auto}
+
+/* Botones de secciones: todos en una fila, mismo ancho y misma altura */
+.secciones .contenedor{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.secciones .boton-seccion,.secciones .boton-enlace{justify-content:center;text-align:center;line-height:1.25;min-height:52px;padding:8px 14px;border-radius:14px}
+@media (max-width:760px){.secciones .contenedor{grid-template-columns:repeat(2,minmax(0,1fr))}.secciones .contenedor>:last-child:nth-child(odd){grid-column:1/-1}}
+.secciones .contenedor{grid-auto-rows:1fr}
+.boton-seccion::after,.boton-enlace::after{flex:none}
+@media (max-width:760px){.secciones .boton-seccion,.secciones .boton-enlace{font-size:.84rem;padding:6px 10px}}
