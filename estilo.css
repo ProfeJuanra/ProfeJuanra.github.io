@@ -262,3 +262,7 @@ button.ficha{font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer
 .secciones .contenedor{grid-auto-rows:1fr}
 .boton-seccion::after,.boton-enlace::after{flex:none}
 @media (max-width:760px){.secciones .boton-seccion,.secciones .boton-enlace{font-size:.84rem;padding:6px 10px}}
+
+/* Apartados dentro de un bloque (Temas PAU, Comentarios de fuente histórica) */
+.apartado+.apartado{margin-top:18px;padding-top:16px;border-top:1px dashed var(--linea)}
+.apartado>h3{font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#c4104c;margin-bottom:10px}

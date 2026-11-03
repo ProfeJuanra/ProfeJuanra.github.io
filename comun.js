@@ -129,14 +129,23 @@
   // Unidades o bloques, cada uno desplegable con sus materiales
   document.querySelectorAll('[data-unidades]').forEach(caja => {
     const unidades = MATERIAS[caja.dataset.unidades] || [];
-    aviso(caja, unidades.flatMap(u => u.materiales || []));
+    aviso(caja, unidades.flatMap(u => [...(u.materiales || []), ...(u.apartados || []).flatMap(a => a.materiales || [])]));
     unidades.forEach(u => {
       const det = el('details', { class: 'unidad' });
       const sum = el('summary', {}, el('span', { class: 't' }, u.titulo));
       if (u.bloque) sum.append(el('small', {}, u.bloque));
       const dentro = el('div', { class: 'dentro' });
       const mats = u.materiales || [];
-      if (mats.length === 0) {
+      if (u.apartados) {
+        // Bloque dividido en apartados (Temas PAU, Comentarios de fuente histórica…)
+        if (mats.length) pintarMateriales(mats, dentro);
+        u.apartados.forEach(a => {
+          const ap = el('div', { class: 'apartado' }, el('h3', {}, a.titulo));
+          if ((a.materiales || []).length) pintarMateriales(a.materiales, ap);
+          else ap.append(el('p', { class: 'vacio' }, 'Aparecerán aquí muy pronto.'));
+          dentro.append(ap);
+        });
+      } else if (mats.length === 0) {
         dentro.append(el('p', { class: 'vacio' }, 'Los materiales de esta unidad aparecerán aquí muy pronto.'));
       } else {
         pintarMateriales(mats, dentro);

@@ -221,17 +221,55 @@ const MATERIAS = {
         vista: "img/materiales/cuestiones-breves.jpg",
         enlace: "https://classroom.google.com/w/MjUzNTEwOTg1OTZa/t/all" },
     ]},
-    { titulo: "Crisis del Antiguo Régimen", bloque: "1788–1833", materiales: [
+    { titulo: "Crisis del Antiguo Régimen", bloque: "1788–1833",
+    apartados: [
+      { titulo: "Temas PAU", materiales: [
+      ]},
+      { titulo: "Comentarios de fuente histórica", materiales: [
+        { tipo: "pdf", titulo: "Comentario 1. Decreto I de las Cortes de Cádiz (1810)",
+          descripcion: "Comentario resuelto del decreto de 24 de septiembre de 1810.",
+          vista: "img/materiales/comentario-decreto-1810.jpg",
+          enlace: "https://classroom.google.com/c/ODg0MjE1MjQ2MTgw/m/MjU1MjY0OTY4NzJa/details" },
+        { tipo: "pdf", titulo: "Comentario 2. Constitución de 1812",
+          descripcion: "Comentario resuelto de la Constitución de Cádiz de 1812.",
+          vista: "img/materiales/comentario-constitucion-1812.jpg",
+          enlace: "https://classroom.google.com/c/ODg0MjE1MjQ2MTgw/m/MjU1MjY0OTMxNTZa/details" },
+      ]},
     ]},
-    { titulo: "Construcción del Estado liberal", bloque: "1833–1874", materiales: [
+    { titulo: "Construcción del Estado liberal", bloque: "1833–1874",
+    apartados: [
+      { titulo: "Temas PAU", materiales: [
+      ]},
+      { titulo: "Comentarios de fuente histórica", materiales: [
+      ]},
     ]},
-    { titulo: "La Restauración", bloque: "1874–1931", materiales: [
+    { titulo: "La Restauración", bloque: "1874–1931",
+    apartados: [
+      { titulo: "Temas PAU", materiales: [
+      ]},
+      { titulo: "Comentarios de fuente histórica", materiales: [
+      ]},
     ]},
-    { titulo: "Segunda República y Guerra Civil", bloque: "1931–1939", materiales: [
+    { titulo: "Segunda República y Guerra Civil", bloque: "1931–1939",
+    apartados: [
+      { titulo: "Temas PAU", materiales: [
+      ]},
+      { titulo: "Comentarios de fuente histórica", materiales: [
+      ]},
     ]},
-    { titulo: "El franquismo", bloque: "1939–1975", materiales: [
+    { titulo: "El franquismo", bloque: "1939–1975",
+    apartados: [
+      { titulo: "Temas PAU", materiales: [
+      ]},
+      { titulo: "Comentarios de fuente histórica", materiales: [
+      ]},
     ]},
-    { titulo: "Transición y democracia", bloque: "1975–hoy", materiales: [
+    { titulo: "Transición y democracia", bloque: "1975–hoy",
+    apartados: [
+      { titulo: "Temas PAU", materiales: [
+      ]},
+      { titulo: "Comentarios de fuente histórica", materiales: [
+      ]},
     ]},
   ],
 
