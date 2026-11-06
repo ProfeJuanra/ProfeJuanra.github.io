@@ -102,16 +102,12 @@
       galeria = (f.fotos || []).map(x => ({ src: 'fotos/' + x.f + '.jpg', mini: 'fotos/' + x.f + '-mini.jpg', pie: x.pie }));
       if (f.extra === 'grabados') {
         html += `<p class="botonera"><button type="button" class="b-resaltar" aria-pressed="${resaltar}">Resaltar grabados</button></p>`;
-        const losas = V.datos.camara.losas.filter(l => V.grabados[l.id]).map(l => l.id).concat(['acceso']);
-        const calcos = losas.map(id => ({ src: 'fotos/calco-' + id + '.jpg', mini: 'fotos/calco-' + id + '-mini.jpg', pie: (id === 'acceso' ? 'Calco del ortostato del acceso' : 'Calco del ortostato U.E. ' + id) + ' (' + V.grabados[id].tecnica + ').' }));
-        html += `<h3 class="pie">Calcos de los grabados</h3>` + htmlGaleria(calcos, 'galeria calcos');
-        galeria = calcos.concat(galeria);
-        if (f.fotos) html += `<h3 class="pie">Fotografías</h3>` + htmlGaleria(galeria.slice(calcos.length), 'galeria').replace(/data-i="(\d+)"/g, (m, i) => `data-i="${+i + calcos.length}"`);
+        const losas = V.datos.camara.losas.filter(l => V.grabados[l.id]);
+        html += `<p class="pie">Calcos esquemáticos (dibujo propio a partir de las fichas; posiciones aproximadas):</p>
+          <div class="calcos-propios">${losas.map(l => `<figure><img src="${V.calcoOrtostato(l.id, l.ancho, l.alto + 0.25)}" alt="Calco esquemático de la U.E. ${l.id}."><figcaption>U.E. ${l.id} · ${esc(V.grabados[l.id].tecnica)}</figcaption></figure>`).join('')}</div>`;
       } else {
         if (f.extra === 'clausura') html += `<p class="botonera"><button type="button" data-p="sellado-fuego" aria-pressed="${momento === 'sellado-fuego'}">1. Losa de cierre y hoguera</button> <button type="button" data-p="sellado-relleno" aria-pressed="${momento === 'sellado-relleno'}">2. Cierre de madera y relleno</button></p>`;
-        if (galeria.length) html += `<h3 class="pie">Fotografías de la excavación</h3>` + htmlGaleria(galeria, 'galeria');
       }
-      if (galeria.length) html += `<p class="pie credito">Fotos, planimetría y calcos: Tera S.L. Pulsa una imagen para ampliarla.</p>`;
       ex.innerHTML = html;
       ex.querySelectorAll('[data-p]').forEach(b => b.addEventListener('click', () => fijarMomento(b.dataset.p)));
       const br = ex.querySelector('.b-resaltar'); if (br) br.addEventListener('click', () => fijarResaltar(!resaltar));
