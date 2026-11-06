@@ -185,3 +185,6 @@ dialog.visor-foto .flecha { position: absolute; top: 50%; transform: translateY(
 dialog.visor-foto .cerrar-foto { position: absolute; top: 6px; right: 6px; }
 dialog.visor-foto .cerrar-foto button { background: rgba(255,255,255,.12); color: #fff; border: none; font-size: 1.4rem; width: 40px; }
 @media (max-width: 700px) { dialog.visor-foto { padding: 8px 8px 40px; } dialog.visor-foto .flecha { top: auto; bottom: 2px; transform: none; height: 36px; } }
+.calcos-propios { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+.calcos-propios figure { margin: 0; } .calcos-propios img { width: 100%; height: auto; display: block; }
+.calcos-propios figcaption { font-size: .7rem; color: var(--suave); line-height: 1.2; margin-top: 2px; }
