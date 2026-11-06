@@ -41,39 +41,53 @@ window.VALDE = window.VALDE || {};
   };
 
   // --- Relieve ---
-  // El poblado está en lo alto de una pequeña meseta con el Tajo al sur (testimonio del excavador,
-  // J. R. Marcos, 01/11/2026). La forma de la meseta, su altura (~16 m sobre la vega) y la distancia
-  // al río (~180 m) son HIPÓTESIS [VERIFICAR]: no hay topografía anterior al embalse.
-  V.yRio = function (x) { return -182 + 14 * Math.sin(x / 110) + 6 * Math.sin(x / 41 + 1); };
-  V.NIVEL_AGUA = -17.5;
-  V.ALTURA_MESETA = 16;
+  // Relieve deducido de la cartografía del IGN (MDT25/MDT05 y MTN50 1.ª edición, CC BY 4.0):
+  // el poblado está en lo alto de un cerro; el Tajo antiguo pasa a unos 2 km al oeste-suroeste.
+  // Bajo el embalse el fondo del valle es una reconstrucción (ver herramientas/relieve_ign.py).
+  const R = V.relieve;
+  const bin = s => { const b = atob(s), u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; };
+  const H16 = new Int16Array(bin(R.h).buffer), DR = bin(R.drio);
+  function muestrear(arr, k, x, y, fuera) {
+    const c = (x - R.xMin) / R.paso, f = (R.yMax - y) / R.paso;
+    if (c < 0 || f < 0 || c > R.ancho - 1 || f > R.alto - 1) return fuera;
+    const c0 = Math.floor(c), f0 = Math.floor(f), c1 = Math.min(c0 + 1, R.ancho - 1), f1 = Math.min(f0 + 1, R.alto - 1);
+    const a = c - c0, b = f - f0, W = R.ancho;
+    return k * ((arr[f0 * W + c0] * (1 - a) + arr[f0 * W + c1] * a) * (1 - b) + (arr[f1 * W + c0] * (1 - a) + arr[f1 * W + c1] * a) * b);
+  }
+  V.LIMITES = { x0: R.xMin, x1: R.xMin + (R.ancho - 1) * R.paso, y0: R.yMax - (R.alto - 1) * R.paso, y1: R.yMax };
+  V.NIVEL_AGUA = R.zAgua;      // Tajo antes del embalse (~290 m) [VERIFICAR]
+  V.NIVEL_LLANO = R.zLlano;
+  V.distRio = (x, y) => muestrear(DR, 10, x, y, 2500);                 // metros hasta el cauce del Tajo
   V.ejeVaguada = function (y) { return -0.6 + 0.28 * (y + 24) + 5 * Math.sin(y / 40); };
 
-  // 1 en lo alto de la meseta, 0 fuera (borde irregular)
-  V.enMeseta = function (x, y) {
-    const e = Math.hypot((x - 5) / 150, (y - 25) / 122) + 0.1 * V.fbm(x / 55, y / 55);
-    return 1 - V.paso(0.98, 1.32, e);
+  // Altura tal como la dibuja una malla de lado `paso` (interpolación por triángulos, como en la GPU)
+  V.alturaMalla = function (x, y, x0, y1, paso) {
+    const i = Math.floor((x - x0) / paso), j = Math.floor((y1 - y) / paso);
+    const xa = x0 + i * paso, ya = y1 - j * paso;
+    const u = (x - xa) / paso, v = (ya - y) / paso;
+    const h = (px, py) => V.altura(px, py);
+    const a = h(xa, ya), b = h(xa + paso, ya), c = h(xa, ya - paso), d = h(xa + paso, ya - paso);
+    return u + v <= 1 ? a + (b - a) * u + (c - a) * v : d + (c - d) * (1 - u) + (b - d) * (1 - v);
+  };
+  // Altura del suelo visible en cualquier punto (cercano: malla fina; lejano: malla de 50 m)
+  V.alturaSuelo = function (x, y) {
+    if (x > -445 && x < 445 && y > -475 && y < 415) return V.altura(x, y);
+    const L = V.LIMITES, paso = V.PASO_LEJANO || 50;
+    return V.alturaMalla(x, y, L.x0, L.y1, paso);
   };
 
   V.altura = function (x, y) {
     const P = V.paso;
-    const m = V.enMeseta(x, y);
-    // Alrededor: la llanura queda unos 8 m más baja al norte y la vega del Tajo, ~16 m al sur
-    const fuera = -8 - 8 * P(-20, -120, y) + 1.2 * V.fbm(x / 80, y / 80) + 20 * P(-250, -400, y);
-    let h = m * (0.003 * y) + (1 - m) * fuera;
+    let h = muestrear(H16, 0.1, x, y, R.zLlano);
     h += V.fbm(x / 9, y / 9) * 0.05;
     const r = Math.hypot(x, y - 10);
-    h += V.fbm(x / 40, y / 40) * 0.8 * P(60, 140, r) * m;     // el sector excavado queda casi llano
-    // vaguada: recoge la zanja y corta el borde sur de la meseta
-    if (y < -16) {
-      const prof = 0.7 * P(-16, -30, y) + 3.5 * P(-30, -110, y) * m;
-      const ancho = 5 + 0.08 * (-y);
-      const dx = (x - V.ejeVaguada(y)) / ancho;
+    h += V.fbm(x / 40, y / 40) * 0.8 * P(60, 140, r);           // el sector excavado queda casi llano
+    // vaguada local que recoge la zanja (documentada) al sur del sector
+    if (y < -16 && y > -120) {
+      const prof = 0.7 * P(-16, -30, y) * (1 - P(-80, -120, y));
+      const dx = (x - V.ejeVaguada(y)) / (5 + 0.08 * (-y));
       h -= prof * Math.exp(-dx * dx);
     }
-    // cauce del Tajo
-    const dr = Math.abs(y - V.yRio(x));
-    h -= 3.0 * (1 - P(26, 48, dr));
     return h;
   };
 
@@ -127,8 +141,8 @@ window.VALDE = window.VALDE || {};
   // Altura del suelo en cualquier punto: detalle dentro del sector, relieve general fuera
   V.alturaSitioOGeneral = function (x, y) {
     const S = V.SITIO;
-    if (V.DOLMEN && V.alturaDolmen !== undefined && Math.hypot(x - V.DOLMEN.x, y - V.DOLMEN.y) < 140) return V.alturaDolmen;
-    return (x > S.x0 && x < S.x1 && y > S.y0 && y < S.y1) ? V.alturaSitio(x, y) : V.altura(x, y);
+    if (V.DOLMEN && V.alturaDolmen !== undefined && Math.hypot(x - V.DOLMEN.x, y - V.DOLMEN.y) < 20) return V.alturaDolmen;
+    return (x > S.x0 && x < S.x1 && y > S.y0 && y < S.y1) ? V.alturaSitio(x, y) : V.alturaSuelo(x, y);
   };
 
   // Paso de coordenadas del plano a la escena

@@ -8,8 +8,9 @@
 (function (V) {
   'use strict';
   const N = V.NIVEL;
-  // Posición en coordenadas del plano (m): ~2,5 km al oeste y ~0,6 km al sur [VERIFICAR]
-  V.DOLMEN = { x: -2500, y: -600 };
+  // Posición respecto al poblado (m), medida sobre la cartografía del IGN: unos 3,1 km al oeste y 0,8 km al sur.
+  // Queda a unos 70-80 m del cauce antiguo del Tajo (MTN50 1.ª edición), como indica el BOE.
+  V.DOLMEN = { x: -3055, y: -836 };
   const R_TUM = 12.5, H_TUM = 3.2;   // túmulo: hipótesis
 
   let texGranito, texTumulo, texMenhir;
@@ -61,44 +62,26 @@
     return g;
   }
 
-  function alturaLocal(lx, ly) {   // relieve suave alrededor del dolmen, junto al antiguo cauce del Tajo (al sur)
-    const r = Math.hypot(lx, ly);
-    let h = -12 + 0.6 * V.fbm(lx / 30, ly / 30) + 1.2 * (1 - V.paso(0, 60, r));
-    h -= 3 * (1 - V.paso(16, 30, Math.abs(ly + 75 + 6 * Math.sin(lx / 25))));   // cauce
-    return h * V.paso(150, 110, r) + -12 * (1 - V.paso(150, 110, r));
-  }
+  // Altura del terreno (relieve del IGN) en coordenadas locales del dolmen
+  function alturaLocal(lx, ly) { return V.alturaSuelo(V.DOLMEN.x + lx, V.DOLMEN.y + ly); }
 
   V.construirDolmen = function (ctx) {
     texturas();
     const D = V.DOLMEN;
     const grupo = new THREE.Group();
     grupo.name = 'dolmen-guadalperal';
-    const h0 = alturaLocal(0, 0);
+    const h0 = Math.max(alturaLocal(0, 0), V.NIVEL_AGUA + 1.5);   // sobre la orilla, nunca bajo el agua
     grupo.position.set(D.x, h0, -D.y);
     ctx.scene.add(grupo);
     V.alturaDolmen = h0;
     const r = V.azar;
     const matGranito = new THREE.MeshLambertMaterial({ map: texGranito });
 
-    // --- Terreno local con el antiguo cauce del Tajo ---
-    const N_ = 70, L = 300;
-    const gT = new THREE.PlaneGeometry(L, L, N_, N_); gT.rotateX(-Math.PI / 2);
-    const pt = gT.attributes.position, ct = new Float32Array(pt.count * 3), c = new THREE.Color();
-    for (let i = 0; i < pt.count; i++) {
-      const lx = pt.getX(i), ly = -pt.getZ(i);
-      pt.setY(i, alturaLocal(lx, ly) - h0);
-      const cauce = 1 - V.paso(18, 34, Math.abs(ly + 75 + 6 * Math.sin(lx / 25)));
-      c.setRGB(0.6 - 0.15 * cauce, 0.56 - 0.05 * cauce, 0.34 - 0.04 * cauce).multiplyScalar(0.92 + 0.1 * V.fbm(lx / 8, ly / 8)).convertSRGBToLinear();
-      ct[i * 3] = c.r; ct[i * 3 + 1] = c.g; ct[i * 3 + 2] = c.b;
-    }
-    gT.setAttribute('color', new THREE.BufferAttribute(ct, 3));
-    gT.computeVertexNormals();
-    const suelo = new THREE.Mesh(gT, new THREE.MeshLambertMaterial({ vertexColors: true }));
-    suelo.receiveShadow = true; suelo.position.y = -0.02;
-    grupo.add(V.marcar(suelo, N.HIP, 'Entorno del dolmen (esquemático)'));
-    const agua = new THREE.Mesh(new THREE.PlaneGeometry(L, 26), new THREE.MeshPhongMaterial({ color: 0x5b7f86, shininess: 60, transparent: true, opacity: 0.9 }));
-    agua.rotation.x = -Math.PI / 2; agua.position.set(0, -12 - h0 - 1.6, 75);
-    grupo.add(V.marcar(agua, N.DED, 'Antiguo cauce del Tajo junto al dolmen'));
+    // --- Explanada donde se asienta el túmulo (el relieve del IGN tiene celdas de 25 m) ---
+    const explanada = new THREE.Mesh(new THREE.CircleGeometry(20, 32), new THREE.MeshLambertMaterial({ color: 0x9a9060 }));
+    explanada.rotation.x = -Math.PI / 2; explanada.position.y = -0.05; explanada.receiveShadow = true;
+    grupo.add(V.marcar(explanada, N.HIP, 'Entorno inmediato del dolmen'));
+    const suelo = explanada, agua = null;
 
     // --- Cámara: 13 losas en óvalo de unos 5 m, abierta al este hacia el corredor ---
     const piedras = [];
@@ -187,8 +170,9 @@
     for (let i = 0; i < 160 && pts.length < 70; i++) {
       const lx = (r() - 0.5) * 280, ly = (r() - 0.5) * 280;
       const rr = Math.hypot(lx, ly);
-      if (rr < 24 || Math.abs(ly + 75) < 16) continue;
-      pts.push([lx, ly, 0.8 + r() * 0.5, Math.abs(ly + 75) < 40]);
+      const dr = V.distRio(V.DOLMEN.x + lx, V.DOLMEN.y + ly);
+      if (rr < 50 || dr < 12) continue;          // claro alrededor del túmulo
+      pts.push([lx, ly, 0.8 + r() * 0.5, dr < 60]);
     }
     const imC = new THREE.InstancedMesh(gC, V.mat(0xffffff), pts.length), imT = new THREE.InstancedMesh(gTr, V.mat(0x6a5642), pts.length);
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3(), col = new THREE.Color();

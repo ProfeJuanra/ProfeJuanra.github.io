@@ -54,8 +54,8 @@
     // Laderas de la meseta: suelo más pobre, con más tierra y piedra a la vista
     const pend = Math.hypot(V.altura(x + 2, y) - V.altura(x - 2, y), V.altura(x, y + 2) - V.altura(x, y - 2)) / 4;
     c = mezcla(c, C.ladera, V.paso(0.08, 0.3, pend) * 0.75);
-    const dr = Math.abs(y - V.yRio(x));
-    c = mezcla(c, C.verde, 1 - V.paso(40, 90, dr));            // ribera
+    const dr = V.distRio(x, y);
+    c = mezcla(c, C.verde, 1 - V.paso(40, 140, dr));           // ribera del Tajo
     if (y < -16) {                                              // fondo de la vaguada
       const dv = Math.abs(x - V.ejeVaguada(y));
       c = mezcla(c, C.verde, (1 - V.paso(3, 14, dv)) * 0.8);
@@ -98,14 +98,23 @@
     detalle.encoding = THREE.LinearEncoding;
     const matTierra = new THREE.MeshLambertMaterial({ vertexColors: true, map: detalle });
 
-    // Relieve general: 900 × 900 m
+    // Relieve lejano: toda la zona del IGN (unos 5 × 3,5 km) cada 25 m, algo hundido bajo el cercano
+    const L = V.LIMITES;
+    const bajoCercano = (x, y) => (x > -445 && x < 445 && y > -475 && y < 415) ? 1.2 : 0;
+    const gLejos = mallaRelieve(L.x0, L.x1, L.y0, L.y1, V.PASO_LEJANO = (ctx.calidad === 'baja' ? 75 : 50), V.altura, colorGeneral, bajoCercano);
+    const lejos = new THREE.Mesh(gLejos, matTierra);
+    lejos.receiveShadow = true;
+    lejos.name = 'relieve-lejano';
+    scene.add(V.marcar(lejos, N.DED, 'Relieve deducido de la cartografía del IGN'));
+
+    // Relieve cercano: 900 × 900 m alrededor del poblado
     const segGeneral = ctx.calidad === 'baja' ? 8 : 6.5;
     const dentroSitio = (x, y) => (x > S.x0 + 0.5 && x < S.x1 - 0.5 && y > S.y0 + 0.5 && y < S.y1 - 0.5) ? 2.0 : 0;
     const gGeneral = mallaRelieve(-450, 450, -480, 420, segGeneral, V.altura, colorGeneral, dentroSitio);
     const general = new THREE.Mesh(gGeneral, matTierra);
     general.receiveShadow = true;
     general.name = 'relieve-general';
-    scene.add(V.marcar(general, N.HIP, 'Relieve general (sin topografía anterior al embalse)'));
+    scene.add(V.marcar(general, N.DED, 'Relieve deducido de la cartografía del IGN'));
 
     // Sector excavado con detalle (0,5 m): zanja y suelos rebajados
     const gSitio = mallaRelieve(S.x0, S.x1, S.y0, S.y1, ctx.calidad === 'baja' ? 0.8 : 0.6, V.alturaSitio, colorSitio);  // malla de 0,6 m (0,8 m en calidad baja)
@@ -115,19 +124,20 @@
     scene.add(V.marcar(sitio, N.DOC, 'Terraza arcillosa y zanja (planta documentada)'));
     ctx.suelo = [general, sitio];
 
-    // Agua del Tajo
-    const gAgua = new THREE.PlaneGeometry(900, 120, 60, 1);
-    gAgua.rotateX(-Math.PI / 2);
-    const pa = gAgua.attributes.position;
-    for (let i = 0; i < pa.count; i++) {
-      const x = pa.getX(i), lado = pa.getZ(i) > 0 ? -1 : 1;
-      pa.setZ(i, -(V.yRio(x) + lado * 34));
-      pa.setY(i, V.NIVEL_AGUA);
+    // Agua del Tajo: solo en las celdas del cauce del MTN50 1.ª edición, al nivel del río antiguo
+    const pasoA = 12.5, pa = [], ia = [];
+    for (let y = L.y0; y < L.y1; y += pasoA) for (let x = L.x0; x < L.x1; x += pasoA) {
+      if (V.distRio(x + pasoA / 2, y + pasoA / 2) > 14) continue;
+      const k = pa.length / 3;
+      pa.push(x, V.NIVEL_AGUA, -y, x + pasoA, V.NIVEL_AGUA, -y, x, V.NIVEL_AGUA, -(y + pasoA), x + pasoA, V.NIVEL_AGUA, -(y + pasoA));
+      ia.push(k, k + 1, k + 2, k + 1, k + 3, k + 2);
     }
-    gAgua.computeVertexNormals();
+    const gAgua = new THREE.BufferGeometry();
+    gAgua.setAttribute('position', new THREE.Float32BufferAttribute(pa, 3));
+    gAgua.setIndex(ia); gAgua.computeVertexNormals();
     const agua = new THREE.Mesh(gAgua, new THREE.MeshPhongMaterial({ color: 0x5b7f86, shininess: 60, specular: 0x667777, transparent: true, opacity: 0.92 }));
     agua.name = 'rio-tajo';
-    scene.add(V.marcar(agua, N.HIP, 'Tajo (posición aproximada)'));
+    scene.add(V.marcar(agua, N.DED, 'Tajo antes del embalse (cauce del MTN50; nivel aproximado)'));
 
     construirCampos(ctx);
     construirHorizonte(ctx);
@@ -200,7 +210,7 @@
       h += Math.max(0, norte) ** 2 * (190 + 80 * V.fbm(i / 4, 7));   // Gredos
       h += Math.max(0, sur) ** 3 * (90 + 50 * V.fbm(i / 5, 11));     // sierras del sur
       const x = Math.sin(a) * R, z = -Math.cos(a) * R;
-      pos.push(x, -30, z, x, h, z);
+      pos.push(x, V.NIVEL_LLANO - 40, z, x, h, z);
       const lejos = norte > 0.5 ? [0.55, 0.6, 0.68] : [0.62, 0.64, 0.66];
       col.push(...lejos, ...lejos.map(c => c * 0.92));
     }
@@ -216,9 +226,15 @@
     ctx.sierras = sierras;
 
     // Llanura intermedia entre el relieve modelado y las sierras
-    const anillo = new THREE.RingGeometry(440, R, 64, 1);
-    anillo.rotateX(-Math.PI / 2);
-    anillo.translate(0, -12, 0);
+    // Llanura con un hueco donde está el relieve del IGN (que se funde con este nivel en sus bordes)
+    const L = V.LIMITES, m = 40;   // el relieve del IGN ya ha subido al nivel de la llanura a 40 m del borde
+    const forma = new THREE.Shape(); forma.absarc(0, 0, R, 0, Math.PI * 2, false);
+    const hueco = new THREE.Path();
+    hueco.moveTo(L.x0 + m, L.y0 + m); hueco.lineTo(L.x1 - m, L.y0 + m); hueco.lineTo(L.x1 - m, L.y1 - m); hueco.lineTo(L.x0 + m, L.y1 - m); hueco.lineTo(L.x0 + m, L.y0 + m);
+    forma.holes.push(hueco);
+    const anillo = new THREE.ShapeGeometry(forma, 48);
+    anillo.rotateX(-Math.PI / 2);                     // x este, y norte -> X, -Z
+    anillo.translate(0, V.NIVEL_LLANO - 0.4, 0);
     const llano = new THREE.Mesh(anillo, new THREE.MeshBasicMaterial({ color: 0x8f8a5c }));
     llano.name = 'llanura-lejana';
     scene.add(V.marcar(llano, N.HIP, 'Llanura del Campo Arañuelo (esquemática)'));

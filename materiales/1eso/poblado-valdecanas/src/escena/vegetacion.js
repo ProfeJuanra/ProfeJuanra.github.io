@@ -16,11 +16,18 @@
   }
 
   // Coloca instancias según una regla de aceptación
-  function sembrar(ctx, cantidad, intentos, acepta) {
-    const r = V.azar, lista = [];
+  // zona: null = entorno cercano (900 m); 'lejos' = resto del relieve del IGN
+  function sembrar(ctx, cantidad, intentos, acepta, zona) {
+    const r = V.azar, lista = [], L = V.LIMITES;
     for (let i = 0; i < intentos && lista.length < cantidad; i++) {
-      const x = (r() * 2 - 1) * 430, y = -470 + r() * 880;
+      let x, y;
+      if (zona === 'lejos') {
+        x = L.x0 + 150 + r() * (L.x1 - L.x0 - 300); y = L.y0 + 150 + r() * (L.y1 - L.y0 - 300);
+        if (x > -430 && x < 430 && y > -470 && y < 410) continue;
+      } else { x = (r() * 2 - 1) * 430; y = -470 + r() * 880; }
       if (enCampo(ctx, x, y, 4)) continue;
+      if (V.distRio(x, y) < 12) continue;                          // nunca dentro del cauce
+      if (V.DOLMEN && Math.hypot(x - V.DOLMEN.x, y - V.DOLMEN.y) < 50) continue;   // claro del dolmen
       const p = acepta(x, y, r());
       if (p) lista.push({ x, y, s: p });
     }
@@ -54,7 +61,7 @@
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3();
     const col = new THREE.Color();
     puntos.forEach((pt, i) => {
-      const h = V.altura(pt.x, pt.y);
+      const h = V.alturaSuelo(pt.x, pt.y);
       const k = pt.s;
       q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (pt.x * 7 + pt.y * 3) % 6.28);
       m4.compose(p.set(pt.x, h - 0.1, -pt.y), q, s.set(k, k, k));
@@ -76,8 +83,7 @@
     // Encinas: dominan lejos del poblado; claros abiertos alrededor
     const encinas = sembrar(ctx, Math.round(560 * f), 40000, (x, y, r) => {
       const d = Math.hypot(x, y - 10);
-      const dr = Math.abs(y - V.yRio(x));
-      if (dr < 55 || d < 70) return 0;
+      if (V.distRio(x, y) < 40 || d < 70) return 0;
       const dens = 0.15 + 0.7 * P(90, 260, d) + 0.25 * V.fbm(x / 60, y / 60);
       return r < dens ? 0.8 + 0.5 * V.azar() : 0;
     });
@@ -86,24 +92,34 @@
     // Alcornoques: mezclados, algo más abiertos
     const alcornoques = sembrar(ctx, Math.round(220 * f), 30000, (x, y, r) => {
       const d = Math.hypot(x, y - 10);
-      if (Math.abs(y - V.yRio(x)) < 60 || d < 85) return 0;
+      if (V.distRio(x, y) < 45 || d < 85) return 0;
       return r < 0.25 + 0.4 * P(110, 300, d) ? 0.9 + 0.4 * V.azar() : 0;
     });
     arboleda(ctx, alcornoques, { tronco: [0.33, 2.2], copa: [3.6, 2.6, 3.6], colorTronco: 0x5a4532, colorCopa: 0x75854a, etiqueta: 'Alcornocal' });
 
     // Bosque de ribera: fresnos, alisos, sauces y álamos blancos junto al río y en la vaguada
     const ribera = sembrar(ctx, Math.round(420 * f), 40000, (x, y, r) => {
-      const dr = Math.abs(y - V.yRio(x));
-      let ok = dr > 33 && dr < 70;
-      if (y < -40 && y > -160 && Math.abs(x - V.ejeVaguada(y)) < 9) ok = true;
+      const ok = y < -40 && y > -160 && Math.abs(x - V.ejeVaguada(y)) < 9;   // vaguada
       return ok && r < 0.85 ? 0.8 + 0.6 * V.azar() : 0;
     });
     arboleda(ctx, ribera, { tronco: [0.25, 3.6], copa: [2.4, 4.2, 2.4], colorTronco: 0x6b6252, colorCopa: 0x7f9a4c, etiqueta: 'Bosque de ribera' });
 
+    // Lejos del poblado (relieve del IGN): ribera a lo largo del Tajo y encinar disperso en el valle
+    const riberaTajo = sembrar(ctx, Math.round(450 * f), 60000, (x, y, r) => {
+      const dr = V.distRio(x, y);
+      return dr > 12 && dr < 80 && r < 0.9 ? 0.9 + 0.6 * V.azar() : 0;
+    }, 'lejos');
+    arboleda(ctx, riberaTajo, { tronco: [0.25, 3.6], copa: [2.4, 4.2, 2.4], colorTronco: 0x6b6252, colorCopa: 0x7f9a4c, etiqueta: 'Bosque de ribera del Tajo' });
+    const encinasLejos = sembrar(ctx, Math.round(380 * f), 60000, (x, y, r) => {
+      if (V.distRio(x, y) < 70) return 0;
+      return r < 0.12 + 0.35 * (0.5 + 0.5 * V.fbm(x / 150, y / 150)) ? 0.9 + 0.5 * V.azar() : 0;
+    }, 'lejos');
+    arboleda(ctx, encinasLejos, { tronco: [0.28, 1.8], copa: [3.2, 2.4, 3.2], colorTronco: 0x6a5642, colorCopa: 0x66773f, etiqueta: 'Encinar' });
+
     // Matorral de jara y retama en los bordes de los claros
     const mato = sembrar(ctx, Math.round(650 * f), 40000, (x, y, r) => {
       const d = Math.hypot(x, y - 10);
-      if (Math.abs(y - V.yRio(x)) < 38 || d < 48) return 0;
+      if (V.distRio(x, y) < 30 || d < 48) return 0;
       return r < 0.2 + 0.5 * (1 - Math.abs(P(70, 200, d) - 0.5) * 2) ? 0.5 + 0.6 * V.azar() : 0;
     });
     const gMato = new THREE.IcosahedronGeometry(0.9, 0);
@@ -112,7 +128,7 @@
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3();
     const col = new THREE.Color();
     mato.forEach((pt, i) => {
-      m4.compose(p.set(pt.x, V.altura(pt.x, pt.y) + 0.3 * pt.s, -pt.y), q, s.setScalar(pt.s));
+      m4.compose(p.set(pt.x, V.alturaSuelo(pt.x, pt.y) + 0.3 * pt.s, -pt.y), q, s.setScalar(pt.s));
       mMato.setMatrixAt(i, m4);
       col.set(i % 3 ? 0x6f7a4a : 0x9a9850);   // jara (verde oscuro) y retama (verde amarillento)
       mMato.setColorAt(i, col);
