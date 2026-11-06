@@ -7,6 +7,9 @@
 ## Software
 - [Three.js](https://threejs.org/) r147, licencia MIT (`src/vendor/LICENSE-three.txt`).
 
+## Relieve
+- El relieve del entorno se ha deducido de la cartografía del **Instituto Geográfico Nacional** (MDT25, MDT05 y primera edición del MTN50), con licencia **CC BY 4.0**: «Contiene información derivada de © Instituto Geográfico Nacional». Procesado propio: suavizado de las obras modernas y reconstrucción del valle anterior al embalse.
+
 ## Cuerpo humano
 - Las personas usan el **cuerpo base de MakeHuman**, su esqueleto y sus pesos de deformación, publicados con licencia **CC0 1.0** por el MakeHuman Team (github.com/makehumancommunity/mpfb2), simplificados para este proyecto. La ropa, el pelo, las posturas y los colores son de creación propia.
 
