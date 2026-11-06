@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Moína II en texto</title>
+<meta name="description" content="Todas las fichas de la reconstrucción del dolmen de La Moína II (Jaraíz de la Vera), sin 3D.">
+<link rel="icon" href="assets/icono.svg" type="image/svg+xml">
+<link rel="stylesheet" href="src/estilo.css?v=20261106a">
+<style>
+  body { overflow: auto; }
+  main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin: 0 0 4px; }
+  .sub { color: var(--suave); margin: 0 0 16px; }
+  .aviso3d { background: var(--acento-fondo); border-radius: 10px; padding: 10px 14px; }
+  img.ancha { width: 100%; height: auto; border: 1px solid var(--borde); border-radius: 10px; background: #fbf8f1; }
+  .ficha { border-top: 2px solid var(--borde); padding-top: 12px; margin-top: 28px; }
+  .ficha h2 { margin: 0 0 4px; }
+  .ficha h3 { font-size: 1rem; margin: 14px 0 4px; }
+  .facil { font-size: 1.2rem; line-height: 1.7; }
+  .facil p { margin: 0 0 .3em; }
+  .fuente { font-size: .88rem; color: var(--suave); }
+  dl.glosario dt { font-weight: 700; margin-top: 8px; }
+  dl.glosario dd { margin: 0; }
+  .niveles li, .momentos li { margin: 4px 0; }
+  .toc { columns: 2; padding-left: 20px; }
+  @media (max-width: 600px) { .toc { columns: 1; } }
+  .selector { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 0; }
+  .oculto { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <p id="aviso" class="aviso3d" hidden>Tu navegador no puede mostrar la escena 3D. Aquí tienes toda la información en texto.</p>
+  <h1 id="t"></h1>
+  <p class="sub" id="s"></p>
+  <p><a href="index.html">← Volver a la reconstrucción 3D</a></p>
+  <p id="intro"></p>
+
+  <h2>Cómo leer esta reconstrucción</h2>
+  <ul class="niveles">
+    <li><span class="chip n1">Documentado</span> Aparece en el informe de la excavación.</li>
+    <li><span class="chip n2">Deducido</span> Se deduce de los croquis del informe o de otros dolmenes de la época.</li>
+    <li><span class="chip n3">Hipótesis</span> Propuesta razonada para completar lo que no se ha conservado.</li>
+  </ul>
+
+  <h2>La historia del dolmen en cuatro momentos</h2>
+  <ul class="momentos" id="momentos"></ul>
+
+  <h2>Dónde y cuándo</h2>
+  <img class="ancha" src="assets/mapa-situacion.svg" alt="Croquis de La Vera: la sierra de Gredos al norte, el río Tiétar al sur, Jaraíz de la Vera, Plasencia y Navalmoral de la Mata, y la zona aproximada del dolmen cerca de Jaraíz.">
+  <p class="fuente">Croquis sin escala exacta. No se indica el punto exacto del dolmen para protegerlo.</p>
+  <img class="ancha" src="assets/linea-tiempo.svg" alt="Línea del tiempo: Neolítico hasta hacia 3200 a. C.; Calcolítico de 3200 a 2200 a. C.; Edad del Bronce de 2200 a 850 a. C.; Edad del Hierro desde 850 a. C. El dolmen se sitúa entre la segunda mitad del IV milenio y los primeros siglos del III milenio a. C.">
+
+  <h2>Puntos de interés</h2>
+  <p>Elige el nivel de lectura:</p>
+  <div class="selector" role="group" aria-label="Nivel de lectura">
+    <button type="button" data-nivel="todo" aria-pressed="true">Todo</button>
+    <button type="button" data-nivel="basico" aria-pressed="false">Básico</button>
+    <button type="button" data-nivel="ampliacion" aria-pressed="false">Ampliación</button>
+    <button type="button" data-nivel="facil" aria-pressed="false">Lectura fácil</button>
+  </div>
+  <ol class="toc" id="toc"></ol>
+  <div id="fichas"></div>
+
+  <h2 class="ficha">Glosario</h2>
+  <dl class="glosario" id="glosario"></dl>
+
+  <p class="fuente">Reconstrucción basada en el informe de la excavación de 2012 aportado por J. R. Marcos. Las fuentes de cada ficha aparecen al final de la misma. Modelos, dibujos de los grabados y gráficos de creación propia; no se reproducen fotografías ni dibujos del informe.</p>
+</main>
+<script src="src/datos/dolmen.js?v=20261106a"></script>
+<script>window.MOINA.desdeEje = function (s, t) { return { x: s, y: t }; };</script>
+<script src="src/datos/fichas.js?v=20261106a"></script>
+<script>
+(function (V) {
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  if (new URLSearchParams(location.search).get('sin3d')) $('aviso').hidden = false;
+  $('t').textContent = V.intro.titulo;
+  $('s').textContent = V.intro.subtitulo;
+  $('intro').textContent = V.intro.texto.replace(/ Elige.*$/, '');
+  const nombres = { 1: 'Documentado', 2: 'Deducido', 3: 'Hipótesis' };
+  $('momentos').innerHTML = V.momentos.map(m => `<li><b>${esc(m.nombre)}</b> (${esc(m.fecha)}): ${esc(m.texto)}</li>`).join('');
+  $('toc').innerHTML = V.fichas.map(f => `<li><a href="#f${f.n}">${esc(f.titulo)}</a></li>`).join('');
+  $('fichas').innerHTML = V.fichas.map(f => `
+    <section class="ficha" id="f${f.n}" aria-labelledby="h${f.n}">
+      <h2 id="h${f.n}">${f.n}. ${esc(f.titulo)}</h2>
+      <p>${f.nivel.map(n => `<span class="chip n${n}">${nombres[n]}</span>`).join(' ')} ${esc(f.nivelTexto)}</p>
+      <div data-bloque="basico"><h3>Básico</h3><p>${esc(f.basico.replace(/ (Prueba a hacerlo con el botón «Pasear»|Pulsa «Resaltar grabados» para verlos mejor|Pulsa «Evidencia» para ver[^.]*|En el momento «Hoy» verás la cámara sin techo)\./g, ''))}</p></div>
+      <div data-bloque="ampliacion"><h3>Ampliación</h3><p>${esc(f.ampliacion.replace(/ Usa los botones de abajo[^.]*\./, ''))}</p></div>
+      <div data-bloque="facil"><h3>Lectura fácil</h3><div class="facil">${f.facil.split(/(?<=\.)\s+/).filter(s => !/botón/.test(s)).map(s => `<p>${esc(s)}</p>`).join('')}</div></div>
+      <p class="fuente">Fuente: ${esc(f.fuente)}</p>
+    </section>`).join('');
+  $('glosario').innerHTML = V.glosario.map(([t, d]) => `<dt>${esc(t)}</dt><dd>${esc(d)}</dd>`).join('');
+  document.querySelector('.selector').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const n = b.dataset.nivel;
+    document.querySelectorAll('.selector button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    document.querySelectorAll('[data-bloque]').forEach(d => d.classList.toggle('oculto', n !== 'todo' && d.dataset.bloque !== n));
+  });
+})(window.MOINA);
+</script>
+<!-- Contador de visitas (GoatCounter: sin cookies ni datos personales) -->
+<script data-goatcounter="https://profejuanra.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>

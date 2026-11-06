@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dolmen de La Moína II</title>
+<meta name="description" content="Reconstrucción virtual del dolmen de La Moína II (Jaraíz de la Vera, Cáceres): construcción, uso, clausura y estado tras su excavación.">
+<link rel="icon" href="assets/icono.svg" type="image/svg+xml">
+<noscript><link rel="stylesheet" href="src/estilo.css"></noscript>
+</head>
+<body>
+<a class="saltar" href="texto.html">Ir al modo solo texto (sin 3D)</a>
+<div id="escena" aria-label="Escena 3D del dolmen. Usa la lista de puntos de interés para explorarla con el teclado."></div>
+<div id="cargando" role="status">Cargando el dolmen…</div>
+<noscript><p class="aviso">Esta reconstrucción necesita JavaScript. Puedes leer todas las fichas en <a href="texto.html">el modo solo texto</a>.</p></noscript>
+
+<header id="cabecera" class="tarjeta">
+  <h1 id="titulo">Dolmen de La Moína II</h1>
+  <p class="sub" id="subtitulo"></p>
+  <details id="intro-det">
+    <summary>¿Qué estoy viendo?</summary>
+    <p id="intro-texto"></p>
+  </details>
+</header>
+
+<nav id="barra" class="tarjeta" aria-label="Herramientas">
+  <button type="button" id="b-pasear" aria-pressed="false" title="Paseo a pie (tecla P)"><span aria-hidden="true">🚶</span><span class="et">Pasear</span></button>
+  <button type="button" id="b-corte" aria-pressed="false" title="Ver por dentro: corte del túmulo (tecla V)"><span aria-hidden="true">◧</span><span class="et">Ver por dentro</span></button>
+  <button type="button" id="b-evidencia" aria-pressed="false" title="Capa de evidencia (tecla E)"><span aria-hidden="true">◐</span><span class="et">Evidencia</span></button>
+  <button type="button" id="b-mapa" title="Mapa y línea del tiempo (tecla M)"><span aria-hidden="true">🗺</span><span class="et">Mapa y tiempo</span></button>
+  <button type="button" id="b-captura" title="Guardar una imagen PNG"><span aria-hidden="true">📷</span><span class="et">Captura</span></button>
+  <button type="button" id="b-ayuda" title="Ayuda (tecla H)"><span aria-hidden="true">?</span><span class="et">Ayuda</span></button>
+  <label class="hora" title="Hora del día (21 de junio)"><span aria-hidden="true">☀</span>
+    <span class="et">Hora</span>
+    <input type="range" id="r-hora" min="6" max="21" step="0.25" value="10.5" aria-label="Hora del día">
+    <output id="o-hora">10:30</output>
+  </label>
+</nav>
+
+<section id="caja-momentos" class="tarjeta" aria-labelledby="momentos-t">
+  <h2 id="momentos-t" class="vh">Momento de la historia del dolmen</h2>
+  <div id="momentos" role="group" aria-label="Momento de la historia del dolmen"></div>
+  <p id="momento-texto"></p>
+  <p id="pasos-sellado" hidden>
+    <button type="button" id="b-fuego" aria-pressed="false">1. Losa de cierre y hoguera</button>
+    <button type="button" id="b-relleno" aria-pressed="false">2. Relleno del vestíbulo</button>
+  </p>
+</section>
+
+<nav id="lista-pdi" class="tarjeta" aria-label="Puntos de interés">
+  <h2>Puntos de interés</h2>
+  <ol id="pdi-ol"></ol>
+  <button type="button" id="b-vista-general" class="enlace">Vista general</button>
+</nav>
+
+<aside id="panel" class="tarjeta" role="dialog" aria-modal="false" aria-labelledby="panel-titulo" hidden>
+  <button type="button" class="cerrar" id="panel-cerrar" aria-label="Cerrar ficha">×</button>
+  <p class="num" id="panel-num"></p>
+  <h2 id="panel-titulo"></h2>
+  <p class="nivel" id="panel-nivel"></p>
+  <div class="pestanas" role="tablist" aria-label="Nivel de lectura">
+    <button type="button" role="tab" id="t-basico" aria-selected="true" aria-controls="panel-texto">Básico</button>
+    <button type="button" role="tab" id="t-ampliacion" aria-selected="false" aria-controls="panel-texto">Ampliación</button>
+    <button type="button" role="tab" id="t-facil" aria-selected="false" aria-controls="panel-texto">Lectura fácil</button>
+  </div>
+  <div id="panel-texto" role="tabpanel" tabindex="0"></div>
+  <div id="panel-extra"></div>
+  <p class="fuente" id="panel-fuente"></p>
+  <div class="nav-fichas">
+    <button type="button" id="panel-ant">← Anterior</button>
+    <button type="button" id="panel-sig">Siguiente →</button>
+  </div>
+</aside>
+
+<div id="leyenda" class="tarjeta" hidden>
+  <h2>Nivel de evidencia</h2>
+  <ul>
+    <li><span class="muestra doc"></span><b>Documentado</b>: hallado en la excavación</li>
+    <li><span class="muestra ded"></span><b>Deducido</b>: por el croquis o por otros dolmenes</li>
+    <li><span class="muestra hip"></span><b>Hipótesis</b>: propuesta razonada</li>
+  </ul>
+</div>
+
+<div id="mando" hidden aria-hidden="true"><div id="mando-bola"></div></div>
+<p id="aviso-paseo" class="tarjeta" hidden>Paseo a pie: <b>W A S D</b> o flechas para andar · arrastra para mirar · <b>P</b> para salir</p>
+
+<dialog id="d-ayuda" aria-labelledby="ayuda-t">
+  <h2 id="ayuda-t">Cómo se usa</h2>
+  <ul>
+    <li><b>Momentos:</b> abajo puedes elegir cómo era el dolmen durante su construcción, mientras se usaba, cuando se cerró o hoy.</li>
+    <li><b>Girar la vista:</b> arrastra con el ratón o con un dedo. <b>Acercar:</b> rueda del ratón o pellizco. <b>Desplazar:</b> botón derecho o dos dedos.</li>
+    <li><b>Puntos de interés:</b> pulsa un número en la escena o en la lista. Cada ficha tiene tres niveles: básico, ampliación y lectura fácil.</li>
+    <li><b>Ver por dentro:</b> corta el túmulo por la mitad para ver la cámara, la cubierta y el corredor.</li>
+    <li><b>Pasear:</b> empiezas frente al vestíbulo. Entra por el corredor (te agacharás) hasta la cámara. Teclado: W A S D o flechas; Mayúsculas para correr. En pantalla táctil, usa el mando redondo.</li>
+    <li><b>Evidencia:</b> colorea cada elemento según lo seguros que estamos de él.</li>
+    <li><b>Teclado:</b> Tab recorre los botones y puntos; Intro abre; Esc cierra. Teclas rápidas: P, V, E, M, H y los números 1 a 9 (0 = punto 10).</li>
+  </ul>
+  <p>¿Prefieres leer sin 3D? <a href="texto.html">Modo solo texto</a>.</p>
+  <p><label><input type="checkbox" id="c-calidad"> Calidad baja (para equipos lentos o móviles)</label></p>
+  <form method="dialog"><button>Cerrar</button></form>
+</dialog>
+
+<dialog id="d-mapa" aria-labelledby="mapa-t">
+  <h2 id="mapa-t">Dónde y cuándo</h2>
+  <div class="dos">
+    <figure><img src="assets/mapa-situacion.svg" alt="Croquis de La Vera: la sierra de Gredos al norte, el río Tiétar al sur, Jaraíz de la Vera, Plasencia y Navalmoral de la Mata, y la zona aproximada del dolmen cerca de Jaraíz."><figcaption>Croquis de situación (sin escala exacta). No se indica el punto exacto del dolmen para protegerlo.</figcaption></figure>
+    <figure><img src="assets/linea-tiempo.svg" alt="Línea del tiempo: Neolítico hasta hacia 3200 a. C.; Calcolítico entre 3200 y 2200 a. C.; Edad del Bronce entre 2200 y 850 a. C.; Edad del Hierro desde 850 a. C. El dolmen se usa entre la segunda mitad del IV milenio y los primeros siglos del III milenio a. C."><figcaption>Fechas aproximadas (a. C. calibrados). Las del dolmen se basan en sus hallazgos: falta una datación por radiocarbono.</figcaption></figure>
+  </div>
+  <form method="dialog"><button>Cerrar</button></form>
+</dialog>
+
+<p id="avisos" class="vh" aria-live="polite"></p>
+
+<script>
+/* Carga los archivos con su versión, para que el navegador no use copias antiguas */
+(function () {
+  var VERSION = '20261106a';
+  var v = /[?&]dev/.test(location.search) ? Date.now() : VERSION;
+  var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'src/estilo.css?v=' + v; document.head.appendChild(css);
+  ['src/vendor/three.min.js', 'src/vendor/OrbitControls.js', 'src/datos/dolmen.js', 'src/escena/comun.js', 'src/datos/fichas.js', 'src/escena/grabados.js', 'src/escena/paisaje.js', 'src/escena/luz.js', 'src/escena/dolmen.js', 'src/interfaz/controles.js', 'src/interfaz/pdi.js', 'src/interfaz/panel.js', 'src/interfaz/evidencia.js', 'src/main.js'].forEach(function (s) {
+    document.write('<script src="' + s + '?v=' + v + '"><\/script>');
+  });
+})();
+</script>
+<!-- Contador de visitas (GoatCounter: sin cookies ni datos personales) -->
+<script data-goatcounter="https://profejuanra.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>
