@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" font-family="system-ui, sans-serif">
+  <title>Croquis de situación del dolmen de La Moína II</title>
+  <desc>La Vera, en el norte de la provincia de Cáceres: la sierra de Gredos al norte, el río Tiétar al sur, Plasencia al oeste y Navalmoral de la Mata al sureste. El dolmen está cerca de Jaraíz de la Vera. Sin escala exacta.</desc>
+  <rect width="640" height="420" fill="#fbf8f1"/>
+  <!-- Sierra de Gredos -->
+  <path d="M0 0 H640 V120 Q560 150 480 118 Q420 92 360 122 Q290 156 220 120 Q150 90 80 128 Q40 146 0 132 Z" fill="#b7bcc6"/>
+  <path d="M60 70 l20 -26 20 26 M180 64 l24 -32 24 32 M330 70 l22 -30 22 30 M470 58 l26 -34 26 34 M560 74 l20 -26 20 26" fill="none" stroke="#7d8594" stroke-width="3"/>
+  <text x="330" y="36" font-size="18" text-anchor="middle" fill="#4b5260" font-weight="700">Sierra de Gredos</text>
+  <!-- Ladera de La Vera -->
+  <path d="M0 132 Q80 150 150 132 Q230 118 300 150 Q380 172 470 140 Q560 120 640 150 V260 H0 Z" fill="#d6dcb8"/>
+  <text x="470" y="200" font-size="15" fill="#5b6b3a" font-style="italic">La Vera</text>
+  <!-- Valle del Tiétar -->
+  <path d="M0 260 H640 V420 H0 Z" fill="#e8dfc4"/>
+  <path d="M640 252 C560 270 500 250 430 280 C360 310 300 286 230 300 C160 312 100 296 40 330 L0 350" fill="none" stroke="#5a8fb0" stroke-width="6" stroke-linecap="round"/>
+  <text x="250" y="330" font-size="15" fill="#2f6a8c" font-style="italic">río Tiétar</text>
+  <!-- Poblaciones -->
+  <g font-size="14" fill="#2b2620">
+    <circle cx="70" cy="226" r="6" fill="#2b2620"/><text x="82" y="231">Plasencia</text>
+    <circle cx="250" cy="196" r="6" fill="#2b2620"/><text x="262" y="189">Jaraíz de la Vera</text>
+    <circle cx="560" cy="338" r="6" fill="#2b2620"/><text x="470" y="362">Navalmoral de la Mata</text>
+  </g>
+  <!-- Zona aproximada del dolmen -->
+  <circle cx="240" cy="214" r="26" fill="#cc79a7" fill-opacity=".3" stroke="#a24e80" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="240" y="262" font-size="13" text-anchor="middle" fill="#7a2f5c" font-weight="700">zona del dolmen (aproximada)</text>
+  <!-- Norte -->
+  <g transform="translate(600 380)"><path d="M0 -26 L8 0 L0 -6 L-8 0 Z" fill="#2b2620"/><text x="0" y="16" font-size="13" text-anchor="middle">N</text></g>
+  <text x="20" y="405" font-size="11" fill="#666">Croquis sin escala exacta. No se indica el punto exacto del dolmen para protegerlo.</text>
+</svg>
