@@ -205,6 +205,10 @@ const MATERIAS = {
         descripcion: "Pasea por un poblado de la Edad del Cobre del Campo Arañuelo, hacia el 2900 a. C.",
         vista: "img/materiales/poblado-valdecanas.jpg",
         enlace: "materiales/1eso/poblado-valdecanas/index.html" },
+      { tipo: "actividad", titulo: "Reconstrucción 3D: el dolmen de La Moína II",
+        descripcion: "Descubre cómo se construyó, se usó y se cerró un dolmen de Jaraíz de la Vera, y entra en su cámara.",
+        vista: "img/materiales/dolmen-moina-ii.jpg",
+        enlace: "materiales/1eso/dolmen-moina-ii/index.html" },
     ]},
     { titulo: "6. Mesopotamia y Egipto", bloque: "Historia", materiales: [
     ]},
