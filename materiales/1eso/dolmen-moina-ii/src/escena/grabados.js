@@ -141,19 +141,57 @@
     g.restore();
   }
 
-  // Textura de la cara interior de un ortostato (ancho y alto en metros)
+  // Máscaras de los motivos sacadas de los calcos del informe (Tera S.L.). Sin máscara se usan los motivos dibujados.
+  V.MASCARAS = { '6': 1, '8': 1, '9': 1, '10': 1, '11': 1, '12': 1, '19': 1, '21': 1, 'acceso': 1 };
+  const mascaras = {}, pendientes = {};
+  function mascara(id, alListo) {
+    if (!V.MASCARAS[id]) return null;
+    if (mascaras[id]) return mascaras[id].complete ? mascaras[id] : null;
+    const img = new Image();
+    img.onload = () => { (pendientes[id] || []).forEach(f => f()); pendientes[id] = []; };
+    img.src = 'fotos/mascara-' + id + '.png';
+    mascaras[id] = img;
+    return null;
+  }
+  // Pinta la máscara como surco: borde iluminado y sombra (o en rojo, como un calco)
+  function pintarMascara(g, img, modo, W, Hv) {
+    const capa = (color, alfa, dx, dy) => {
+      const c = document.createElement('canvas'); c.width = W; c.height = Hv;
+      const x = c.getContext('2d');
+      x.drawImage(img, 0, 0, W, Hv);
+      x.globalCompositeOperation = 'source-in'; x.fillStyle = color; x.fillRect(0, 0, W, Hv);
+      g.save(); g.globalAlpha = alfa; g.drawImage(c, dx, dy); g.restore();
+    };
+    if (modo === 'resaltado') capa('#b03a20', 0.92, 0, 0);
+    else if (modo === 'gastado') { capa('#ece6da', 0.16, -1, -1); capa('#342e28', 0.42, 0.8, 0.8); }
+    else { capa('#eee8dc', 0.32, -1.4, -1.4); capa('#28221d', 0.78, 0.9, 0.9); }
+  }
+
+  // Textura de la cara interior de un ortostato (ancho y alto total en metros, incluida la parte enterrada)
   const cache = {};
   V.texturaOrtostato = function (id, ancho, alto, modo) {
     const clave = id + modo;
     if (cache[clave]) return cache[clave];
     const W = 256, H = Math.round(256 * alto / ancho);
     const datos = V.grabados[id];
-    const t = V.texturaCanvas(W, H, (g) => {
+    const losa = V.datos.camara.losas.find(l => l.id === id);
+    const visible = losa ? losa.alto / alto : 0.455 / alto;   // fracción de la cara por encima del suelo
+    const pintar = (g) => {
       V.pintarGranito(g, W, H, '#a59e92', 100 + id.length * 13 + (parseInt(id, 10) || 3));
       if (!datos) return;
+      const img = mascara(id);
+      if (img) { pintarMascara(g, img, modo, W, Math.round(H * visible)); return; }
+      if (V.MASCARAS[id]) return;          // la máscara aún se está cargando
       const k = W / (ancho * 100);      // píxeles por centímetro
       datos.motivos.forEach((m, i) => motivo(g, m, m.u * W, m.v * H, k, modo, 17 + i * 31, datos.tecnica));
-    });
+    };
+    const t = V.texturaCanvas(W, H, pintar);
+    if (V.MASCARAS[id] && !mascara(id)) {
+      (pendientes[id] = pendientes[id] || []).push(() => {
+        const g = t.image.getContext('2d'); g.clearRect(0, 0, W, H); pintar(g);
+        t.needsUpdate = true; V.ctx && V.ctx.pedirRender && V.ctx.pedirRender();
+      });
+    }
     cache[clave] = t;
     return t;
   };
