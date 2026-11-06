@@ -78,18 +78,44 @@
       el.innerHTML = nivelLectura === 'facil' ? txt.split(/(?<=\.)\s+/).map(s => `<p>${esc(s)}</p>`).join('') : `<p>${esc(txt)}</p>`;
       for (const k in pestanas) pestanas[k].setAttribute('aria-selected', String(k === nivelLectura));
     }
+    // Galería de fotos y calcos del informe (Tera S.L.), con visor a pantalla completa
+    const visor = $('d-foto');
+    let galeria = [], iFoto = 0;
+    function verFoto(i) {
+      iFoto = (i + galeria.length) % galeria.length;
+      const g = galeria[iFoto];
+      $('foto-img').src = g.src; $('foto-img').alt = g.pie;
+      $('foto-pie').textContent = g.pie + ' Foto: Tera S.L.';
+      $('foto-ant').hidden = $('foto-sig').hidden = galeria.length < 2;
+      if (!visor.open) visor.showModal();
+    }
+    $('foto-ant').addEventListener('click', () => verFoto(iFoto - 1));
+    $('foto-sig').addEventListener('click', () => verFoto(iFoto + 1));
+    visor.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') verFoto(iFoto - 1); if (e.key === 'ArrowRight') verFoto(iFoto + 1); });
+    visor.addEventListener('click', e => { if (e.target === visor) visor.close(); });
+    function htmlGaleria(lista, clase) {
+      return `<div class="${clase}">${lista.map((g, i) => `<button type="button" class="miniatura" data-i="${i}" aria-label="Ampliar: ${esc(g.pie)}"><img src="${g.mini}" alt="" loading="lazy"></button>`).join('')}</div>`;
+    }
     function pintarExtra(f) {
       const ex = $('panel-extra');
+      let html = '';
+      galeria = (f.fotos || []).map(x => ({ src: 'fotos/' + x.f + '.jpg', mini: 'fotos/' + x.f + '-mini.jpg', pie: x.pie }));
       if (f.extra === 'grabados') {
-        const losas = V.datos.camara.losas.filter(l => V.grabados[l.id]);
-        ex.innerHTML = `<p class="botonera"><button type="button" class="b-resaltar" aria-pressed="${resaltar}">Resaltar grabados</button></p>
-          <p class="pie">Calcos esquemáticos (dibujo propio a partir de las fichas; posiciones aproximadas):</p>
-          <div class="calcos">${losas.map(l => `<figure><img src="${V.calcoOrtostato(l.id, l.ancho, l.alto + 0.25)}" alt="Calco esquemático de la U.E. ${l.id}: ${esc(V.grabados[l.id].motivos.map(m => m.t).join(', '))}."><figcaption>U.E. ${l.id} · ${esc(V.grabados[l.id].tecnica)}</figcaption></figure>`).join('')}</div>`;
-        ex.querySelector('.b-resaltar').addEventListener('click', () => fijarResaltar(!resaltar));
-      } else if (f.extra === 'clausura') {
-        ex.innerHTML = `<p class="botonera"><button type="button" data-p="sellado-fuego" aria-pressed="${momento === 'sellado-fuego'}">1. Losa de cierre y hoguera</button> <button type="button" data-p="sellado-relleno" aria-pressed="${momento === 'sellado-relleno'}">2. Cierre de madera y relleno</button></p>`;
-        ex.querySelectorAll('button').forEach(b => b.addEventListener('click', () => fijarMomento(b.dataset.p)));
-      } else ex.innerHTML = '';
+        html += `<p class="botonera"><button type="button" class="b-resaltar" aria-pressed="${resaltar}">Resaltar grabados</button></p>`;
+        const losas = V.datos.camara.losas.filter(l => V.grabados[l.id]).map(l => l.id).concat(['acceso']);
+        const calcos = losas.map(id => ({ src: 'fotos/calco-' + id + '.jpg', mini: 'fotos/calco-' + id + '-mini.jpg', pie: (id === 'acceso' ? 'Calco del ortostato del acceso' : 'Calco del ortostato U.E. ' + id) + ' (' + V.grabados[id].tecnica + ').' }));
+        html += `<h3 class="pie">Calcos de los grabados</h3>` + htmlGaleria(calcos, 'galeria calcos');
+        galeria = calcos.concat(galeria);
+        if (f.fotos) html += `<h3 class="pie">Fotografías</h3>` + htmlGaleria(galeria.slice(calcos.length), 'galeria').replace(/data-i="(\d+)"/g, (m, i) => `data-i="${+i + calcos.length}"`);
+      } else {
+        if (f.extra === 'clausura') html += `<p class="botonera"><button type="button" data-p="sellado-fuego" aria-pressed="${momento === 'sellado-fuego'}">1. Losa de cierre y hoguera</button> <button type="button" data-p="sellado-relleno" aria-pressed="${momento === 'sellado-relleno'}">2. Cierre de madera y relleno</button></p>`;
+        if (galeria.length) html += `<h3 class="pie">Fotografías de la excavación</h3>` + htmlGaleria(galeria, 'galeria');
+      }
+      if (galeria.length) html += `<p class="pie credito">Fotos, planimetría y calcos: Tera S.L. Pulsa una imagen para ampliarla.</p>`;
+      ex.innerHTML = html;
+      ex.querySelectorAll('[data-p]').forEach(b => b.addEventListener('click', () => fijarMomento(b.dataset.p)));
+      const br = ex.querySelector('.b-resaltar'); if (br) br.addEventListener('click', () => fijarResaltar(!resaltar));
+      ex.querySelectorAll('.miniatura').forEach(b => b.addEventListener('click', () => verFoto(+b.dataset.i)));
     }
     function abrir(n, volar) {
       const f = V.fichas.find(x => x.n === n);
@@ -101,7 +127,7 @@
       $('panel-num').textContent = `Punto de interés ${n} de ${V.fichas.length}`;
       $('panel-titulo').textContent = f.titulo;
       $('panel-nivel').innerHTML = f.nivel.map(l => `<span class="chip n${l}">${V.NOMBRE_NIVEL[l]}</span>`).join('') + `<span>${esc(f.nivelTexto)}</span>`;
-      $('panel-fuente').textContent = 'Fuente: ' + f.fuente;
+      $('panel-fuente').textContent = 'Fuente: ' + f.fuente.replace('[Inf.]', 'informe de la excavación de 2012 (Tera S.L.):');
       pintarExtra(f);
       pintarTexto();
       $('panel').hidden = false;
