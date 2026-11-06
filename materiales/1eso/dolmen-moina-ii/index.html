@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dolmen de La Moína II</title>
-<meta name="description" content="Reconstrucción virtual del dolmen de La Moína II (Jaraíz de la Vera, Cáceres): construcción, uso, clausura y estado tras su excavación.">
+<meta name="description" content="Reconstrucción virtual del dolmen de La Moína II (Jaraíz de la Vera, Cáceres): construcción, uso, clausura y estado tras su excavación por Tera S.L.">
 <link rel="icon" href="assets/icono.svg" type="image/svg+xml">
 <noscript><link rel="stylesheet" href="src/estilo.css"></noscript>
 </head>
@@ -109,12 +109,19 @@
   <form method="dialog"><button>Cerrar</button></form>
 </dialog>
 
+<dialog id="d-foto" class="visor-foto" aria-label="Imagen ampliada">
+  <form method="dialog" class="cerrar-foto"><button aria-label="Cerrar">×</button></form>
+  <button type="button" id="foto-ant" class="flecha" aria-label="Imagen anterior">‹</button>
+  <figure><img id="foto-img" alt=""><figcaption id="foto-pie"></figcaption></figure>
+  <button type="button" id="foto-sig" class="flecha" aria-label="Imagen siguiente">›</button>
+</dialog>
+
 <p id="avisos" class="vh" aria-live="polite"></p>
 
 <script>
 /* Carga los archivos con su versión, para que el navegador no use copias antiguas */
 (function () {
-  var VERSION = '20261106a';
+  var VERSION = '20261106b';
   var v = /[?&]dev/.test(location.search) ? Date.now() : VERSION;
   var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'src/estilo.css?v=' + v; document.head.appendChild(css);
   ['src/vendor/three.min.js', 'src/vendor/OrbitControls.js', 'src/datos/dolmen.js', 'src/escena/comun.js', 'src/datos/fichas.js', 'src/escena/grabados.js', 'src/escena/paisaje.js', 'src/escena/luz.js', 'src/escena/dolmen.js', 'src/interfaz/controles.js', 'src/interfaz/pdi.js', 'src/interfaz/panel.js', 'src/interfaz/evidencia.js', 'src/main.js'].forEach(function (s) {

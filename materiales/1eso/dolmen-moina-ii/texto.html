@@ -6,7 +6,7 @@
 <title>La Moína II en texto</title>
 <meta name="description" content="Todas las fichas de la reconstrucción del dolmen de La Moína II (Jaraíz de la Vera), sin 3D.">
 <link rel="icon" href="assets/icono.svg" type="image/svg+xml">
-<link rel="stylesheet" href="src/estilo.css?v=20261106a">
+<link rel="stylesheet" href="src/estilo.css?v=20261106b">
 <style>
   body { overflow: auto; }
   main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
@@ -27,6 +27,9 @@
   @media (max-width: 600px) { .toc { columns: 1; } }
   .selector { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 0; }
   .oculto { display: none; }
+  .fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 12px; }
+  .fotos figure { margin: 0; } .fotos img { width: 100%; height: 130px; object-fit: cover; border-radius: 8px; border: 1px solid var(--borde); background: #fff; }
+  .fotos figcaption { font-size: .8rem; color: var(--suave); }
 </style>
 </head>
 <body>
@@ -66,11 +69,11 @@
   <h2 class="ficha">Glosario</h2>
   <dl class="glosario" id="glosario"></dl>
 
-  <p class="fuente">Reconstrucción basada en el informe de la excavación de 2012 aportado por J. R. Marcos. Las fuentes de cada ficha aparecen al final de la misma. Modelos, dibujos de los grabados y gráficos de creación propia; no se reproducen fotografías ni dibujos del informe.</p>
+  <p class="fuente">Reconstrucción basada en el informe de la excavación de 2012, realizada por la empresa Tera S.L. Fotografías, planimetría y calcos de los grabados: Tera S.L. Modelos 3D y gráficos de creación propia. Las fuentes de cada ficha aparecen al final de la misma.</p>
 </main>
-<script src="src/datos/dolmen.js?v=20261106a"></script>
+<script src="src/datos/dolmen.js?v=20261106b"></script>
 <script>window.MOINA.desdeEje = function (s, t) { return { x: s, y: t }; };</script>
-<script src="src/datos/fichas.js?v=20261106a"></script>
+<script src="src/datos/fichas.js?v=20261106b"></script>
 <script>
 (function (V) {
   const $ = id => document.getElementById(id);
@@ -89,7 +92,8 @@
       <div data-bloque="basico"><h3>Básico</h3><p>${esc(f.basico.replace(/ (Prueba a hacerlo con el botón «Pasear»|Pulsa «Resaltar grabados» para verlos mejor|Pulsa «Evidencia» para ver[^.]*|En el momento «Hoy» verás la cámara sin techo)\./g, ''))}</p></div>
       <div data-bloque="ampliacion"><h3>Ampliación</h3><p>${esc(f.ampliacion.replace(/ Usa los botones de abajo[^.]*\./, ''))}</p></div>
       <div data-bloque="facil"><h3>Lectura fácil</h3><div class="facil">${f.facil.split(/(?<=\.)\s+/).filter(s => !/botón/.test(s)).map(s => `<p>${esc(s)}</p>`).join('')}</div></div>
-      <p class="fuente">Fuente: ${esc(f.fuente)}</p>
+      ${(f.fotos || []).length || f.extra === 'grabados' ? `<div class="fotos">${(f.extra === 'grabados' ? ['6', '8', '9', '10', '11', '12', '13', '19', '21', 'acceso'].map(id => ({ f: 'calco-' + id, pie: id === 'acceso' ? 'Calco del ortostato del acceso.' : 'Calco del ortostato U.E. ' + id + '.' })) : []).concat(f.fotos || []).map(x => `<figure><a href="fotos/${x.f}.jpg"><img src="fotos/${x.f}-mini.jpg" alt="${esc(x.pie)}" loading="lazy"></a><figcaption>${esc(x.pie)}</figcaption></figure>`).join('')}</div><p class="fuente">Fotos, planimetría y calcos: Tera S.L.</p>` : ''}
+      <p class="fuente">Fuente: ${esc(f.fuente.replace('[Inf.]', 'informe de la excavación de 2012 (Tera S.L.):'))}</p>
     </section>`).join('');
   $('glosario').innerHTML = V.glosario.map(([t, d]) => `<dt>${esc(t)}</dt><dd>${esc(d)}</dd>`).join('');
   document.querySelector('.selector').addEventListener('click', e => {
