@@ -141,8 +141,8 @@
     g.restore();
   }
 
-  // Máscaras de los motivos sacadas de los calcos del informe (Tera S.L.). Sin máscara se usan los motivos dibujados.
-  V.MASCARAS = { '6': 1, '8': 1, '9': 1, '10': 1, '11': 1, '12': 1, '19': 1, '21': 1, 'acceso': 1 };
+  // Admite máscaras de motivos en fotos/mascara-<id>.png; ahora no se usa ninguna.
+  V.MASCARAS = {};   // sin máscaras: los grabados se dibujan a partir de las descripciones de las fichas
   const mascaras = {}, pendientes = {};
   function mascara(id, alListo) {
     if (!V.MASCARAS[id]) return null;
