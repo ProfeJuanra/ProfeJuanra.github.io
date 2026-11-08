@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reconstrucciones en 3D · Profe JuanRa</title>
+<meta name="description" content="Reconstrucciones en 3D de lugares históricos de Extremadura para explorar en el navegador: poblados, dolmenes y villas del pasado.">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+<script>/* Carga siempre la versión más reciente del estilo */document.write('<link rel="stylesheet" href="estilo.css?v=' + Date.now() + '">');</script>
+<noscript><link rel="stylesheet" href="estilo.css"></noscript>
+</head>
+<body data-pagina="reconstrucciones">
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<div id="barra"></div>
+<main id="contenido">
+<div class="contenedor">
+  <section class="seccion">
+    <div class="etiqueta">Viajar al pasado</div>
+    <h1 class="titulo-pagina">Reconstrucción en 3D de lugares históricos</h1>
+    <p class="intro">Recorre, como si estuvieras allí, lugares de nuestra historia tal y como pudieron ser. Cada reconstrucción se basa en excavaciones y estudios, y explica qué está comprobado, qué se deduce y qué es una hipótesis. Funcionan en el ordenador y en el móvil, sin instalar nada.</p>
+  </section>
+  <section class="seccion" aria-label="Reconstrucciones">
+    <div class="recos" data-reconstrucciones></div>
+  </section>
+  <section class="seccion">
+    <div class="botones"><a class="boton" href="index.html">← Volver al inicio</a></div>
+  </section>
+</div>
+</main>
+<div id="pie"></div>
+<script>/* Carga siempre la versión más reciente de los contenidos */
+var v = Date.now();
+document.write('<script src="contenidos.js?v=' + v + '"><\/script><script src="comun.js?v=' + v + '"><\/script>');
+</script>
+<!-- Contador de visitas (GoatCounter: sin cookies ni datos personales) -->
+<script data-goatcounter="https://profejuanra.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>

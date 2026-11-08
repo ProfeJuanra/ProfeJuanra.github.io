@@ -15,6 +15,7 @@
       { id: 'geografia', texto: '2º Bach. · Geografía', enlace: 'geografia.html' },
       { id: 'historia-arte', texto: '2º Bach. · Historia del Arte', enlace: 'historia-arte.html' },
     ]},
+    { id: 'reconstrucciones', texto: 'Reconstrucciones 3D', enlace: 'reconstrucciones.html' },
   ];
 
   const pagina = document.body.dataset.pagina || 'inicio';
@@ -236,6 +237,25 @@
     ['contextmenu', 'copy', 'cut', 'dragstart'].forEach(ev => caja.addEventListener(ev, e => e.preventDefault()));
   });
 
+  // ---- Reconstrucciones en 3D: una tarjeta por cada una ----
+  document.querySelectorAll('[data-reconstrucciones]').forEach(caja => {
+    const lista = (typeof RECONSTRUCCIONES !== 'undefined' && RECONSTRUCCIONES) || [];
+    lista.forEach(r => {
+      const url = WEB[r.enlace] || r.enlace;
+      const fuera = esExterno(url);
+      const a = el('a', { class: 'reco', href: url },
+        el('span', { class: 'reco-img' }, el('img', { src: r.vista, alt: '', loading: 'lazy', width: 900, height: 506 })),
+        el('span', { class: 'reco-texto' },
+          el('span', { class: 'reco-curso' }, r.curso),
+          el('h3', {}, r.titulo),
+          el('span', { class: 'reco-datos' }, r.lugar + ' · ' + r.epoca),
+          el('span', { class: 'reco-desc' }, r.descripcion),
+          el('span', { class: 'ir' }, fuera ? 'Abrir en una pestaña nueva ↗' : 'Entrar en la reconstrucción →')));
+      if (fuera) { a.target = '_blank'; a.rel = 'noopener'; }
+      caja.append(a);
+    });
+  });
+
   // ---- Galería de imágenes con visor a pantalla completa ----
   const abrirGaleria = {};
   document.querySelectorAll('[data-galeria]').forEach(caja => {
@@ -360,6 +380,7 @@
           <a href="index.html">Inicio</a>
           <a href="eso.html">ESO</a>
           <a href="bachillerato.html">Bachillerato</a>
+          <a href="reconstrucciones.html">Reconstrucciones 3D</a>
           <a data-enlace="youtube">YouTube</a>
           <a data-enlace="instagram">Instagram</a>
         </nav>

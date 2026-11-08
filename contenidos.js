@@ -33,6 +33,26 @@ const WEB = {
   instagram: "https://www.instagram.com/juan_barbado/",
 };
 
+// Reconstrucciones en 3D de lugares históricos (página «reconstrucciones.html»).
+// Para añadir una nueva, copia un bloque y cambia los datos.
+const RECONSTRUCCIONES = [
+  { titulo: "Poblado de la Isla de Valdecañas",
+    lugar: "El Gordo – Berrocalejo (Cáceres)", epoca: "Edad del Cobre · hacia el 2900 a. C.",
+    descripcion: "Pasea por un poblado de campesinos del Campo Arañuelo: cabañas, silos, la zanja de drenaje y el hogar.",
+    curso: "1º ESO · La Prehistoria", vista: "img/materiales/poblado-valdecanas.jpg",
+    enlace: "materiales/1eso/poblado-valdecanas/index.html" },
+  { titulo: "Dolmen de La Moína II",
+    lugar: "Jaraíz de la Vera (Cáceres)", epoca: "Neolítico final – Calcolítico · 3500-2700 a. C.",
+    descripcion: "Mira cómo se construyó, se usó y se cerró un sepulcro megalítico, y entra por su corredor hasta la cámara.",
+    curso: "1º ESO · La Prehistoria", vista: "img/materiales/dolmen-moina-ii.jpg",
+    enlace: "materiales/1eso/dolmen-moina-ii/index.html" },
+  { titulo: "Navalmoral de la Mata hacia 1850",
+    lugar: "Navalmoral de la Mata (Cáceres)", epoca: "Siglo XIX · hacia 1850",
+    descripcion: "Recorre las calles de la villa a mediados del siglo XIX.",
+    curso: "Historia de Navalmoral", vista: "img/tarjeta-navalmoral.png",
+    enlace: "paseoNavalmoral" },
+];
+
 // Apartado «Materiales» de cada asignatura (materiales generales, no de una unidad)
 const MATERIALES = {
 
