@@ -26,8 +26,8 @@
 */
 
 const WEB = {
-  // Enlace del paseo 3D por Navalmoral en 1850 (se abre en pestaña nueva)
-  paseoNavalmoral: "https://claude.ai/artifact/RowaKbFG2UcMV4SZ12xB2S",
+  // Paseo 3D por Navalmoral en 1850 (alojado en la propia web; se abre en pestaña nueva)
+  paseoNavalmoral: "materiales/navalmoral-1850/index.html",
   // Tu canal de YouTube
   youtube: "https://www.youtube.com/@juanramonmarcosbarbado",
   instagram: "https://www.instagram.com/juan_barbado/",
