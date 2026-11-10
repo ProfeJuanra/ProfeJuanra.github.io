@@ -56,3 +56,7 @@ claros y cercanos, con rigor histórico.
   de claude.ai; ahora vive en la web y no depende de ninguna cuenta.
 - Los commits recientes se hicieron subiendo archivos desde la web de GitHub
   («Add files via upload»).
+- Claude Code sube los cambios **directamente a `main`**, sin ramas de trabajo ni
+  pull requests (decisión del profesor). Antes de subir, `git fetch origin main` e
+  integrar lo que haya subido él desde la web. Claude no puede borrar ramas en
+  GitHub, así que no conviene crearlas.
