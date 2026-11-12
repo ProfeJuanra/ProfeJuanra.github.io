@@ -65,3 +65,10 @@ claros y cercanos, con rigor histórico.
   pull requests (decisión del profesor). Antes de subir, `git fetch origin main` e
   integrar lo que haya subido él desde la web. Claude no puede borrar ramas en
   GitHub, así que no conviene crearlas.
+- El profesor guarda en su ordenador una carpeta con las cosas de la web, y **puede
+  estar desfasada** respecto a GitHub (en noviembre de 2026 le faltaban, entre otras
+  cosas, `egipto.html`, `egipto/`, `materiales/1eso/gran-piramide/`,
+  `materiales/navalmoral-1850/` y el `contenidos.js` actual). Si trabajas en esa
+  carpeta, sincronízala primero con `origin/main` sin borrar sus archivos propios que
+  no estén en la web (Word, borradores…). Nunca subas desde ella un archivo antiguo
+  que sobrescriba uno más reciente de GitHub, sobre todo `contenidos.js`.
