@@ -124,7 +124,8 @@
 .quien p:last-child{margin:0}
 
 /* ---------- Comparación de fotos ---------- */
-.comparar{display:grid;gap:20px}
+.comparar{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:22px;align-items:start}
+.cmp .cmp-marco{box-shadow:0 12px 30px -20px rgba(13,16,51,.5)}
 .cmp{margin:0}
 .cmp-marco{position:relative;border-radius:14px;overflow:hidden;--corte:50%}
 .cmp-marco img{width:100%;height:auto;display:block}
@@ -172,3 +173,4 @@
   .ficha-enclave{padding:16px}
 }
 @media print{.mapa-vistas,.barra-facil,.reto-botones{display:none}}
+.cmp.sola .cmp-marco::after{display:none}
