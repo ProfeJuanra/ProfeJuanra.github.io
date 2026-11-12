@@ -38,7 +38,7 @@ window.PIRAMIDE = {
 
     { id: 'base', titulo: 'Lado de la base', nivel: 'Medido',
       valor: '230,3 m de media (440 codos)',
-      texto: 'Cada lado de la base mide unos 230,3 m. Entre el lado más largo y el más corto solo hay unos 20 cm de diferencia. La base ocupa más de 5 hectáreas, como siete campos de fútbol.',
+      texto: 'Cada lado de la base mide unos 230,3 m, y los cuatro lados son casi exactamente iguales. La base ocupa más de 5 hectáreas, como siete campos de fútbol.',
       facil: 'Cada lado mide unos 230 metros. La base es tan grande como siete campos de fútbol.',
       fuentes: ['cole1925', 'lehner1997'] },
 
@@ -62,7 +62,7 @@ window.PIRAMIDE = {
 
     { id: 'materiales', titulo: 'Materiales y procedencia', nivel: 'Documentado',
       valor: 'Caliza de Giza, caliza fina de Tura y granito de Asuán',
-      texto: 'El núcleo es de caliza local, sacada de canteras junto a la pirámide. El revestimiento exterior era de caliza blanca y fina de Tura, en la otra orilla del Nilo. La Cámara del Rey es de granito rojo traído en barco desde Asuán, a unos 800 km al sur.',
+      texto: 'El núcleo es de caliza local, sacada de canteras junto a la pirámide. El revestimiento exterior era de caliza blanca y fina de Tura, en la otra orilla del Nilo. La Cámara del Rey es de granito rojo traído en barco desde Asuán, a más de 800 km al sur.',
       facil: 'Por dentro es de piedra de Giza. Por fuera tenía piedra blanca de Tura. La cámara del rey es de granito de Asuán, que llegó en barco por el Nilo.',
       fuentes: ['lehner1997', 'tallet2017'] },
 
