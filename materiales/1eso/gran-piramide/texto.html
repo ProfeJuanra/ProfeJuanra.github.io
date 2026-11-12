@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Gran Pirámide de Keops · solo texto</title>
+<meta name="description" content="Todas las fichas de la reconstrucción de la Gran Pirámide de Keops, sin 3D.">
+<link rel="icon" href="../../../img/favicon.png">
+<style>
+  :root{--azul:#0d1033;--rosa:#c4104c;--suave:#4a5078;--borde:#dfe3ef}
+  body{margin:0;background:#eef1f8;color:var(--azul);font:16px/1.6 'Poppins','Segoe UI',system-ui,sans-serif}
+  main{max-width:820px;margin:0 auto;padding:24px 16px 48px}
+  h1{font-size:1.7rem;line-height:1.2;margin:8px 0 4px}
+  h2{font-size:1.2rem;margin:28px 0 10px}
+  a{color:var(--rosa)}
+  :focus-visible{outline:3px solid #ff1a68;outline-offset:2px}
+  .aviso{background:#fff4e0;border-left:4px solid #ff8c2b;padding:10px 14px;border-radius:8px}
+  .boton{display:inline-block;background:#ff1a68;color:#fff;text-decoration:none;font-weight:600;padding:8px 18px;border-radius:999px;margin:4px 6px 4px 0}
+  .boton.oscuro{background:var(--azul)}
+  article{background:#fff;border:1px solid var(--borde);border-radius:12px;padding:14px 18px;margin:0 0 10px}
+  article h3{margin:0 0 4px;font-size:1.05rem}
+  article p{margin:6px 0 0;color:var(--suave)}
+  .nivel{display:inline-block;font-size:.75rem;font-weight:700;padding:1px 9px;border-radius:999px;border:1px solid #c5c9dc;color:var(--azul);background:#f4f6fb}
+  .valor{font-weight:700;color:var(--rosa)}
+  .facil-boton{font:inherit;font-weight:600;border:2px solid var(--azul);background:#fff;color:var(--azul);border-radius:999px;padding:6px 14px;cursor:pointer}
+  .facil-boton[aria-pressed="true"]{background:var(--azul);color:#fff}
+  ol.fuentes{font-size:.9rem;color:var(--suave);padding-left:22px}
+</style>
+</head>
+<body>
+<main>
+  <p><a href="../../../egipto.html#piramide">← Volver al mapa de Egipto</a></p>
+  <h1>La Gran Pirámide de Keops</h1>
+  <p class="aviso" id="aviso-3d" hidden>Este dispositivo no puede mostrar la reconstrucción en 3D, pero aquí tienes toda la información.</p>
+  <p><a class="boton" href="index.html">Abrir la reconstrucción 3D</a>
+     <button type="button" class="facil-boton" id="b-facil" aria-pressed="false">Lectura fácil</button></p>
+
+  <h2>Puntos de información</h2>
+  <div id="puntos"></div>
+
+  <h2>Ficha de datos</h2>
+  <div id="datos"></div>
+
+  <h2>Fuentes</h2>
+  <ol class="fuentes" id="fuentes"></ol>
+</main>
+<script src="../../../egipto/piramide-datos.js"></script>
+<script src="src/puntos.js"></script>
+<script>
+(function () {
+  'use strict';
+  if (/sin3d=1/.test(location.search)) document.getElementById('aviso-3d').hidden = false;
+  var facil = /[?&]facil=1/.test(location.search);
+  try { if (!facil) facil = localStorage.getItem('egipto-facil') === '1'; } catch (e) {}
+  function art(titulo, nivel, valor, texto) {
+    var a = document.createElement('article');
+    var h = document.createElement('h3'); h.textContent = titulo; a.append(h);
+    var n = document.createElement('span'); n.className = 'nivel'; n.textContent = nivel; a.append(n);
+    if (valor) { var v = document.createElement('p'); v.className = 'valor'; v.textContent = valor; a.append(v); }
+    var p = document.createElement('p'); p.textContent = texto; a.append(p);
+    return a;
+  }
+  function pintar() {
+    document.getElementById('b-facil').setAttribute('aria-pressed', String(facil));
+    var c = document.getElementById('puntos'); c.textContent = '';
+    window.PUNTOS.forEach(function (p) { c.append(art(p.n + '. ' + p.titulo, p.nivel, null, facil ? p.facil : p.texto)); });
+    var d = document.getElementById('datos'); d.textContent = '';
+    window.PIRAMIDE.datos.forEach(function (x) { d.append(art(x.titulo, x.nivel, x.valor, facil ? x.facil : x.texto)); });
+  }
+  var F = window.PIRAMIDE.FUENTES, ol = document.getElementById('fuentes');
+  Object.keys(F).forEach(function (k) {
+    var li = document.createElement('li'); li.textContent = F[k].cita + ' ';
+    if (F[k].url) { var a = document.createElement('a'); a.href = F[k].url; a.textContent = 'Enlace'; a.rel = 'noopener'; li.append(a); }
+    ol.append(li);
+  });
+  document.getElementById('b-facil').addEventListener('click', function () {
+    facil = !facil;
+    try { localStorage.setItem('egipto-facil', facil ? '1' : '0'); } catch (e) {}
+    pintar();
+  });
+  pintar();
+})();
+</script>
+</body>
+</html>

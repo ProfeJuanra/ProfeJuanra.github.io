@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Gran Pirámide de Keops en 3D</title>
+<meta name="description" content="Reconstrucción 3D de la Gran Pirámide de Keops (Giza) tal como era al terminarse y como está hoy, con su interior y datos científicos contrastados. 1.º ESO.">
+<link rel="icon" href="../../../img/favicon.png">
+<noscript><link rel="stylesheet" href="src/estilo.css"></noscript>
+</head>
+<body>
+<a class="saltar" href="texto.html">Ir al modo solo texto (sin 3D)</a>
+<div id="escena"></div>
+<div id="marcas" class="marcas" aria-label="Puntos de información sobre el modelo"></div>
+<div id="cargando" role="status">Cargando la Gran Pirámide…</div>
+<noscript><p class="aviso">Esta reconstrucción necesita JavaScript. Puedes leer todo en <a href="texto.html">el modo solo texto</a>.</p></noscript>
+
+<header id="cabecera" class="tarjeta">
+  <a id="volver-mapa" class="volver" href="../../../egipto.html#piramide">← Mapa de Egipto</a>
+  <h1>La Gran Pirámide de Keops</h1>
+  <p class="sub">Giza · IV dinastía · hacia 2560 a. C.</p>
+  <p class="estado" id="estado-texto" aria-live="polite"></p>
+</header>
+
+<nav id="barra" class="tarjeta" aria-label="Herramientas de la reconstrucción">
+  <div class="grupo" role="group" aria-label="Época">
+    <button type="button" id="b-completa" aria-pressed="true">Recién terminada</button>
+    <button type="button" id="b-hoy" aria-pressed="false">Hoy</button>
+  </div>
+  <button type="button" id="b-dentro" aria-pressed="false"><span aria-hidden="true">◧ </span>Ver por dentro</button>
+  <button type="button" id="b-escala"><span aria-hidden="true">🧍 </span>Escala humana</button>
+  <div class="grupo" role="group" aria-label="Mover la vista">
+    <button type="button" id="b-izq" title="Girar a la izquierda" aria-label="Girar a la izquierda">↺</button>
+    <button type="button" id="b-der" title="Girar a la derecha" aria-label="Girar a la derecha">↻</button>
+    <button type="button" id="b-mas" title="Acercar" aria-label="Acercar">＋</button>
+    <button type="button" id="b-menos" title="Alejar" aria-label="Alejar">－</button>
+    <button type="button" id="b-reset" title="Restablecer la vista" aria-label="Restablecer la vista">⟲</button>
+  </div>
+  <button type="button" id="b-facil" aria-pressed="false">Lectura fácil</button>
+  <button type="button" id="b-ayuda" aria-expanded="false" aria-controls="ayuda">?</button>
+</nav>
+
+<nav id="nav-puntos" class="tarjeta" aria-labelledby="t-puntos">
+  <button type="button" id="b-lista" class="b-lista" aria-expanded="false" aria-controls="lista-puntos">Puntos de información</button>
+  <h2 id="t-puntos">Puntos de información</h2>
+  <ol id="lista-puntos"></ol>
+  <p id="nota-interior" class="nota-interior" hidden>Esquema del interior: posiciones aproximadas. Los pasillos se han dibujado unas 2,5 veces más anchos de lo real para que se vean. La zona naranja del Gran Vacío solo indica dónde se detectó: su forma es desconocida.</p>
+</nav>
+
+<aside id="panel" class="tarjeta" aria-labelledby="panel-titulo" hidden>
+  <button type="button" class="cerrar" id="panel-cerrar" aria-label="Cerrar ficha">×</button>
+  <p class="num" id="panel-num" aria-hidden="true"></p>
+  <h2 id="panel-titulo" tabindex="-1"></h2>
+  <p id="panel-nivel" class="nivel"></p>
+  <p id="panel-texto"></p>
+  <div id="panel-dato" class="panel-dato"></div>
+</aside>
+
+<section id="ayuda" class="tarjeta" aria-labelledby="ayuda-t" hidden>
+  <button type="button" class="cerrar" id="ayuda-cerrar" aria-label="Cerrar ayuda">×</button>
+  <h2 id="ayuda-t">Cómo se maneja</h2>
+  <ul>
+    <li><b>Girar:</b> arrastra con el ratón o con un dedo. Con el teclado, pulsa en la escena y usa las flechas ← →.</li>
+    <li><b>Acercar y alejar:</b> rueda del ratón, pellizco con dos dedos, flechas ↑ ↓ o los botones ＋ －.</li>
+    <li><b>Desplazar:</b> botón derecho del ratón o arrastre con dos dedos.</li>
+    <li><b>Números:</b> pulsa un número del modelo o de la lista para leer su ficha.</li>
+    <li><b>Hoy / Recién terminada:</b> compara la pirámide de hace 4500 años con la de ahora.</li>
+  </ul>
+  <p>Esta reconstrucción se basa en mediciones publicadas (Petrie, Cole, Lehner) y en los hallazgos de ScanPyramids. El piramidión y la posición exacta de algunos elementos interiores son hipótesis. <a href="texto.html">Leer todo sin 3D</a>.</p>
+</section>
+
+<script>
+(function () {
+  var v = Date.now();
+  var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'src/estilo.css?v=' + v; document.head.appendChild(css);
+  ['src/vendor/three.min.js', 'src/vendor/OrbitControls.js', '../../../egipto/piramide-datos.js', 'src/puntos.js', 'src/escena.js', 'src/main.js'].forEach(function (s) {
+    document.write('<script src="' + s + (s.indexOf('vendor') < 0 ? '?v=' + v : '') + '"><\/script>');
+  });
+})();
+</script>
+</body>
+</html>

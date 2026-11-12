@@ -46,6 +46,11 @@ const RECONSTRUCCIONES = [
     descripcion: "Mira cómo se construyó, se usó y se cerró un sepulcro megalítico, y entra por su corredor hasta la cámara.",
     curso: "1º ESO · La Prehistoria", vista: "img/materiales/dolmen-moina-ii.jpg",
     enlace: "materiales/1eso/dolmen-moina-ii/index.html" },
+  { titulo: "La Gran Pirámide de Keops",
+    lugar: "Giza (Egipto)", epoca: "Imperio Antiguo · IV dinastía · hacia 2560 a. C.",
+    descripcion: "Compárala recién terminada y como está hoy, entra en su interior y descubre quién la construyó.",
+    curso: "1º ESO · Mesopotamia y Egipto", vista: "img/materiales/gran-piramide.jpg",
+    enlace: "materiales/1eso/gran-piramide/index.html" },
   { titulo: "Navalmoral de la Mata hacia 1850",
     lugar: "Navalmoral de la Mata (Cáceres)", epoca: "Siglo XIX · hacia 1850",
     descripcion: "Recorre las calles de la villa a mediados del siglo XIX.",
@@ -231,6 +236,10 @@ const MATERIAS = {
         enlace: "materiales/1eso/dolmen-moina-ii/index.html" },
     ]},
     { titulo: "6. Mesopotamia y Egipto", bloque: "Historia", materiales: [
+      { tipo: "actividad", titulo: "El antiguo Egipto: mapa interactivo y Gran Pirámide en 3D",
+        descripcion: "Sitúa las ciudades, necrópolis y templos del Nilo, y explora la Gran Pirámide de Keops.",
+        vista: "img/materiales/egipto-mapa.jpg",
+        enlace: "egipto.html" },
     ]},
     { titulo: "7. Grecia", bloque: "Historia", materiales: [
     ]},

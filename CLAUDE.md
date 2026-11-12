@@ -36,6 +36,11 @@ claros y cercanos, con rigor histórico.
   (copia local en `src/vendor/`): `poblado-valdecanas` y `dolmen-moina-ii`. Cada una
   tiene `index.html`, `texto.html`, `src/` (datos, escena, interfaz) y `assets/`.
 - `materiales/navalmoral-1850/` — paseo 3D por Navalmoral hacia 1850 (ver abajo).
+- `egipto.html` + `egipto/` — 1.º ESO: mapa SVG del antiguo Egipto (enclaves en `enclaves.js`,
+  geografía en `mapa-geo.js`), ficha de datos de la Gran Pirámide (`piramide-datos.js`, con nivel
+  Medido/Estimación/Documentado y fuentes), «Reto del escriba» y lectura fácil. Sin GoatCounter.
+- `materiales/1eso/gran-piramide/` — reconstrucción 3D de la Gran Pirámide (three.js r147 local),
+  usa los datos de `egipto/piramide-datos.js`. Fotos propias para comparar en `img/egipto/`.
 
 ## Convenciones
 - Las páginas cargan `estilo.css`, `contenidos.js` y `comun.js` con `?v=Date.now()`

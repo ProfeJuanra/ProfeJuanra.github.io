@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El antiguo Egipto y la Gran Pirámide · Profe JuanRa</title>
+<meta name="description" content="Mapa interactivo del antiguo Egipto y reconstrucción 3D de la Gran Pirámide de Keops, con datos científicos contrastados. 1.º ESO.">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+<script>/* Carga siempre la versión más reciente del estilo */
+var v0 = Date.now();
+document.write('<link rel="stylesheet" href="estilo.css?v=' + v0 + '"><link rel="stylesheet" href="egipto/egipto.css?v=' + v0 + '">');</script>
+<noscript><link rel="stylesheet" href="estilo.css"><link rel="stylesheet" href="egipto/egipto.css"></noscript>
+</head>
+<body data-pagina="egipto">
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<div id="barra"></div>
+<main id="contenido">
+<div class="contenedor">
+
+  <section class="seccion">
+    <div class="etiqueta">1.º ESO · Mesopotamia y Egipto</div>
+    <h1 class="titulo-pagina">El antiguo Egipto, un regalo del Nilo</h1>
+    <p class="intro">Hace más de 5000 años, a orillas del Nilo, nació una de las primeras civilizaciones de la historia. Explora en el mapa sus ciudades, sus necrópolis y sus templos, y descubre cómo se construyó la Gran Pirámide de Keops.</p>
+    <div class="barra-facil">
+      <button type="button" class="boton-facil" data-boton-facil aria-pressed="false">
+        <span class="interruptor" aria-hidden="true"></span>
+        <span>Lectura fácil: <span class="estado">desactivada</span></span>
+      </button>
+      <span class="ayuda-facil">Frases más cortas y cifras redondeadas.</span>
+    </div>
+  </section>
+
+  <!-- ===================== MAPA ===================== -->
+  <section class="seccion" aria-labelledby="t-mapa">
+    <div class="etiqueta">Situar en el espacio</div>
+    <h2 id="t-mapa">Mapa del antiguo Egipto</h2>
+    <p class="nota-mapa">Egipto era una franja verde en medio del desierto. Pulsa los símbolos para leer sus fichas. Las zonas de Menfis y Tebas tienen muchos lugares juntos: amplíalas para verlos.</p>
+
+    <div class="mapa-rejilla">
+      <div class="mapa-columna">
+        <div class="mapa-vistas" role="group" aria-label="Vista del mapa">
+          <button type="button" data-vista="todo" aria-pressed="true">Todo Egipto</button>
+          <button type="button" data-vista="menfis" aria-pressed="false">Zona de Menfis</button>
+          <button type="button" data-vista="tebas" aria-pressed="false">Zona de Tebas</button>
+        </div>
+        <p id="mapa-estado" class="vh" aria-live="polite"></p>
+        <div id="mapa-egipto" class="mapa-caja"></div>
+        <ul id="leyenda-mapa" class="leyenda" aria-label="Leyenda de símbolos"></ul>
+        <p class="leyenda-geo"><span class="m-valle" aria-hidden="true"></span> Tierras fértiles del Nilo <span class="m-catarata" aria-hidden="true">≋</span> Catarata (rocas que cortan el río) <span class="m-frontera" aria-hidden="true"></span> Frontera entre el Alto y el Bajo Egipto</p>
+        <p class="nota-pequena">Mapa esquemático. El Nilo corre de sur a norte: por eso el Alto Egipto está abajo, en el sur, y el Bajo Egipto arriba, en el delta. Hoy el delta tiene dos brazos principales; en la Antigüedad tenía más (Heródoto cita siete).</p>
+      </div>
+      <aside id="ficha-enclave" class="ficha-enclave" aria-live="polite" aria-label="Ficha del enclave"></aside>
+    </div>
+
+    <h3 class="titulo-lista" id="t-lista">Lista de enclaves</h3>
+    <p class="nota-pequena">La misma información que el mapa. Puedes moverte con el tabulador o con las flechas ↑ ↓.</p>
+    <nav id="lista-enclaves" class="lista-enclaves" aria-labelledby="t-lista"></nav>
+  </section>
+
+  <!-- ===================== LA GRAN PIRÁMIDE ===================== -->
+  <section class="seccion" id="piramide" aria-labelledby="t-piramide">
+    <div class="etiqueta">Ingeniería y organización del Estado</div>
+    <h2 id="t-piramide">La Gran Pirámide de Keops</h2>
+    <a class="boton-3d" data-enlace-3d="materiales/1eso/gran-piramide/index.html" href="materiales/1eso/gran-piramide/index.html">
+      <span class="icono" aria-hidden="true">3D</span>
+      <span><b>Ver la Gran Pirámide en 3D</b><span class="sub">Gírala, compárala con cómo está hoy y entra en su interior</span></span>
+      <span class="flecha" aria-hidden="true">→</span>
+    </a>
+
+    <h3 class="subtitulo">Ficha de datos</h3>
+    <ul class="niveles-leyenda" aria-label="Qué significa cada etiqueta">
+      <li><span class="nivel medido"><span aria-hidden="true">📏 </span>Medido</span> se ha medido sobre la pirámide.</li>
+      <li><span class="nivel estimacion"><span aria-hidden="true">≈ </span>Estimación</span> cálculo aproximado de los especialistas.</li>
+      <li><span class="nivel documentado"><span aria-hidden="true">📜 </span>Documentado</span> lo prueban textos o hallazgos arqueológicos.</li>
+    </ul>
+    <div id="datos-piramide" class="datos"></div>
+
+    <h3 class="subtitulo" id="quien">¿Quién la construyó?</h3>
+    <div id="quien-texto" class="quien"></div>
+  </section>
+
+  <!-- Comparación de fotos (se muestra cuando haya fotos en egipto/fotos.js) -->
+  <section class="seccion" id="comparar" aria-labelledby="t-comparar" hidden>
+    <div class="etiqueta">Antes y ahora</div>
+    <h2 id="t-comparar">La pirámide hoy / Reconstrucción</h2>
+    <div id="comparar-fotos" class="comparar"></div>
+  </section>
+
+  <!-- ===================== RETO DEL ESCRIBA ===================== -->
+  <section class="seccion" aria-labelledby="t-reto">
+    <div class="etiqueta">Comprueba lo que has aprendido</div>
+    <h2 id="t-reto">Reto del escriba</h2>
+    <p class="nota-mapa">Responde y pulsa «Corregir». Tus respuestas no se guardan ni se envían a nadie.</p>
+    <form id="reto-form" class="reto">
+      <div class="reto-botones">
+        <button type="submit" class="boton">Corregir</button>
+        <button type="reset" class="boton oscuro">Empezar de nuevo</button>
+      </div>
+      <p id="reto-resultado" class="reto-resultado" tabindex="-1" aria-live="polite"></p>
+    </form>
+    <!-- [CRITERIO DE EVALUACIÓN – Decreto 110/2022]
+         Escribe aquí el criterio de evaluación de Geografía e Historia de 1.º ESO
+         que se evalúa con el «Reto del escriba». -->
+  </section>
+
+  <!-- ===================== PARA SABER MÁS ===================== -->
+  <section class="seccion" aria-labelledby="t-fuentes">
+    <div class="etiqueta">Fuentes</div>
+    <h2 id="t-fuentes">Para saber más</h2>
+    <p class="nota-pequena">Las cifras de esta página proceden de estas publicaciones. Las teorías que atribuyen las pirámides a extraterrestres o a «energías» no tienen ninguna base científica.</p>
+    <ol id="fuentes-lista" class="fuentes"></ol>
+  </section>
+
+  <section class="seccion">
+    <div class="botones">
+      <a class="boton" href="1eso.html">← Volver a 1.º ESO</a>
+      <a class="boton oscuro" href="reconstrucciones.html">Otras reconstrucciones 3D</a>
+    </div>
+  </section>
+</div>
+</main>
+<div id="pie"></div>
+<script>/* Carga siempre la versión más reciente de los contenidos */
+var v = Date.now();
+document.write('<script src="contenidos.js?v=' + v + '"><\/script><script src="comun.js?v=' + v + '"><\/script>');
+['pagina', 'enclaves', 'mapa-geo', 'mapa', 'piramide-datos', 'ficha', 'reto', 'fotos'].forEach(function (s) {
+  document.write('<script src="egipto/' + s + '.js?v=' + v + '"><\/script>');
+});
+</script>
+</body>
+</html>

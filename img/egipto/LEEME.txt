@@ -1,0 +1,3 @@
+Fotos propias de la Gran Pirámide para el bloque «La pirámide hoy / Reconstrucción» de egipto.html.
+Cada foto en dos formatos con el mismo nombre (ancho máximo 1600 px): nombre.webp y nombre.jpg.
+Después se añade la pareja en egipto/fotos.js (lista FOTOS_PIRAMIDE).

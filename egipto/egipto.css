@@ -1,0 +1,174 @@
+/* Estilos propios de egipto.html (se suman a estilo.css de la web) */
+:root{
+  --arena:#f3e7c9; --arena-2:#e6d3a6; --mar:#b9d9ea; --verde:#8fbf6a; --verde-osc:#5f8f3f; --nilo:#1f5fa8;
+  --t-ciudad:#1a1f55; --t-necropolis:#b5123f; --t-templo:#b35a00; --t-cantera:#0f6b6b;
+}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nota-mapa{color:var(--texto-2);margin:0 0 14px;max-width:75ch}
+.nota-pequena{color:#555b7c;font-size:.85rem;margin:8px 0 0;max-width:80ch}
+.subtitulo{font-size:1.2rem;font-weight:700;margin:30px 0 12px}
+
+/* ---------- Interruptor de lectura fácil ---------- */
+.barra-facil{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:16px}
+.boton-facil{display:inline-flex;align-items:center;gap:10px;font:inherit;font-weight:600;font-size:.95rem;background:var(--blanco);color:var(--azul);border:2px solid var(--azul);border-radius:999px;padding:7px 16px 7px 8px;cursor:pointer}
+.boton-facil .interruptor{width:40px;height:22px;border-radius:999px;background:#c5c9dc;position:relative;flex:none;transition:background .2s}
+.boton-facil .interruptor::after{content:'';position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s}
+.boton-facil[aria-pressed="true"]{background:var(--azul);color:#fff}
+.boton-facil[aria-pressed="true"] .interruptor{background:var(--rosa)}
+.boton-facil[aria-pressed="true"] .interruptor::after{transform:translateX(18px)}
+.ayuda-facil{font-size:.85rem;color:#555b7c}
+.lectura-facil .texto,.lectura-facil .ficha-texto,.lectura-facil .quien p{font-size:1.08rem;line-height:1.7}
+
+/* ---------- Mapa ---------- */
+.mapa-rejilla{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:start}
+.mapa-vistas{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.mapa-vistas button{font:inherit;font-weight:600;font-size:.88rem;border:2px solid var(--azul);background:var(--blanco);color:var(--azul);padding:6px 14px;border-radius:999px;cursor:pointer}
+.mapa-vistas button[aria-pressed="true"]{background:var(--azul);color:#fff}
+.mapa-caja{background:var(--arena);border:1px solid var(--linea);border-radius:16px;overflow:hidden;box-shadow:0 12px 30px -20px rgba(13,16,51,.5)}
+.mapa{display:block;margin:0 auto;width:100%;height:auto;max-height:78vh;aspect-ratio:644/1080;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.mapa .tierra{fill:var(--arena)}
+.mapa .mar{fill:var(--mar);stroke:#8fb5cb;stroke-width:1;vector-effect:non-scaling-stroke}
+.mapa .fertil{fill:var(--verde);opacity:.85}
+.mapa .lago{fill:var(--mar)}
+.mapa .valle{fill:none;stroke:var(--verde);stroke-width:var(--valle,8);stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.mapa .nilo{fill:none;stroke:var(--nilo);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.mapa .nilo.brazo{stroke-width:2}
+.mapa .frontera{fill:none;stroke:#6b4b1f;stroke-width:1.6;stroke-dasharray:6 4;vector-effect:non-scaling-stroke}
+.mapa text{font-family:var(--fuente);paint-order:stroke;stroke:rgba(255,255,255,.85);stroke-width:3px;stroke-linejoin:round}
+.mapa .r-mar{font-size:15px;font-style:italic;fill:#1f5578;letter-spacing:.18em;stroke:none}
+.mapa .r-region{font-size:14px;font-weight:600;fill:#7a6236;letter-spacing:.2em;stroke:none}
+.mapa .r-desierto{font-size:15px;font-weight:600;fill:#806428;letter-spacing:.25em;stroke:none}
+.mapa .r-pais{font-size:17px;font-weight:800;fill:#3a2a10;letter-spacing:.08em}
+.mapa .r-nota{font-size:11px;fill:#4d3c1c;font-style:italic}
+.mapa .r-nota-peq{font-size:9px;fill:#6b4b1f;font-style:italic}
+.mapa .r-rio{font-size:13px;font-style:italic;font-weight:600;fill:var(--nilo)}
+.mapa .rot-zona{font-size:12px;font-style:italic;fill:#4d3c1c;text-anchor:middle}
+.mapa .catarata path{fill:none;stroke:#5a3d12;stroke-width:2;stroke-linecap:round}
+.mapa .catarata text{font-size:11px;font-weight:600;fill:#5a3d12}
+
+/* Marcadores: forma + color + nombre */
+.marcador,.boton-zona{cursor:pointer;outline:none}
+.marcador .zona-toque{fill:transparent}
+.marcador .forma{stroke:#fff;stroke-width:2;transition:transform .15s}
+.marcador text{font-size:12.5px;font-weight:600;fill:var(--azul)}
+.t-ciudad .forma,.icono-tipo.t-ciudad path{fill:var(--t-ciudad)}
+.t-necropolis .forma,.icono-tipo.t-necropolis path{fill:var(--t-necropolis)}
+.t-templo .forma,.icono-tipo.t-templo path{fill:var(--t-templo)}
+.t-cantera .forma,.icono-tipo.t-cantera path{fill:var(--t-cantera)}
+.marcador:hover .forma,.marcador:focus-visible .forma,.marcador.activo .forma{transform:scale(1.35)}
+.marcador.activo text{font-weight:800;fill:#000}
+.marcador:focus-visible .zona-toque,.boton-zona:focus-visible circle{stroke:var(--rosa);stroke-width:3}
+.marcador.activo .zona-toque{fill:rgba(255,26,104,.18)}
+.boton-zona circle{fill:rgba(255,26,104,.12);stroke:var(--rosa);stroke-width:2;stroke-dasharray:4 3}
+.boton-zona .zona-nombre{font-size:12.5px;font-weight:700;fill:var(--azul)}
+.boton-zona .zona-accion{font-size:10.5px;font-weight:600;fill:#b5123f}
+.boton-zona:hover circle{fill:rgba(255,26,104,.25)}
+
+/* Leyenda */
+.leyenda{list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 0;padding:0;font-size:.9rem}
+.leyenda li{display:flex;align-items:center;gap:6px}
+.icono-tipo{flex:none}
+.icono-tipo path{stroke:#fff;stroke-width:1.5}
+.leyenda-geo{font-size:.85rem;color:var(--texto-2);margin:8px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.m-valle{display:inline-block;width:22px;height:10px;background:var(--verde);border-radius:3px}
+.m-catarata{color:#5a3d12;font-weight:700}
+.m-frontera{display:inline-block;width:24px;border-top:2px dashed #6b4b1f}
+
+/* Ficha del enclave */
+.ficha-enclave{background:var(--blanco);border:1px solid var(--linea);border-radius:16px;padding:20px 22px;position:sticky;top:84px;min-height:180px}
+.ficha-vacia{color:#555b7c;margin:0}
+.ficha-tipo{display:inline-flex;align-items:center;gap:6px;margin:0 0 6px;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.ficha-tipo.t-ciudad{color:var(--t-ciudad)}.ficha-tipo.t-necropolis{color:var(--t-necropolis)}.ficha-tipo.t-templo{color:var(--t-templo)}.ficha-tipo.t-cantera{color:var(--t-cantera)}
+.ficha-enclave h3{font-size:1.45rem;font-weight:800;margin-bottom:4px}
+.ficha-enclave h3:focus{outline:none}
+.ficha-periodo{margin:0 0 10px;font-size:.88rem;font-weight:600;color:var(--texto-2)}
+.ficha-texto{margin:0 0 10px}
+.ficha-aviso{margin:0 0 10px;background:#fff4e0;border-left:4px solid var(--naranja);padding:8px 12px;border-radius:8px;font-size:.92rem;font-weight:600}
+.ficha-nota{margin:0;font-size:.82rem;color:#555b7c}
+.boton-piramide{margin-top:12px;padding:14px 16px;gap:12px}
+.boton-piramide .icono{width:44px;height:44px;font-size:1rem}
+.boton-piramide b{font-size:1.05rem}
+.ficha-enlace{margin:10px 0 0;font-size:.9rem}
+.ficha-enlace a{color:#c4104c;font-weight:600}
+
+/* Lista accesible */
+.titulo-lista{font-size:1.1rem;font-weight:700;margin:28px 0 0}
+.lista-enclaves{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:12px}
+.grupo-lista h3{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#c4104c;margin:0 0 6px}
+.grupo-lista ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.grupo-lista button{width:100%;display:flex;align-items:center;gap:8px;font:inherit;font-size:.92rem;text-align:left;background:var(--blanco);border:1px solid var(--linea);border-radius:10px;padding:7px 10px;cursor:pointer;color:var(--texto)}
+.grupo-lista button:hover{border-color:var(--rosa)}
+.grupo-lista button[aria-current="true"]{border:2px solid var(--rosa);background:#fff0f5}
+.grupo-lista .nombre{flex:1;font-weight:600}
+.grupo-lista .tipo-txt{font-size:.75rem;color:#555b7c}
+
+/* ---------- Ficha de datos ---------- */
+.boton-3d{margin-bottom:6px}
+.niveles-leyenda{list-style:none;padding:0;margin:0 0 14px;display:flex;flex-wrap:wrap;gap:6px 20px;font-size:.88rem;color:var(--texto-2)}
+.nivel{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;margin:0;border:1px solid}
+.nivel.medido{background:#e4f1ff;color:#0b4f8a;border-color:#9cc3e8}
+.nivel.estimacion{background:#fff1dc;color:#8a4b00;border-color:#efc58a}
+.nivel.documentado{background:#ece6ff;color:#4b2e93;border-color:#c3b3ee}
+.datos{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.dato{background:var(--blanco);border:1px solid var(--linea);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.dato .nivel{align-self:flex-start}
+.dato h3{font-size:1rem;font-weight:700;margin-top:4px}
+.dato .valor{margin:0;font-size:1.05rem;font-weight:700;color:#c4104c;line-height:1.3}
+.dato .texto{margin:0;font-size:.92rem;color:var(--texto-2)}
+.citas{font-size:.78rem;color:#555b7c;margin-top:auto}
+.citas a{color:#2a5f9e;font-weight:600;text-decoration:none}
+.citas a:hover{text-decoration:underline}
+.quien{background:var(--blanco);border:1px solid var(--linea);border-left:5px solid var(--t1);border-radius:14px;padding:18px 22px;max-width:850px}
+.quien p{margin:0 0 10px;color:var(--texto-2)}
+.quien p:first-child{font-weight:600;color:var(--texto)}
+.quien p:last-child{margin:0}
+
+/* ---------- Comparación de fotos ---------- */
+.comparar{display:grid;gap:20px}
+.cmp{margin:0}
+.cmp-marco{position:relative;border-radius:14px;overflow:hidden;--corte:50%}
+.cmp-marco img{width:100%;height:auto;display:block}
+.cmp-reco{position:absolute;inset:0;clip-path:inset(0 0 0 var(--corte))}
+.cmp-reco img{height:100%;object-fit:cover}
+.cmp-marco::after{content:'';position:absolute;top:0;bottom:0;left:var(--corte);width:3px;background:#fff;box-shadow:0 0 6px rgba(0,0,0,.5);pointer-events:none}
+.cmp-et{position:absolute;top:10px;background:rgba(13,16,51,.85);color:#fff;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px}
+.cmp-et.hoy{left:10px}.cmp-et.reco{right:10px}
+.cmp-rango{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.cmp-rango:focus-visible+*,.cmp-marco:focus-within{outline:3px solid var(--rosa);outline-offset:2px}
+.cmp figcaption{font-size:.88rem;color:var(--texto-2);margin-top:6px}
+
+/* ---------- Reto del escriba ---------- */
+.reto{display:grid;gap:14px;max-width:780px}
+.pregunta{background:var(--blanco);border:1px solid var(--linea);border-radius:14px;padding:14px 18px 12px;margin:0}
+.pregunta legend{font-weight:700;padding:0 6px;display:flex;align-items:center;gap:8px}
+.pregunta .num{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--azul);color:#fff;font-size:.85rem;flex:none}
+.opcion{display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:8px;cursor:pointer}
+.opcion:hover{background:var(--gris)}
+.opcion input{margin-top:5px;width:18px;height:18px;accent-color:var(--rosa);flex:none}
+.pregunta.bien{border:2px solid #1f8a5f;background:#f1faf5}
+.pregunta.mal{border:2px solid #c4104c;background:#fff4f7}
+.explicacion{margin:6px 0 0;font-size:.92rem;font-weight:500}
+.explicacion:empty{display:none}
+.pregunta.bien .explicacion{color:#14613f}
+.pregunta.mal .explicacion{color:#9b0d3c}
+.reto-botones{display:flex;flex-wrap:wrap;gap:10px}
+.reto-botones .boton{border:0;cursor:pointer;font-family:inherit}
+.reto-resultado{font-weight:700;font-size:1.1rem;margin:0;color:var(--azul)}
+.reto-resultado:focus{outline:none}
+
+/* ---------- Fuentes ---------- */
+.fuentes{margin:12px 0 0;padding-left:26px;display:grid;gap:6px;font-size:.9rem;color:var(--texto-2);max-width:900px}
+.fuentes li:target{background:#fff4c2;border-radius:6px}
+.fuentes a{color:#2a5f9e;font-weight:600}
+
+/* ---------- Móvil ---------- */
+@media (max-width:860px){
+  .mapa-rejilla{grid-template-columns:1fr}
+  .ficha-enclave{position:static;min-height:0}
+  .mapa{max-height:none}
+}
+@media (max-width:520px){
+  .mapa-vistas button{font-size:.82rem;padding:6px 11px}
+  .ficha-enclave{padding:16px}
+}
+@media print{.mapa-vistas,.barra-facil,.reto-botones{display:none}}

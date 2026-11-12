@@ -1,0 +1,101 @@
+/* Reconstrucción 3D de la Gran Pirámide: interfaz sobre la escena */
+:root{
+  --azul:#0d1033; --rosa:#ff1a68; --rosa-osc:#c4104c; --naranja:#ff8c2b;
+  --panel:rgba(255,255,255,.95); --tinta:#0d1033; --suave:#4a5078; --borde:#dfe3ef;
+  --sombra:0 8px 24px -10px rgba(13,16,51,.45); --r:14px;
+  --fuente:'Poppins','Avenir Next','Segoe UI',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#bcd7ea;color:var(--tinta);font:15px/1.5 var(--fuente)}
+body{overflow:hidden}
+#escena{position:fixed;inset:0;touch-action:none}
+#escena canvas{display:block;width:100%;height:100%;outline:none}
+#escena canvas:focus-visible{outline:4px solid var(--rosa);outline-offset:-4px}
+:focus-visible{outline:3px solid var(--rosa);outline-offset:2px}
+a{color:var(--rosa-osc)}
+.saltar{position:fixed;left:12px;top:-60px;z-index:80;background:#fff;padding:8px 12px;border-radius:8px}
+.saltar:focus{top:10px}
+#cargando{position:fixed;inset:0;display:grid;place-items:center;background:#bcd7ea;font-size:1.2rem;font-weight:600;z-index:70;transition:opacity .6s}
+#cargando.oculto{opacity:0;pointer-events:none}
+.aviso{position:fixed;inset:auto 16px 16px;background:#fff;padding:12px;border-radius:8px;z-index:75}
+.tarjeta{position:fixed;background:var(--panel);border:1px solid var(--borde);border-radius:var(--r);box-shadow:var(--sombra);z-index:20}
+button{font:inherit;color:inherit;cursor:pointer}
+
+/* Cabecera */
+#cabecera{top:12px;left:12px;padding:10px 16px 12px;max-width:340px}
+#cabecera h1{margin:2px 0 0;font-size:1.25rem;line-height:1.2;font-weight:800}
+#cabecera .sub{margin:2px 0 0;color:var(--suave);font-size:.85rem}
+#cabecera .estado{margin:6px 0 0;font-size:.82rem;font-weight:700;color:var(--rosa-osc)}
+.volver{font-size:.85rem;font-weight:600;text-decoration:none}
+.volver:hover{text-decoration:underline}
+
+/* Barra de herramientas */
+#barra{left:50%;bottom:14px;transform:translateX(-50%);display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:8px;max-width:calc(100vw - 24px)}
+#barra button{background:#fff;border:2px solid var(--azul);border-radius:999px;padding:6px 13px;font-weight:600;font-size:.88rem;min-height:40px;white-space:nowrap}
+#barra button:hover{background:#eef1f8}
+#barra button[aria-pressed="true"]{background:var(--azul);color:#fff}
+#barra .grupo{display:flex;gap:4px}
+#barra .grupo button{padding:6px 11px}
+#b-ayuda{width:40px;padding:0 !important}
+
+/* Lista de puntos */
+#nav-puntos{top:12px;right:12px;width:270px;max-height:calc(100vh - 110px);overflow:auto;padding:10px 12px}
+#nav-puntos h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--rosa-osc);margin:2px 4px 6px}
+#nav-puntos ol{list-style:none;margin:0;padding:0;display:grid;gap:3px}
+#nav-puntos li button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:5px 6px;font-size:.88rem}
+#nav-puntos li button:hover{background:#eef1f8}
+#nav-puntos .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--azul);color:#fff;font-size:.75rem;font-weight:700;flex:none}
+.b-lista{display:none}
+.nota-interior{font-size:.78rem;color:var(--suave);background:#fff4e0;border-left:3px solid var(--naranja);padding:6px 8px;border-radius:6px;margin:8px 0 0}
+
+/* Marcas numeradas sobre el modelo */
+.marcas{position:fixed;inset:0;pointer-events:none;z-index:10;overflow:hidden}
+.marca{position:absolute;left:-17px;top:-17px;width:34px;height:34px;border-radius:50%;border:3px solid #fff;background:var(--azul);color:#fff;font-weight:800;font-size:.9rem;pointer-events:auto;box-shadow:0 2px 8px rgba(0,0,0,.4);padding:0;transition:background .15s}
+.marca:hover,.marca.activa{background:var(--rosa-osc)}
+.marca[hidden]{display:none}
+
+/* Panel de la ficha */
+#panel{left:12px;top:150px;width:min(380px,calc(100vw - 24px));max-height:calc(100vh - 250px);overflow:auto;padding:14px 18px 16px;z-index:30}
+#panel h2{font-size:1.15rem;margin:0 30px 6px 0;line-height:1.25}
+#panel h2:focus{outline:none}
+#panel .num{margin:0;font-size:.75rem;font-weight:700;color:var(--rosa-osc)}
+#panel .num::before{content:'Punto '}
+#panel-texto{margin:8px 0 0}
+.lectura-facil #panel-texto{font-size:1.05rem;line-height:1.65}
+.cerrar{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;border:0;background:#eef1f8;font-size:1.3rem;line-height:1}
+.cerrar:hover{background:#dfe3ef}
+.nivel{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px;border:1px solid;margin:0}
+.nivel.medido{background:#e4f1ff;color:#0b4f8a;border-color:#9cc3e8}
+.nivel.estimacion{background:#fff1dc;color:#8a4b00;border-color:#efc58a}
+.nivel.documentado{background:#ece6ff;color:#4b2e93;border-color:#c3b3ee}
+.nivel.hipotesis{background:#ffe6ef;color:#9b0d3c;border-color:#f3a5c0}
+.panel-dato{margin-top:10px}
+.panel-dato:empty{display:none}
+.dato-cab{margin:0;padding:10px 12px 6px;background:#f4f6fb;border-radius:10px 10px 0 0;font-size:.88rem}
+.dato-fuentes{margin:0;padding:0 12px 10px;background:#f4f6fb;border-radius:0 0 10px 10px;font-size:.75rem;color:var(--suave)}
+
+/* Ayuda */
+#ayuda{left:50%;top:50%;transform:translate(-50%,-50%);width:min(520px,calc(100vw - 24px));max-height:calc(100vh - 40px);overflow:auto;padding:18px 22px;z-index:40}
+#ayuda h2{margin:0 0 8px;font-size:1.15rem}
+#ayuda ul{padding-left:18px;margin:0 0 10px}
+#ayuda p{font-size:.88rem;color:var(--suave);margin:0}
+
+/* Móvil y tablet vertical */
+@media (max-width:760px){
+  #cabecera{right:12px;max-width:none;padding:8px 12px 10px}
+  #cabecera h1{font-size:1.05rem}
+  #cabecera .sub{display:none}
+  #nav-puntos{top:auto;bottom:auto;right:12px;top:118px;width:auto;max-width:230px;padding:4px}
+  #nav-puntos h2{display:none}
+  .b-lista{display:block;width:100%;background:#fff;border:2px solid var(--azul);border-radius:999px;padding:6px 12px;font-weight:600;font-size:.82rem}
+  .b-lista::after{content:' ▾'}
+  #nav-puntos:not(.abierta) ol,#nav-puntos:not(.abierta) .nota-interior{display:none}
+  #nav-puntos.abierta{max-height:50vh}
+  #barra{left:8px;right:8px;bottom:8px;transform:none;max-width:none;gap:4px;padding:5px}
+  #barra button{font-size:.76rem;padding:4px 9px;min-height:36px}
+  #barra .grupo button{padding:4px 8px;min-width:36px}
+  #b-dentro span,#b-escala span{display:none}
+  #panel{left:12px;right:12px;width:auto;bottom:auto;top:118px;max-height:calc(100vh - 260px);z-index:35}
+  .marca{width:30px;height:30px;left:-15px;top:-15px;font-size:.8rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
