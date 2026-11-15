@@ -36,6 +36,11 @@
     <button type="button" id="b-menos" title="Alejar" aria-label="Alejar">－</button>
     <button type="button" id="b-reset" title="Restablecer la vista" aria-label="Restablecer la vista">⟲</button>
   </div>
+  <label class="hora" title="Hora del día el 21 de marzo"><span aria-hidden="true">☀</span>
+    <span class="vh">Hora del día (21 de marzo)</span>
+    <input type="range" id="r-hora" min="6.75" max="17.25" step="0.25" value="10">
+    <output id="o-hora" for="r-hora">10:00</output>
+  </label>
   <button type="button" id="b-facil" aria-pressed="false">Lectura fácil</button>
   <button type="button" id="b-ayuda" aria-expanded="false" aria-controls="ayuda">?</button>
 </nav>
@@ -65,6 +70,7 @@
     <li><b>Desplazar:</b> botón derecho del ratón o arrastre con dos dedos.</li>
     <li><b>Números:</b> pulsa un número del modelo o de la lista para leer su ficha.</li>
     <li><b>Hoy / Recién terminada:</b> compara la pirámide de hace 4500 años con la de ahora.</li>
+    <li><b>Hora:</b> mueve el sol de la mañana a la tarde (21 de marzo) y mira cómo cambian la luz y las sombras.</li>
   </ul>
   <p>Esta reconstrucción se basa en mediciones publicadas (Petrie, Cole, Lehner) y en los hallazgos de ScanPyramids. El piramidión y la posición exacta de algunos elementos interiores son hipótesis. <a href="texto.html">Leer todo sin 3D</a>.</p>
 </section>

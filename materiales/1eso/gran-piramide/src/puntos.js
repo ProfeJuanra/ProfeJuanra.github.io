@@ -8,6 +8,7 @@
   · nivel: "Medido", "Estimación", "Documentado" o "Hipótesis"
   · dato (opcional): id del dato de egipto/piramide-datos.js que se enseña debajo
 */
+const A_P = 230.33 / 2;   // mitad del lado de la base de Keops
 window.PUNTOS = [
   { n: 1, id: 'piramidion', titulo: 'El piramidión', pos: [0, 148, 0], modo: 'fuera', estado: 'completa', nivel: 'Hipótesis',
     texto: 'La punta de la pirámide era una piedra en forma de pequeña pirámide. El de Keops no se ha conservado, así que no sabemos de qué material era ni cómo era. Que estuviera recubierto de oro es solo una hipótesis. Aquí se ha dibujado de caliza, como el revestimiento.',
@@ -40,6 +41,15 @@ window.PUNTOS = [
   { n: 8, id: 'persona', titulo: 'Una persona a escala', pos: [122, 3, -122], modo: 'ambos', estado: 'ambos', nivel: 'Medido', dato: 'altura',
     texto: 'Junto a la esquina noreste hay una persona de 1,65 m. Pulsa «Escala humana» para acercarte: la pirámide medía casi 90 veces su altura.',
     facil: 'Aquí hay una persona. La pirámide es casi 90 veces más alta que ella.' },
+
+  // --------- Contexto de Giza ---------
+  { n: 17, id: 'reinas', titulo: 'Pirámides de las reinas', pos: [A_P + 62, 34, 17.5], modo: 'fuera', estado: 'ambos', nivel: 'Medido', fuentes: ['lehner1997'],
+    texto: 'Al este hay tres pirámides pequeñas, de unos 46-50 m de lado y unos 30 m de altura, para reinas de la familia de Keops. Su posición en el modelo es aproximada.',
+    facil: 'Estas tres pirámides pequeñas eran para reinas de la familia de Keops.' },
+
+  { n: 18, id: 'posteriores', titulo: 'Kefrén y Micerino, posteriores', pos: [-328, 150, 344], modo: 'fuera', estado: 'hoy', nivel: 'Documentado', fuentes: ['lehner1997', 'nova'],
+    texto: 'Las otras dos grandes pirámides de Giza se construyeron después: la de Kefrén, hijo de Keops, y la de Micerino. Por eso no aparecen en la vista «Recién terminada». Kefrén conserva parte del revestimiento en la punta, y Micerino tenía las hiladas de abajo de granito rojo de Asuán. Posiciones y medidas aproximadas.',
+    facil: 'Estas dos pirámides se hicieron más tarde, por eso no salen en la vista «Recién terminada».' },
 
   // --------- Interior ---------
   { n: 9, id: 'descendente', titulo: 'Pasillo descendente', pos: [7.3, -6, -56], modo: 'dentro', estado: 'ambos', nivel: 'Medido',
@@ -74,3 +84,6 @@ window.PUNTOS = [
     texto: 'Corredor de unos 9 m confirmado en 2023 detrás de los bloques en V que hay sobre la entrada. Se vio con un endoscopio. Su función no se conoce.',
     facil: 'Es un pasillo escondido encima de la entrada. Se encontró en 2023.' },
 ];
+
+// Numeración seguida en el orden de la lista
+window.PUNTOS.forEach((p, i) => { p.n = i + 1; });

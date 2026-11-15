@@ -37,11 +37,11 @@
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(45, 1, 0.3, 6000);
-  const escena = window.construirEscena({ scene, calidad });
+  const escena = window.construirEscena({ scene, calidad, renderer });
 
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true; controls.dampingFactor = 0.08;
-  controls.minDistance = 3; controls.maxDistance = 1100;
+  controls.minDistance = 3; controls.maxDistance = 2200;
   controls.maxPolarAngle = Math.PI * 0.495;
   controls.enablePan = true; controls.screenSpacePanning = true;
 
@@ -107,6 +107,14 @@
     $('#volver-mapa').href = '../../../egipto.html' + (facil ? '?facil=1' : '') + '#piramide';
     if (abierto) abrirPunto(abierto, false);
   }
+  // Hora del día (posición del Sol el 21 de marzo)
+  const rHora = $('#r-hora'), oHora = $('#o-hora');
+  function ponerHora() {
+    const h = Number(rHora.value);
+    oHora.textContent = Math.floor(h) + ':' + String(Math.round((h % 1) * 60)).padStart(2, '0');
+    escena.ponerHora(h); pedir();
+  }
+  rHora.addEventListener('input', ponerHora);
   $('#b-reset').addEventListener('click', () => volar(dentro ? 'dentro' : 'general'));
   $('#b-escala').addEventListener('click', () => { if (dentro) { dentro = false; aplicarEstado(); } volar('persona'); abrirPunto('persona', false); });
 
@@ -189,6 +197,10 @@
         el('p', { class: 'dato-cab' }, el('span', { class: 'nivel ' + NIVEL[d.nivel][1], text: NIVEL[d.nivel][0] + ' ' + d.nivel }), ' ', el('b', { text: d.titulo + ': ' }), d.valor),
         el('p', { class: 'dato-fuentes', text: 'Fuentes: ' + d.fuentes.map(f => corta(F[f].cita)).join(' · ') }));
     }
+    if (!d && p.fuentes) {
+      const F = window.PIRAMIDE.FUENTES;
+      datoCaja.append(el('p', { class: 'dato-fuentes solo', text: 'Fuentes: ' + p.fuentes.map(f => corta(F[f].cita)).join(' · ') }));
+    }
     panel.hidden = false;
     if (mover) $('#panel-titulo').focus({ preventScroll: true });
   }
@@ -228,6 +240,7 @@
   }
 
   ajustar();
+  ponerHora();
   volar('general', true);
   aplicarEstado();
   pintarFacil();
