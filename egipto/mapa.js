@@ -49,6 +49,33 @@
     tebas: cajaZona(G.zonas.tebas),
   };
 
+  // Textura del desierto: ruido suave (valor interpolado) dibujado en un lienzo pequeño.
+  // Es decorativa: NO representa el relieve real, solo da aspecto de arena.
+  function texturaDesierto() {
+    try {
+      const W = 322, Hh = 540, c = document.createElement('canvas'); c.width = W; c.height = Hh;
+      const g = c.getContext('2d'), img = g.createImageData(W, Hh), d = img.data;
+      let semilla = 9;
+      const rnd = () => { semilla = (semilla * 16807) % 2147483647; return semilla / 2147483647; };
+      const rejilla = (n) => { const r = []; for (let i = 0; i < (n + 2) * (n + 2); i++) r.push(rnd()); return r; };
+      const capas = [[6, 0.5], [14, 0.3], [40, 0.2]].map(([n, peso]) => ({ n, peso, r: rejilla(n) }));
+      const suave = t => t * t * (3 - 2 * t);
+      for (let y = 0; y < Hh; y++) for (let x = 0; x < W; x++) {
+        let v = 0;
+        for (const { n, peso, r } of capas) {
+          const fx = x / W * n, fy = y / Hh * n * 1.4, ix = Math.floor(fx), iy = Math.floor(fy) % (n + 1);
+          const tx = suave(fx - ix), ty = suave(fy - Math.floor(fy)), w = n + 2;
+          const a = r[iy * w + ix], b = r[iy * w + ix + 1], c2 = r[(iy + 1) * w + ix], e = r[(iy + 1) * w + ix + 1];
+          v += peso * ((a * (1 - tx) + b * tx) * (1 - ty) + (c2 * (1 - tx) + e * tx) * ty);
+        }
+        const i = (y * W + x) * 4, k = (v - 0.5) * 2;
+        d[i] = 238 + k * 14; d[i + 1] = 223 + k * 16; d[i + 2] = 186 + k * 18; d[i + 3] = 255;
+      }
+      g.putImageData(img, 0, 0);
+      return c.toDataURL('image/png');
+    } catch (e) { return null; }
+  }
+
   function iniciar() {
     const caja = document.getElementById('mapa-egipto');
     if (!caja) return;
@@ -60,14 +87,39 @@
     const mapa = svg('svg', { viewBox: `0 0 ${ANCHO.toFixed(0)} ${ALTO.toFixed(0)}`, role: 'group',
       'aria-labelledby': 'mapa-titulo', class: 'mapa', preserveAspectRatio: 'xMidYMid meet' });
     mapa.append(svg('title', { id: 'mapa-titulo' }, 'Mapa del antiguo Egipto: el Nilo, el delta, las cataratas y los principales enclaves'));
+    // Motivos de relleno: campos de cultivo y montes (se dibujan una vez, no pesan)
+    const defs = svg('defs', {},
+      svg('pattern', { id: 'p-campos', width: 7, height: 5, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(-20)' },
+        svg('rect', { width: 7, height: 5, fill: 'var(--verde)' }),
+        svg('rect', { width: 3.4, height: 2.3, fill: '#a4cd7d' }), svg('rect', { x: 3.6, y: 2.6, width: 3.4, height: 2.4, fill: '#7fb15a' })),
+      svg('pattern', { id: 'p-montes', width: 16, height: 12, patternUnits: 'userSpaceOnUse' },
+        svg('path', { d: 'M1 9L4.5 4L8 9M9 4L12 0.5L15 4', fill: 'none', stroke: '#9c7a45', 'stroke-width': 1.1, 'stroke-linejoin': 'round', opacity: 0.75 })),
+      svg('clipPath', { id: 'c-mar' }, svg('path', { d: ruta(G.mediterraneo, true) + ruta(G.marRojo, true) })),
+      svg('linearGradient', { id: 'g-mar', x1: 0, y1: 0, x2: 0, y2: 1 },
+        svg('stop', { offset: 0, 'stop-color': '#a9d0e6' }), svg('stop', { offset: 1, 'stop-color': '#c4e0ee' })));
+    mapa.append(defs);
     mapa.append(svg('rect', { class: 'tierra', x: 0, y: 0, width: ANCHO, height: ALTO }));
+    // Textura del desierto: manchas suaves generadas una sola vez en un lienzo
+    const tex = texturaDesierto();
+    if (tex) mapa.append(svg('image', { href: tex, x: 0, y: 0, width: ANCHO, height: ALTO, preserveAspectRatio: 'none', opacity: 0.9, 'aria-hidden': 'true', class: 'textura-desierto' }));
+    // Montes (relieve esquemático)
+    for (const m of G.montes) mapa.append(svg('path', { class: 'montes', d: ruta(m.contorno, true) }));
     mapa.append(svg('path', { class: 'mar', d: ruta(G.mediterraneo, true) }));
     mapa.append(svg('path', { class: 'mar', d: ruta(G.marRojo, true) }));
+    // Aguas poco profundas junto a la costa
+    mapa.append(svg('g', { 'clip-path': 'url(#c-mar)' },
+      svg('path', { class: 'costa-agua', d: ruta(G.mediterraneo, true) }), svg('path', { class: 'costa-agua', d: ruta(G.marRojo, true) })));
+    // Oasis
+    for (const o of G.oasis) {
+      const [ox, oy] = px(o.pos[0], o.pos[1]);
+      mapa.append(svg('ellipse', { class: 'fertil campos', cx: ox, cy: oy, rx: o.rx * ESCALA * K, ry: o.ry * ESCALA }));
+    }
     const [fx, fy] = px(G.fayum.centro[0], G.fayum.centro[1]);
-    mapa.append(svg('ellipse', { class: 'fertil', cx: fx, cy: fy, rx: G.fayum.radio * ESCALA * K, ry: G.fayum.radio * ESCALA * 0.8 }));
+    mapa.append(svg('ellipse', { class: 'fertil campos', cx: fx, cy: fy, rx: G.fayum.radio * ESCALA * K, ry: G.fayum.radio * ESCALA * 0.8 }));
     const [lx, ly] = px(G.fayum.lago[0], G.fayum.lago[1]);
     mapa.append(svg('ellipse', { class: 'lago', cx: lx, cy: ly, rx: 9, ry: 3.5 }));
-    mapa.append(svg('path', { class: 'fertil', d: ruta(G.delta, true) }));
+    mapa.append(svg('path', { class: 'fertil campos', d: ruta(G.delta, true) }));
+    mapa.append(svg('path', { class: 'valle-borde', d: ruta(G.nilo) }));
     mapa.append(svg('path', { class: 'valle', d: ruta(G.nilo) }));
     mapa.append(svg('path', { class: 'nilo', d: ruta(G.nilo) }));
     G.brazos.forEach(b => mapa.append(svg('path', { class: 'nilo brazo', d: ruta(b) })));
@@ -79,6 +131,8 @@
       const [x, y] = px(lat, lon);
       rotulos.append(svg('text', { x, y, class: 'r-' + clase, transform: giro ? `rotate(${giro} ${x} ${y})` : '' }, texto));
     }
+    for (const o of G.oasis) { const [x, y] = px(o.pos[0] - o.ry - 0.12, o.pos[1]); rotulos.append(svg('text', { x, y, class: 'r-oasis' }, o.nombre)); }
+    for (const m of G.montes) { const [x, y] = px(m.rotulo[0], m.rotulo[1]); rotulos.append(svg('text', { x, y, class: 'r-montes', transform: m.rotulo[2] ? `rotate(${m.rotulo[2]} ${x} ${y})` : '' }, m.nombre)); }
     mapa.append(rotulos);
 
     // Capa de elementos que mantienen su tamaño al ampliar
@@ -140,6 +194,10 @@
       marcadores[e.id] = g;
     }
     caja.append(mapa);
+    const rosa = el('div', { class: 'rosa', 'aria-hidden': 'true' });
+    rosa.innerHTML = '<svg viewBox="-20 -24 40 46" width="38" height="44"><path d="M0 -18L6 0L0 -4L-6 0Z" fill="#0d1033"/><path d="M0 18L6 0L0 4L-6 0Z" fill="#fff" stroke="#0d1033" stroke-width="1"/><text x="0" y="-19" text-anchor="middle" font-size="10" font-weight="800" fill="#0d1033">N</text></svg>';
+    const escala = el('div', { class: 'escala', 'aria-hidden': 'true' }, el('span', { class: 'barra-escala' }), el('span', { class: 'texto-escala' }));
+    caja.append(rosa, escala);
 
     // ---------- Vistas y ampliación ----------
     let vista = 'todo', vb = { ...VISTAS.todo }, anim = null;
@@ -151,6 +209,11 @@
       const s = Math.min(1.6, Math.max(v.w / cw, v.h / ch));
       for (const f of fijos) f.nodo.setAttribute('transform', `translate(${f.x.toFixed(2)} ${f.y.toFixed(2)}) scale(${s.toFixed(5)})`);
       mapa.style.setProperty('--grosor', s);
+      // Escala gráfica: 1 grado de latitud ≈ 111 km
+      const pxKm = (1 / s) * (ESCALA / 111);
+      const km = [1000, 500, 200, 100, 50, 20, 10, 5, 2, 1, 0.5].find(k => k * pxKm <= 120) || 0.5;
+      escala.querySelector('.barra-escala').style.width = (km * pxKm).toFixed(0) + 'px';
+      escala.querySelector('.texto-escala').textContent = km >= 1 ? km + ' km' : km * 1000 + ' m';
     }
     function verVista(id, foco) {
       vista = id;

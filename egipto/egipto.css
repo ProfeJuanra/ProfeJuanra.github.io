@@ -30,6 +30,18 @@
 .mapa .mar{fill:var(--mar);stroke:#8fb5cb;stroke-width:1;vector-effect:non-scaling-stroke}
 .mapa .fertil{fill:var(--verde);opacity:.85}
 .mapa .lago{fill:var(--mar)}
+.mapa .montes{fill:url(#p-montes);stroke:none}
+.mapa .campos{fill:url(#p-campos);opacity:1}
+.mapa .mar{fill:url(#g-mar)}
+.mapa .costa-agua{fill:none;stroke:#dbeef6;stroke-width:7;opacity:.75;stroke-linejoin:round}
+.mapa .valle-borde{fill:none;stroke:#5f8f3f;stroke-width:calc(var(--valle,9px) * 1.18);stroke-linecap:round;stroke-linejoin:round;opacity:.55}
+.mapa .r-oasis{font-size:10px;font-style:italic;fill:#3f6b25;text-anchor:middle}
+.mapa .r-montes{font-size:10.5px;font-weight:600;letter-spacing:.18em;fill:#7a5a28;stroke:none;text-anchor:middle}
+.mapa-caja{position:relative;width:fit-content;max-width:100%;margin-inline:auto}
+@media (min-width:861px){.mapa{width:auto;height:min(78vh,900px);max-height:none}}
+.rosa{position:absolute;top:10px;right:12px;background:rgba(255,255,255,.75);border-radius:10px;padding:2px 4px 0;line-height:0}
+.escala{position:absolute;right:12px;bottom:10px;align-items:flex-end;background:rgba(255,255,255,.8);border-radius:8px;padding:4px 8px 3px;font-size:.72rem;font-weight:600;color:var(--azul);display:flex;flex-direction:column;gap:2px}
+.barra-escala{display:block;height:6px;border:2px solid var(--azul);border-top:0;min-width:20px}
 .mapa .valle{fill:none;stroke:var(--verde);stroke-width:var(--valle,8);stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 .mapa .nilo{fill:none;stroke:var(--nilo);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 .mapa .nilo.brazo{stroke-width:2}
@@ -174,3 +186,6 @@
 }
 @media print{.mapa-vistas,.barra-facil,.reto-botones{display:none}}
 .cmp.sola .cmp-marco::after{display:none}
+
+.mapa-caja:not([data-vista="todo"]) .textura-desierto{display:none}
+.m-montes{color:#9c7a45;font-weight:700;letter-spacing:-.15em}

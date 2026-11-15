@@ -54,6 +54,22 @@ window.GEO_EGIPTO = {
   // Oasis de El Fayum y su lago
   fayum: { centro: [29.3, 30.85], radio: 0.28, lago: [29.47, 30.62] },
 
+  // Oasis del desierto occidental (posiciones aproximadas)
+  oasis: [
+    { nombre: 'Oasis de Bahariya', pos: [28.35, 28.86], rx: 0.22, ry: 0.12 },
+    { nombre: 'Oasis de Dajla', pos: [25.5, 29.05], rx: 0.35, ry: 0.1 },
+    { nombre: 'Oasis de Jarga', pos: [25.4, 30.55], rx: 0.12, ry: 0.4 },
+  ],
+
+  // Zonas montañosas (contorno esquemático): montes del mar Rojo y sur del Sinaí
+  montes: [
+    { nombre: 'MONTES DEL MAR ROJO', rotulo: [27.05, 33.07, -68], contorno: [
+      [28.7, 32.35], [28.1, 32.85], [27.2, 33.3], [26.2, 33.65], [25.2, 34.05], [24.2, 34.6], [23.2, 35.05], [22.2, 35.4], [21.2, 35.6],
+      [21.2, 34.75], [22.3, 34.1], [23.6, 33.55], [24.8, 33.2], [26.0, 32.95], [27.2, 32.7], [28.2, 32.25]] },
+    { nombre: 'Montes del Sinaí', rotulo: [28.42, 33.95, 0], contorno: [
+      [28.95, 33.55], [29.0, 34.15], [28.55, 34.45], [28.0, 34.32], [27.85, 34.1], [28.3, 33.65]] },
+  ],
+
   // Cataratas: zonas de rocas que cortan el río
   cataratas: [
     { nombre: '1.ª catarata', pos: [24.0, 32.88] },
@@ -68,8 +84,8 @@ window.GEO_EGIPTO = {
     [31.78, 30.4, 'MAR MEDITERRÁNEO', 'mar', 0],
     [26.95, 34.72, 'MAR ROJO', 'mar', -62],
     [29.25, 33.95, 'SINAÍ', 'region', 0],
-    [27.3, 29.25, 'DESIERTO OCCIDENTAL', 'desierto', -90],
-    [22.85, 34.35, 'DESIERTO ORIENTAL', 'desierto', -90],
+    [27.1, 29.72, 'DESIERTO OCCIDENTAL', 'desierto', -90],
+    [22.9, 34.75, 'DESIERTO ORIENTAL', 'desierto', -70],
     [30.98, 31.0, 'BAJO EGIPTO', 'pais', 0],
     [30.78, 31.0, '(el delta)', 'nota', 0],
     [27.1, 32.25, 'ALTO EGIPTO', 'pais', -62],
