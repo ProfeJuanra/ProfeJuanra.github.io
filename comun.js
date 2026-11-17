@@ -71,7 +71,28 @@
   });
 
   // ---- Materiales: apartado general y unidades ----
-  const NOMBRE_TIPO = { pdf: 'PDF', presentacion: 'Presentación', video: 'Vídeo', actividad: 'Actividad', enlace: 'Enlace' };
+  const NOMBRE_TIPO = { pdf: 'PDF', presentacion: 'Presentación', video: 'Vídeo', actividad: 'Actividad', enlace: 'Enlace', imagen: 'Imagen' };
+
+  // Imágenes para ver dentro de la web (tipo "imagen"): se abren en un visor, sin
+  // enlace al archivo ni botón de descarga, y sin menú contextual ni arrastre.
+  let visorImagen = null;
+  function verImagen(m) {
+    if (!visorImagen) {
+      const img = el('img', { alt: '', draggable: 'false' });
+      const pie = el('div', { class: 'visor-pie' });
+      const cerrar = el('button', { class: 'visor-cerrar', type: 'button', 'aria-label': 'Cerrar' }, '✕');
+      visorImagen = el('dialog', { class: 'visor visor-imagen', 'aria-label': 'Imagen ampliada' }, cerrar, el('figure', {}, img, pie));
+      ['contextmenu', 'dragstart'].forEach(ev => img.addEventListener(ev, e => e.preventDefault()));
+      cerrar.addEventListener('click', () => visorImagen.close());
+      visorImagen.addEventListener('click', e => { if (e.target === visorImagen) visorImagen.close(); });
+      visorImagen.img = img; visorImagen.pie = pie;
+      document.body.append(visorImagen);
+    }
+    visorImagen.img.src = m.enlace; visorImagen.img.alt = m.alt || m.titulo || '';
+    visorImagen.pie.replaceChildren(el('b', {}, m.titulo || ''));
+    if (m.descripcion) visorImagen.pie.append(el('span', { class: 'texto' }, m.descripcion));
+    visorImagen.showModal();
+  }
   // Enlaces de Classroom o Drive: solo los abren los alumnos con su cuenta
   const esPrivado = (url) => /classroom\.google\.com|drive\.google\.com|docs\.google\.com/.test(url || '');
   const candado = () => el('span', { class: 'candado' }, '🔒 Solo alumnos');
@@ -89,6 +110,13 @@
           el('h3', {}, m.titulo || 'Material'));
         if (m.descripcion) info.append(el('p', {}, m.descripcion));
         if (esPrivado(m.enlace)) info.append(candado());
+        if (tipo === 'imagen') {
+          info.append(el('span', { class: 'abrir' }, 'Ver la imagen ⤢'));
+          const boton = el('button', { class: 'ficha', type: 'button' }, el('img', { src: m.vista, alt: '', loading: 'lazy', draggable: 'false' }), info);
+          boton.addEventListener('click', () => verImagen(m));
+          rejilla.append(boton);
+          continue;
+        }
         info.append(el('span', { class: 'abrir' }, esPrivado(m.enlace) ? 'Abrir en Classroom →' : 'Abrir →'));
         rejilla.append(el('a', { class: 'ficha', href: m.enlace || '#', target: '_blank', rel: 'noopener' },
           el('img', { src: m.vista, alt: '', loading: 'lazy' }), info));
@@ -99,9 +127,13 @@
       const lista = el('ul', { class: 'materiales' });
       for (const m of sinVista) {
         const tipo = (m.tipo || 'enlace').toLowerCase();
-        const a = el('a', { href: m.enlace || '#', target: '_blank', rel: 'noopener' },
-          el('span', { class: 'tipo ' + tipo }, NOMBRE_TIPO[tipo] || tipo),
-          el('span', { class: 'nombre' }, m.titulo || 'Material'));
+        const a = tipo === 'imagen'
+          ? el('button', { type: 'button', class: 'material-boton' },
+              el('span', { class: 'tipo ' + tipo }, NOMBRE_TIPO[tipo]), el('span', { class: 'nombre' }, m.titulo || 'Imagen'))
+          : el('a', { href: m.enlace || '#', target: '_blank', rel: 'noopener' },
+              el('span', { class: 'tipo ' + tipo }, NOMBRE_TIPO[tipo] || tipo),
+              el('span', { class: 'nombre' }, m.titulo || 'Material'));
+        if (tipo === 'imagen') a.addEventListener('click', () => verImagen(m));
         if (esPrivado(m.enlace)) a.append(candado());
         lista.append(el('li', {}, a));
       }

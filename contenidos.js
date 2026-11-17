@@ -8,7 +8,8 @@
 
       { tipo: "pdf", titulo: "Apuntes de la unidad", enlace: "materiales/1eso/u1-apuntes.pdf" },
 
-  · tipo: "pdf", "presentacion", "video", "actividad" o "enlace"
+  · tipo: "pdf", "presentacion", "video", "actividad", "enlace" o "imagen"
+           ("imagen" se ve dentro de la web, en grande, sin botón de descarga)
   · titulo: lo que verán tus alumnos
   · enlace: o un archivo subido a la carpeta «materiales»
             o una dirección de internet (YouTube, Drive, Genially…) que empiece por https://
@@ -226,6 +227,11 @@ const MATERIAS = {
     { titulo: "4. El medio físico de España y de Extremadura", bloque: "Geografía", materiales: [
     ]},
     { titulo: "5. La Prehistoria", bloque: "Historia", materiales: [
+      { tipo: "imagen", titulo: "Mapa conceptual: las etapas de la Prehistoria",
+        descripcion: "Paleolítico, Neolítico y Edad de los Metales: cómo vivían en cada etapa.",
+        alt: "Mapa conceptual de la Prehistoria en tres columnas. Paleolítico: vida nómada; caza, pesca y recolección; herramientas de piedra tallada; dominio del fuego; pinturas rupestres. Neolítico: vida sedentaria; agricultura y ganadería; herramientas de piedra pulida; aldeas; cerámica y tejidos. Edad de los Metales: cobre, bronce y hierro; mejores armas y herramientas; comercio; ciudades; diferencias sociales. Conclusión: de la supervivencia nómada a las primeras sociedades sedentarias.",
+        vista: "img/materiales/prehistoria-mapa-conceptual-mini.jpg",
+        enlace: "img/materiales/prehistoria-mapa-conceptual.jpg" },
       { tipo: "actividad", titulo: "Reconstrucción 3D: el poblado de la Isla de Valdecañas",
         descripcion: "Pasea por un poblado de la Edad del Cobre del Campo Arañuelo, hacia el 2900 a. C.",
         vista: "img/materiales/poblado-valdecanas.jpg",

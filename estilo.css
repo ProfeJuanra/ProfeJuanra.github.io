@@ -110,7 +110,7 @@ a.curso:hover{border-color:var(--rosa);transform:translateY(-2px)}
 .materiales a{display:flex;align-items:center;gap:10px;text-decoration:none;padding:8px 10px;border-radius:10px;background:var(--gris)}
 .materiales a:hover{background:#e3e7f3}
 .tipo{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:6px;color:#fff;background:var(--azul);flex:none;min-width:86px;text-align:center}
-.tipo.pdf{background:#d62f4b}.tipo.presentacion{background:#e07a12}.tipo.video{background:#c4104c}.tipo.actividad{background:#1f8a5f}.tipo.enlace{background:#2a7fb0}
+.tipo.pdf{background:#d62f4b}.tipo.presentacion{background:#e07a12}.tipo.video{background:#c4104c}.tipo.actividad{background:#1f8a5f}.tipo.enlace{background:#2a7fb0}.tipo.imagen{background:#6a3fb0}
 
 /* Aviso de "próximamente" */
 .aviso{background:var(--blanco);border:1px solid var(--linea);border-left:5px solid var(--t4);border-radius:14px;padding:22px 24px;display:grid;gap:12px;max-width:720px}
@@ -287,3 +287,8 @@ button.ficha{font:inherit;color:inherit;text-align:left;padding:0;cursor:pointer
 .reco .ir{margin-top:auto;padding-top:6px}
 @media (max-width:520px){.boton-3d{padding:16px;gap:12px}.boton-3d .icono{width:46px;height:46px;font-size:1.1rem}}
 .titulo-pagina{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;margin:0 0 12px}
+
+/* Imágenes que solo se ven en la web (tipo «imagen» en contenidos.js) */
+.visor-imagen img{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;background:#fff}
+.materiales .material-boton{display:flex;align-items:center;gap:10px;width:100%;font:inherit;color:inherit;text-align:left;border:0;cursor:pointer;padding:8px 10px;border-radius:10px;background:var(--gris)}
+.materiales .material-boton:hover{background:#e3e7f3}
