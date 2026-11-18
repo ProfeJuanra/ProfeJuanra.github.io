@@ -242,6 +242,10 @@ const MATERIAS = {
         enlace: "materiales/1eso/dolmen-moina-ii/index.html" },
     ]},
     { titulo: "6. Mesopotamia y Egipto", bloque: "Historia", materiales: [
+      { tipo: "video", titulo: "Mesopotamia contada por una niña de Uruk",
+        descripcion: "La tierra entre dos ríos: vídeo de mi canal de YouTube.",
+        vista: "img/materiales/video-mesopotamia-uruk.jpg",
+        enlace: "https://youtu.be/SK42iHLVuQI" },
       { tipo: "actividad", titulo: "El antiguo Egipto: mapa interactivo y Gran Pirámide en 3D",
         descripcion: "Sitúa las ciudades, necrópolis y templos del Nilo, y explora la Gran Pirámide de Keops.",
         vista: "img/materiales/egipto-mapa.jpg",
