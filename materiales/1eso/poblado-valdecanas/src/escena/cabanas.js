@@ -1,6 +1,6 @@
-// Fase c: cabañas. Planta de la 31 documentada (10,56 × 2,59 m, sin agujeros de poste).
+// Fase c: cabañas. Planta de la 30 documentada (numeración del informe preliminar) (10,56 × 2,59 m, sin agujeros de poste).
 // Paredes de ramas manteadas con barro (deducido). Postes, altura, cubierta y puerta (hipótesis).
-// H1-H3: cabañas enteramente hipotéticas con la forma de la 31.
+// H1-H3: cabañas enteramente hipotéticas con la forma de la 30.
 (function (V) {
   'use strict';
   const N = V.NIVEL;

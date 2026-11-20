@@ -99,7 +99,7 @@
 
     const linea = document.createElement('div');
     linea.className = 'linea-corte'; linea.hidden = true;
-    linea.innerHTML = '<span>◀ 2008 · hacia 2900 a. C. ▶</span>';
+    linea.innerHTML = '<span>◀ 2008 · Neolítico final – Calcolítico inicial ▶</span>';
     document.body.appendChild(linea);
 
     let activa = false, corte = 0.5;

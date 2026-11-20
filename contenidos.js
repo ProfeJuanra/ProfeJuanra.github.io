@@ -38,7 +38,7 @@ const WEB = {
 // Para añadir una nueva, copia un bloque y cambia los datos.
 const RECONSTRUCCIONES = [
   { titulo: "Poblado de la Isla de Valdecañas",
-    lugar: "El Gordo – Berrocalejo (Cáceres)", epoca: "Edad del Cobre · hacia el 2900 a. C.",
+    lugar: "El Gordo – Berrocalejo (Cáceres)", epoca: "Neolítico final – Calcolítico inicial",
     descripcion: "Pasea por un poblado de campesinos del Campo Arañuelo: cabañas, silos, la zanja de drenaje y el hogar.",
     curso: "1º ESO · La Prehistoria", vista: "img/materiales/poblado-valdecanas.jpg",
     enlace: "materiales/1eso/poblado-valdecanas/index.html" },
@@ -233,7 +233,7 @@ const MATERIAS = {
         vista: "img/materiales/prehistoria-mapa-conceptual-mini.jpg",
         enlace: "img/materiales/prehistoria-mapa-conceptual.jpg" },
       { tipo: "actividad", titulo: "Reconstrucción 3D: el poblado de la Isla de Valdecañas",
-        descripcion: "Pasea por un poblado de la Edad del Cobre del Campo Arañuelo, hacia el 2900 a. C.",
+        descripcion: "Pasea por un poblado del Neolítico final – Calcolítico inicial en el Campo Arañuelo.",
         vista: "img/materiales/poblado-valdecanas.jpg",
         enlace: "materiales/1eso/poblado-valdecanas/index.html" },
       { tipo: "actividad", titulo: "Reconstrucción 3D: el dolmen de La Moína II",

@@ -22,7 +22,7 @@
 <text x="322.0" y="624.0" font-size="13" fill="#555" text-anchor="end">hacia la vaguada y el Tajo ↓</text>
 <text x="46.0" y="488.0" font-size="12" fill="#555">← dolmen de Guadalperal</text><text x="46.0" y="504.0" font-size="11" fill="#777">(fuera del plano, a pocos km)</text>
 <ellipse cx="197.0" cy="360.0" rx="12.9" ry="52.8" transform="rotate(17.7 197.0 360.0)" fill="#0072B2" fill-opacity="0.18" stroke="#0072B2" stroke-width="2.5"/>
-<text x="197.0" y="430.8" font-size="12" fill="#333" text-anchor="middle">Cabaña 31</text>
+<text x="197.0" y="430.8" font-size="12" fill="#333" text-anchor="middle">Cabaña 30</text>
 <ellipse cx="575.0" cy="390.0" rx="13.0" ry="42.5" transform="rotate(17.7 575.0 390.0)" fill="#CC79A7" fill-opacity="0.18" stroke="#CC79A7" stroke-width="2.5" stroke-dasharray="6 4"/>
 <text x="575.0" y="450.5" font-size="12" fill="#333" text-anchor="middle">Cabaña (hipótesis)</text>
 <ellipse cx="300.0" cy="220.0" rx="13.0" ry="42.5" transform="rotate(10.0 300.0 220.0)" fill="#CC79A7" fill-opacity="0.18" stroke="#CC79A7" stroke-width="2.5" stroke-dasharray="6 4"/>
@@ -116,6 +116,6 @@
 <text x="194" y="774" font-size="13">Deducido</text>
 <rect x="322" y="762" width="16" height="16" fill="#CC79A7"/>
 <text x="344" y="774" font-size="13">Hipótesis</text>
-<text x="30" y="814" font-size="12" fill="#555">Isla de Valdecañas (El Gordo / Berrocalejo, Cáceres). Calcolítico inicial, primera mitad del III milenio a. C.</text>
+<text x="30" y="814" font-size="12" fill="#555">Isla de Valdecañas (El Gordo / Berrocalejo, Cáceres). Neolítico final – Calcolítico inicial.</text>
 <text x="30" y="834" font-size="12" fill="#555">Planta: plano CAD de la excavación de 2008. Cabañas hipotéticas y norte: propuesta del proyecto.</text>
 </svg>

@@ -6,10 +6,10 @@ window.VALDE = window.VALDE || {};
 VALDE.fichas = [
   {
     n: 1, titulo: 'La cabaña', nivel: [1, 3], nivelTexto: 'Planta documentada · paredes deducidas · tejado hipotético',
-    fuente: '[Inf.] estructura 31; [Art.] §4.1; Fonseca de la Torre et al. 2022',
+    fuente: '[Inf.] estructura 30; [Art.] §4.1; Fonseca de la Torre et al. 2022',
     vista: [-2.5, -8.5, 5, -14.3, 0, 1],
     basico: 'Aquí vivía una familia. Los arqueólogos encontraron el suelo de la cabaña, un poco hundido en la tierra: medía 10,5 metros de largo y 2,6 de ancho. Las paredes eran de ramas cubiertas de barro; lo sabemos porque aparecieron trozos de barro con huellas de ramas. Dentro había dos pequeños silos. El tejado lo imaginamos nosotros: no se ha conservado.',
-    ampliacion: 'La estructura 31 es el único fondo de cabaña seguro del yacimiento: una planta alargada de 10,56 × 2,59 m, excavada en la arcilla de la terraza, que conserva unos 30 cm de relleno y contiene dos silos coetáneos. No aparecieron agujeros de poste, porque la erosión arrasó la superficie sobre la que se vivía. Los fragmentos de adobe y de barro con improntas vegetales hallados en muchos hoyos proceden de paredes de entramado vegetal manteado con barro, una técnica bien estudiada en asentamientos del Calcolítico de la Meseta Norte. La altura de las paredes, los postes, la cubierta vegetal con caballete y la puerta son hipótesis de este proyecto: otra reconstrucción igual de válida podría proponer, por ejemplo, una cubierta abovedada de ramas. Las otras tres cabañas que ves son hipotéticas: los adobes repartidos por el yacimiento indican que hubo más viviendas, pero no sabemos dónde.',
+    ampliacion: 'La estructura 30 es el único fondo de cabaña seguro del yacimiento: una planta alargada de 10,56 × 2,59 m, excavada en la arcilla de la terraza, que conserva unos 30 cm de relleno y contiene dos silos coetáneos. No aparecieron agujeros de poste, porque la erosión arrasó la superficie sobre la que se vivía. Los fragmentos de adobe y de barro con improntas vegetales hallados en muchos hoyos proceden de paredes de entramado vegetal manteado con barro, una técnica bien estudiada en asentamientos del Calcolítico de la Meseta Norte. La altura de las paredes, los postes, la cubierta vegetal con caballete y la puerta son hipótesis de este proyecto: otra reconstrucción igual de válida podría proponer, por ejemplo, una cubierta abovedada de ramas. Las otras tres cabañas que ves son hipotéticas: los adobes repartidos por el yacimiento indican que hubo más viviendas, pero no sabemos dónde.',
     facil: 'Esta es una casa. Las paredes eran de ramas y barro. El suelo estaba un poco hundido. Dentro guardaban comida en dos agujeros. No sabemos cómo era el tejado.',
   },
   {
@@ -30,7 +30,7 @@ VALDE.fichas = [
   },
   {
     n: 4, titulo: 'La zanja de drenaje', nivel: [1], nivelTexto: 'Documentado (la profundidad original es hipótesis)',
-    fuente: '[Art.] §4.3; [Inf.] estructuras 30 y 32',
+    fuente: '[Art.] §4.3; [Inf.] estructuras 31 y 32',
     vista: [-2.5, -5, 3.5, 3.5, -12, -0.5],
     basico: 'Esta zanja medía unos 40 metros de largo y algo más de 2 de ancho. Servía para sacar el agua de lluvia hacia una vaguada y proteger los silos de la humedad, que pudre el grano. Había que limpiarla a menudo, seguramente entre todos. No es un foso de defensa: no rodea el poblado.',
     ampliacion: 'La zanja tiene unos 40 m de longitud, entre 2 y 2,40 m de anchura, 61 cm de profundidad conservada y sección en U. Desemboca en una vaguada natural y en su recorrido toca las estructuras 30 a 36. Por su trazado se interpreta como un canal para evacuar el agua de lluvia y proteger las estructuras de almacenamiento, ya que la humedad es el peor enemigo de un silo. Una obra así exige limpiezas periódicas, probablemente colectivas. Cuando se rellenó con basura, fauna, adobes y muchos cantos rodados, el sistema ya había dejado de funcionar. Es importante no confundirla con los fosos que rodean algunos poblados calcolíticos de la Meseta y del sur, como los de la cuenca de Madrid o Cortijo Lobato, en Almendralejo: aquí no hay un recinto cerrado, sino una obra de drenaje. En el modelo la hemos hecho unos 30 cm más honda de lo conservado, para compensar la erosión.',
@@ -72,9 +72,9 @@ VALDE.fichas = [
     n: 9, titulo: '¿Dónde está el metal?', nivel: [1], nivelTexto: 'Documentado (ausencia de metal)',
     fuente: '[Art.] §6 y §7',
     vista: [34, -30, 16, 4, 2, 0],
-    basico: 'Este periodo se llama Edad del Cobre, pero en Valdecañas no apareció ningún objeto de metal. Al principio del Calcolítico el cobre era raro y la piedra seguía siendo lo más usado. Este poblado era pequeño y abierto, sin murallas, en lo alto de un cerro sobre el valle del Tajo. En el sur de Extremadura, en cambio, hubo grandes poblados con fosos y murallas.',
+    basico: 'Este poblado es de la transición entre el Neolítico final y el Calcolítico inicial, cuando empieza la Edad del Cobre. Pero en Valdecañas no apareció ningún objeto de metal. Al principio del Calcolítico el cobre era raro y la piedra seguía siendo lo más usado. Este poblado era pequeño y abierto, sin murallas, en lo alto de un cerro sobre el valle del Tajo. En el sur de Extremadura, en cambio, hubo grandes poblados con fosos y murallas.',
     ampliacion: 'El Calcolítico, o Edad del Cobre, ocupa a grandes rasgos el III milenio a. C. Su nombre viene del primer uso del cobre, pero durante buena parte del periodo los objetos de metal fueron escasos. Lo importante fue el cambio en la forma de vivir: más población, más tierra cultivada y más excedentes guardados en silos. En Valdecañas no hay metal, ni cerámica campaniforme, ni ídolos, ni objetos de prestigio, lo que apoya una fecha antigua, de la primera mitad del III milenio. Comparado con su entorno, el asentamiento se parece a los campos de hoyos de la Meseta (Las Matillas, Fuente Celada) y es muy distinto de los grandes recintos del sur. Allí estaban San Blas, en Cheles, con unas 30 ha y murallas; Cortijo Lobato, en Almendralejo, con murallas y fosos concéntricos; y Valencina, en Sevilla, con más de 235 ha. Las diferencias no se deben solo a la geografía, sino también al tiempo: Valdecañas sería anterior al apogeo de esos grandes centros.',
-    facil: 'Es la Edad del Cobre. Pero aquí no apareció cobre. Usaban herramientas de piedra. El pueblo era pequeño. No tenía murallas.',
+    facil: 'Es el final del Neolítico y el principio de la Edad del Cobre. Pero aquí no apareció cobre. Usaban herramientas de piedra. El pueblo era pequeño. No tenía murallas.',
   },
   {
     n: 10, titulo: 'El dolmen de Guadalperal', nivel: [1, 3], nivelTexto: 'Dolmen documentado · relación con el poblado hipotética',
@@ -88,7 +88,7 @@ VALDE.fichas = [
 
 VALDE.intro = {
   titulo: 'Poblado de la Isla de Valdecañas',
-  subtitulo: 'Edad del Cobre · hacia el 2900 a. C. · El Gordo y Berrocalejo (Cáceres)',
+  subtitulo: 'Neolítico final – Calcolítico inicial · El Gordo y Berrocalejo (Cáceres)',
   texto: 'Esta reconstrucción muestra cómo pudo ser el asentamiento campesino que se excavó en 2008 en lo alto de un cerro sobre el valle del Tajo, hoy convertido en una isla del embalse de Valdecañas. Es una hipótesis científica: cada elemento tiene su justificación. Activa la capa de evidencia para ver qué está documentado, qué está deducido y qué es hipótesis.',
 };
 

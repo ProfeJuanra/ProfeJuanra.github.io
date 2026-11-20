@@ -371,7 +371,7 @@
     añadir(hachero, N.HIP, 'Persona');
     anim.push(t => { const v = -150 + 85 * Math.max(0, Math.sin(t * 2)); hachero.userData.art.brazos.forEach(b => { b.rotation.x = v * D2R; }); });
 
-    // 3. Telar (PDI 7) junto a la cabaña 31
+    // 3. Telar (PDI 7) junto a la cabaña 30
     const tel = situar(telar(), -16.6, 4.6, -14, 4.4);
     añadir(tel, N.DED, 'Telar vertical con pesas de placa (pesas documentadas)');
     const t2 = new THREE.Vector3(0, 0, 0.75).applyEuler(tel.rotation);
