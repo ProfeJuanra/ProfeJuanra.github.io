@@ -265,6 +265,12 @@ const MATERIAS = {
         enlace: "https://classroom.google.com/w/MjUzNTEwOTg1OTZa/t/all" },
     ]},
     { titulo: "Crisis del Antiguo Régimen", bloque: "1788–1833",
+    materiales: [
+      { tipo: "actividad", titulo: "Mapa conceptual interactivo de la unidad",
+        descripcion: "Despliega las ramas, busca conceptos y repasa con las ideas tapadas.",
+        vista: "img/materiales/mapa-caida-antiguo-regimen.jpg",
+        enlace: "materiales/historia-espana/mapa-caida-antiguo-regimen.html" },
+    ],
     apartados: [
       { titulo: "Temas PAU", materiales: [
       ]},
