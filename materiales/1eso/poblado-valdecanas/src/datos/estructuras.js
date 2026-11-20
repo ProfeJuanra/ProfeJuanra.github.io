@@ -57,8 +57,8 @@ VALDE.plano = {
    "tipo": "silo",
    "x": 18.1,
    "y": 7.9,
-   "diametro": 1.5,
-   "profundidad": null,
+   "diametro": 1.49,
+   "profundidad": 0.92,
    "estado": "uso",
    "nivel": 1
   },
