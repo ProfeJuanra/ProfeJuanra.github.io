@@ -25,7 +25,7 @@ VALDE.fichas = [
   },
   {
     n: 3, titulo: 'Del silo al basurero', nivel: [1], nivelTexto: 'Documentado',
-    fotos: [{ src: 'assets/fotos/silos-que-se-cortan.jpg', pie: 'Dos silos que se cortan: el más moderno rompió la pared del más antiguo.', alt: 'Dos silos excavados, uno junto a otro: el más nuevo rompe la pared del más viejo.' }],
+    fotos: [{ src: 'assets/fotos/silos-que-se-cortan.jpg', pie: 'Dos silos que se cortan: el más moderno rompió la pared del más antiguo.', alt: 'Dos silos excavados, uno junto a otro: el más nuevo rompe la pared del más viejo.' }, { src: 'assets/fotos/vasija-estructura-3.jpg', pie: 'Vasija hecha a mano hallada rota en el relleno de la estructura 3 y pegada de nuevo en el laboratorio. La regla mide 30 cm.', alt: 'Vasija de cerámica marrón hecha a mano, recompuesta con muchos fragmentos, junto a dos trozos sueltos.' }],
     fuente: '[Inf.] estructuras 17, 18 y 19; [Art.] §4.2',
     vista: [9.5, 7.5, 3.2, 13, 2.8, -0.2],
     basico: 'Cuando un silo se estropeaba, lo usaban como basurero y lo llenaban de restos: cerámica rota, huesos, piedras de moler. Luego excavaban otro al lado. Aquí, el silo 19 corta al 18, y el 18 corta al 17. Así los arqueólogos saben cuál es más antiguo: el que está cortado. Las manchas oscuras del suelo son silos ya rellenos.',
@@ -37,11 +37,12 @@ VALDE.fichas = [
     fuente: '[Art.] §4.3; [Inf.] estructuras 31 y 32',
     vista: [-2.5, -5, 3.5, 3.5, -12, -0.5],
     basico: 'Esta zanja medía unos 40 metros de largo y algo más de 2 de ancho. Servía para sacar el agua de lluvia hacia una vaguada y proteger los silos de la humedad, que pudre el grano. Había que limpiarla a menudo, seguramente entre todos. No es un foso de defensa: no rodea el poblado.',
-    ampliacion: 'La zanja tiene unos 40 m de longitud, entre 2 y 2,40 m de anchura, 61 cm de profundidad conservada y sección en U. Desemboca en una vaguada natural y en su recorrido toca las estructuras 30 a 36. Por su trazado se interpreta como un canal para evacuar el agua de lluvia y proteger las estructuras de almacenamiento, ya que la humedad es el peor enemigo de un silo. Una obra así exige limpiezas periódicas, probablemente colectivas. Cuando se rellenó con basura, fauna, adobes y muchos cantos rodados, el sistema ya había dejado de funcionar. Es importante no confundirla con los fosos que rodean algunos poblados calcolíticos de la Meseta y del sur, como los de la cuenca de Madrid o Cortijo Lobato, en Almendralejo: aquí no hay un recinto cerrado, sino una obra de drenaje. En el modelo la hemos hecho unos 30 cm más honda de lo conservado, para compensar la erosión.',
+    ampliacion: 'La zanja tiene unos 40 m de longitud, entre 2 y 2,40 m de anchura, 61 cm de profundidad conservada y sección en U. Desemboca en una vaguada natural y en su recorrido toca varios silos. Por su trazado se interpreta como un canal para evacuar el agua de lluvia y proteger las estructuras de almacenamiento, ya que la humedad es el peor enemigo de un silo. Una obra así exige limpiezas periódicas, probablemente colectivas. Cuando se rellenó con basura, fauna, adobes y muchos cantos rodados, el sistema ya había dejado de funcionar. Es importante no confundirla con los fosos que rodean algunos poblados calcolíticos de la Meseta y del sur, como los de la cuenca de Madrid o Cortijo Lobato, en Almendralejo: aquí no hay un recinto cerrado, sino una obra de drenaje. En el modelo la hemos hecho unos 30 cm más honda de lo conservado, para compensar la erosión.',
     facil: 'Esto es una zanja. Llevaba el agua de la lluvia lejos de los silos. Así el grano no se mojaba. La limpiaban entre todos.',
   },
   {
     n: 5, titulo: 'El hogar y la molienda', nivel: [1, 3], nivelTexto: 'Documentado (el fuego encendido es hipótesis)',
+    fotos: [{ src: 'assets/fotos/molino.jpg', pie: 'Molino de mano: una piedra grande con la superficie gastada, donde se molía el grano, y encima la moledera, la piedra que se movía adelante y atrás.', alt: 'Molino de piedra arenisca en forma de bandeja alargada con una piedra redondeada más pequeña encima.' }],
     fuente: '[Inf.] estructura 11/4; [Art.] §5.3',
     vista: [14, -13.8, 2.8, 9.8, -10.3, 0.3],
     basico: 'Este es un hogar al aire libre, hecho con adobes en círculo. Junto a él aparecieron huesos de animales y trozos de molino. Las personas molían el cereal de rodillas: frotaban un canto de cuarcita sobre una piedra plana de granito. Así hacían harina. Cerca hay cuencos, platos y ollas hechos a mano, sin torno.',
