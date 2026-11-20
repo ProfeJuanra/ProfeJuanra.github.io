@@ -13,6 +13,9 @@
 ## Cuerpo humano
 - Las personas usan el **cuerpo base de MakeHuman**, su esqueleto y sus pesos de deformación, publicados con licencia **CC0 1.0** por el MakeHuman Team (github.com/makehumancommunity/mpfb2), simplificados para este proyecto. La ropa, el pelo, las posturas y los colores son de creación propia.
 
+## Fotografías de la excavación
+- Las fotos de los silos y de los materiales que aparecen en las fichas son de **F9 Arqueología Constructiva** (excavación de 2008), publicadas con permiso. Se han reducido de tamaño y se les han quitado los metadatos (`assets/fotos/`).
+
 ## Texturas fotográficas
 - Las texturas de la cubierta de carrizo, el barro de las paredes, la corteza de los postes y el detalle del suelo proceden de **Poly Haven** (polyhaven.com), con licencia **CC0 1.0** (dominio público): `reed_roof_04`, `clay_plaster`, `brown_mud_dry`, `bark_brown_02` y `withered_grass`. Se han recortado, reducido y retocado para este proyecto (`assets/texturas/`). Son materiales actuales usados como aspecto, no restos arqueológicos.
 

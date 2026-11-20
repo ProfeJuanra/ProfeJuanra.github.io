@@ -136,3 +136,9 @@ dialog figcaption { font-size: .85rem; color: var(--suave); }
 }
 #panel-titulo:focus:not(:focus-visible) { outline: none; }
 body.limpio .tarjeta, body.limpio .saltar { display: none !important; }
+
+/* Fotos de la excavación en las fichas */
+.foto-ficha{margin:12px 0 4px}
+.foto-ficha img{display:block;width:100%;height:auto;border-radius:8px;border:1px solid var(--borde)}
+.foto-ficha figcaption{font-size:.82rem;color:var(--suave);margin-top:4px;line-height:1.35}
+.foto-ficha .autor{font-style:italic}

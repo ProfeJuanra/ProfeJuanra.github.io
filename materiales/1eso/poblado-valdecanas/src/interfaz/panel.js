@@ -87,7 +87,8 @@
       $('panel-titulo').textContent = f.titulo;
       $('panel-nivel').innerHTML = f.nivel.map(l => `<span class="chip n${l}">${V.NOMBRE_NIVEL[l]}</span>`).join('') + `<span>${esc(f.nivelTexto)}</span>`;
       $('panel-fuente').textContent = 'Fuente: ' + f.fuente;
-      $('panel-extra').innerHTML = EXTRAS[n] ? EXTRAS[n]() : '';
+      $('panel-extra').innerHTML = (EXTRAS[n] ? EXTRAS[n]() : '') + (f.fotos || []).map(ft =>
+        `<figure class="foto-ficha"><img src="${ft.src}" alt="${esc(ft.alt)}" loading="lazy"><figcaption>${esc(ft.pie)} <span class="autor">Foto: ${esc(V.AUTOR_FOTOS)}.</span></figcaption></figure>`).join('');
       pintarTexto();
       $('panel').hidden = false;
       document.querySelectorAll('#pdi-ol button').forEach(b => b.setAttribute('aria-current', String(+b.dataset.n === n)));

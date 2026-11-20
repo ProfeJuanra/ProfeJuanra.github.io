@@ -40,7 +40,7 @@
   <ul class="niveles" id="niveles"></ul>
 
   <h2>Plano del poblado</h2>
-  <img class="ancha" src="docs/plano.svg" alt="Plano esquemático del sector excavado: la cabaña 31 al oeste; la zanja de drenaje en diagonal hacia la vaguada al sur; los silos agrupados al este de la zanja; el hogar 11/4 al sureste; tres cabañas hipotéticas; y la numeración de los diez puntos de interés.">
+  <img class="ancha" src="docs/plano.svg" alt="Plano esquemático del sector excavado: la cabaña 30 al oeste; la zanja de drenaje en diagonal hacia la vaguada al sur; los silos agrupados al este de la zanja; el hogar 11/4 al sureste; tres cabañas hipotéticas; y la numeración de los diez puntos de interés.">
 
   <h2>Dónde y cuándo</h2>
   <img class="ancha" src="assets/mapa-situacion.svg" alt="Croquis del Campo Arañuelo con los ríos Tajo y Tiétar, el embalse de Valdecañas y la zona aproximada del yacimiento entre El Gordo y Berrocalejo.">
@@ -61,7 +61,7 @@
   <h2 id="glosario-t" class="ficha">Glosario</h2>
   <dl class="glosario" id="glosario"></dl>
 
-  <p class="fuente">Reconstrucción basada en la excavación de 2008 (dirección: D. A. Lara Montero; equipo: J. A. Valiente De Santis y J. R. Marcos Barbado). Las fuentes de cada ficha aparecen al final de la misma. Modelos y gráficos de creación propia; texturas fotográficas de Poly Haven (CC0). Relieve: contiene información derivada de © Instituto Geográfico Nacional (CC BY 4.0). Cuerpo humano base: MakeHuman (CC0).</p>
+  <p class="fuente">Reconstrucción basada en la excavación de 2008 (dirección: D. A. Lara Montero; equipo: J. A. Valiente De Santis y J. R. Marcos Barbado). Las fuentes de cada ficha aparecen al final de la misma. Fotos de la excavación: F9 Arqueología Constructiva. Modelos y gráficos de creación propia; texturas fotográficas de Poly Haven (CC0). Relieve: contiene información derivada de © Instituto Geográfico Nacional (CC BY 4.0). Cuerpo humano base: MakeHuman (CC0).</p>
 </main>
 <script src="src/datos/fichas.js"></script>
 <script>
@@ -82,6 +82,7 @@
       <div data-bloque="basico"><h3>Básico</h3><p>${esc(f.basico)}</p></div>
       <div data-bloque="ampliacion"><h3>Ampliación</h3><p>${esc(f.ampliacion)}</p></div>
       <div data-bloque="facil"><h3>Lectura fácil</h3><div class="facil">${f.facil.split(/(?<=\.)\s+/).map(s => `<p>${esc(s)}</p>`).join('')}</div></div>
+      ${(f.fotos || []).map(ft => `<figure class="foto-ficha"><img class="ancha" src="${ft.src}" alt="${esc(ft.alt)}" loading="lazy"><figcaption>${esc(ft.pie)} <em>Foto: ${esc(V.AUTOR_FOTOS)}.</em></figcaption></figure>`).join('')}
       <p class="fuente">Fuente: ${esc(f.fuente)}</p>
     </section>`).join('');
   $('glosario').innerHTML = V.glosario.map(([t, d]) => `<dt>${esc(t)}</dt><dd>${esc(d)}</dd>`).join('');

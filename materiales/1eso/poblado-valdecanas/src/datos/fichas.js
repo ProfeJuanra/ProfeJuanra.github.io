@@ -3,6 +3,8 @@
 // Ver docs/INVESTIGACION.md. Nivel: 1 documentado, 2 deducido, 3 hipótesis.
 // vista: [x, y, altura sobre el suelo, x, y, altura] de la cámara y su objetivo, en coordenadas del plano.
 window.VALDE = window.VALDE || {};
+// Fotos de las fichas: excavación de 2008, autoría de F9 Arqueología Constructiva.
+VALDE.AUTOR_FOTOS = 'F9 Arqueología Constructiva';
 VALDE.fichas = [
   {
     n: 1, titulo: 'La cabaña', nivel: [1, 3], nivelTexto: 'Planta documentada · paredes deducidas · tejado hipotético',
@@ -14,6 +16,7 @@ VALDE.fichas = [
   },
   {
     n: 2, titulo: 'Despensas bajo tierra', nivel: [1], nivelTexto: 'Documentado',
+    fotos: [{ src: 'assets/fotos/silo-excavado.jpg', pie: 'Silo excavado en la arcilla de la terraza: se ven las paredes acampanadas y el fondo plano. Los jalones rojos y blancos sirven de escala.', alt: 'Silo excavado: paredes en forma de campana y fondo plano.' }],
     fuente: '[Art.] §4.2; [Inf.] estructuras 22 y 33',
     vista: [21.5, 11.5, 2.4, 18.1, 7.9, -0.5],
     basico: 'Estos agujeros son silos: despensas excavadas en el suelo para guardar el grano. Tienen forma de campana, con la boca estrecha y el fondo ancho. Así se cerraban bien y el grano se conservaba sin aire, a salvo de bichos y hongos. En el fondo ponían lajas de pizarra y grandes vasijas de barro. En uno de ellos apareció una espiga de trigo.',
@@ -22,6 +25,7 @@ VALDE.fichas = [
   },
   {
     n: 3, titulo: 'Del silo al basurero', nivel: [1], nivelTexto: 'Documentado',
+    fotos: [{ src: 'assets/fotos/silos-que-se-cortan.jpg', pie: 'Dos silos que se cortan: el más moderno rompió la pared del más antiguo.', alt: 'Dos silos excavados, uno junto a otro: el más nuevo rompe la pared del más viejo.' }],
     fuente: '[Inf.] estructuras 17, 18 y 19; [Art.] §4.2',
     vista: [9.5, 7.5, 3.2, 13, 2.8, -0.2],
     basico: 'Cuando un silo se estropeaba, lo usaban como basurero y lo llenaban de restos: cerámica rota, huesos, piedras de moler. Luego excavaban otro al lado. Aquí, el silo 19 corta al 18, y el 18 corta al 17. Así los arqueólogos saben cuál es más antiguo: el que está cortado. Las manchas oscuras del suelo son silos ya rellenos.',
@@ -46,6 +50,7 @@ VALDE.fichas = [
   },
   {
     n: 6, titulo: 'Taller de sílex', nivel: [1, 3], nivelTexto: 'Documentado (el lugar exacto es hipótesis)',
+    fotos: [{ src: 'assets/fotos/materiales.jpg', pie: 'Materiales del poblado: hachas y azuelas de piedra pulimentada, un canto, cerámica con mamelones, una placa de barro con dos agujeros, una punta de flecha, una lámina y una punta de sílex y otras piezas líticas. La regla mide 30 cm.', alt: 'Herramientas y objetos encontrados en el poblado.' }],
     fuente: '[Art.] §5.2 y §5.3',
     vista: [-1.5, 0, 2.6, -7, -5, 0.4],
     basico: 'Casi todas las herramientas eran de piedra. Golpeando un bloque de sílex sacaban láminas afiladas que servían de cuchillo o de dientes para las hoces. También hacían puntas de flecha. Con hachas de una piedra dura y pulida, el gabro, cortaban árboles y trabajaban la madera. Aparecieron muchos núcleos: tallaban aquí mismo.',
@@ -54,6 +59,7 @@ VALDE.fichas = [
   },
   {
     n: 7, titulo: 'El telar', nivel: [1, 2], nivelTexto: 'Pesas documentadas · telar deducido',
+    fotos: [{ src: 'assets/fotos/placa-telar.jpg', pie: 'Placa de barro con dos agujeros en la parte superior, usada como pesa de telar.', alt: 'Pesa de telar de barro con dos agujeros.' }],
     fuente: '[Art.] §5.4',
     vista: [-13, 7.5, 2.4, -16.6, 4.6, 1],
     basico: 'En Valdecañas aparecieron pesas de telar: placas de barro con dos agujeros. Se colgaban de los hilos de un telar vertical para mantenerlos tensos mientras se tejía. Así sabemos que aquí se hacían telas, seguramente de lana de oveja y de lino. Las telas no se han conservado.',
