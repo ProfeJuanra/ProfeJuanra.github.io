@@ -4,7 +4,8 @@
 (function (V) {
   'use strict';
   const N = V.NIVEL;
-  const ALTO_PARED = 1.2, ALTO_CABALLETE = 1.7, ALERO = 0.35, PUERTA = 0.9;
+  // Alturas: hipótesis (no se conservan). Paredes a la altura de una persona, para que se pueda entrar de pie.
+  const ALTO_PARED = 1.75, ALTO_CABALLETE = 1.6, ALERO = 0.35, PUERTA = 0.9;
 
   let texPared, texPaja;
   function texturas() {

@@ -119,7 +119,7 @@ window.VALDE = window.VALDE || {};
 
   // Relieve de detalle dentro del sector: zanja de drenaje y suelos rebajados de las cabañas
   V.PROF_ZANJA = 0.9;     // 0,61 m conservados + ~0,3 m erosionados (hipótesis)
-  V.REBAJE_CABANA = 0.5;  // 0,30 m conservados + erosión (hipótesis)
+  V.REBAJE_CABANA = 0.3;  // fondo de cabaña: 0,30 m de relleno conservado (documentado); no estaba semienterrada
   V.alturaSitio = function (x, y) {
     let h = V.altura(x, y);
     const P = V.plano;
@@ -134,6 +134,13 @@ window.VALDE = window.VALDE || {};
     for (const c of P.cabanas) {
       const e = V.enCabana(x, y, c, 0);
       if (e < 1) h -= V.REBAJE_CABANA * (1 - V.paso(0.82, 1, e));
+    }
+    // Alrededor de los silos abiertos (22 y 33) el suelo queda llano a la altura de la boca,
+    // para que el relieve no tape la mitad del agujero
+    for (const e of P.estructuras || []) {
+      if (e.estado !== 'uso' || (e.id !== '22' && e.id !== '33')) continue;
+      const R = (e.diametro || 1.2) / 2 + 1.0, d = Math.hypot(x - e.x, y - e.y);
+      if (d < R) { const h0 = V.altura(e.x, e.y); h = h0 + (h - h0) * V.paso(R - 0.6, R, d); }
     }
     return h;
   };
