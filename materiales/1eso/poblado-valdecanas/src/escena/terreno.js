@@ -97,6 +97,8 @@
     detalle.wrapS = detalle.wrapT = THREE.RepeatWrapping;
     detalle.encoding = THREE.LinearEncoding;
     const matTierra = new THREE.MeshLambertMaterial({ vertexColors: true, map: detalle });
+    // Detalle fotográfico de hierba seca y tierra (CC0), en gris para no alterar los colores
+    V.ponerFoto(ctx, matTierra, 'map', 'suelo-detalle.jpg', [1, 1], false);
 
     // Relieve lejano: toda la zona del IGN (unos 5 × 3,5 km) cada 25 m, algo hundido bajo el cercano
     const L = V.LIMITES;

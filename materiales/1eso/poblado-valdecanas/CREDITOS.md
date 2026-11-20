@@ -13,8 +13,11 @@
 ## Cuerpo humano
 - Las personas usan el **cuerpo base de MakeHuman**, su esqueleto y sus pesos de deformación, publicados con licencia **CC0 1.0** por el MakeHuman Team (github.com/makehumancommunity/mpfb2), simplificados para este proyecto. La ropa, el pelo, las posturas y los colores son de creación propia.
 
+## Texturas fotográficas
+- Las texturas de la cubierta de carrizo, el barro de las paredes, la corteza de los postes y el detalle del suelo proceden de **Poly Haven** (polyhaven.com), con licencia **CC0 1.0** (dominio público): `reed_roof_04`, `clay_plaster`, `brown_mud_dry`, `bark_brown_02` y `withered_grass`. Se han recortado, reducido y retocado para este proyecto (`assets/texturas/`). Son materiales actuales usados como aspecto, no restos arqueológicos.
+
 ## Modelos, texturas y sonidos
-- Salvo el cuerpo humano base (ver arriba), todos los modelos 3D, texturas y gráficos SVG son de creación propia: los genera el código del proyecto.
-- No hay modelos ni imágenes de terceros, ni imágenes generadas por IA.
+- Salvo el cuerpo humano base y las texturas fotográficas (ver arriba), todos los modelos 3D, texturas y gráficos SVG son de creación propia: los genera el código del proyecto.
+- No hay modelos 3D de terceros ni imágenes generadas por IA.
 - No hay sonidos.
 - Para la ropa, los peinados y las posturas de las figuras se usó como **referencia visual** una ilustración de un poblado calcolítico aportada por J. R. Marcos [COMPLETAR: autoría]. No se ha copiado: las figuras son de creación propia.

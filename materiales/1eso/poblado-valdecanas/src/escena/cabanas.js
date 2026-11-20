@@ -46,8 +46,32 @@
     return { x: c.x + along * Math.sin(g), y: c.y + along * Math.cos(g) };
   }
 
-  function cabana(ctx, c) {
+  // Materiales compartidos por todas las cabañas: con fotografía (calidad alta) o dibujados
+  let matPared, matTecho, matMadera;
+  function materiales(ctx) {
+    if (matPared) return;
     texturas();
+    const alta = V.fotosAltas(ctx);
+    const M = alta ? THREE.MeshStandardMaterial : THREE.MeshLambertMaterial;
+    const extra = alta ? { roughness: 0.95, metalness: 0 } : {};
+    matPared = new M(Object.assign({ map: texPared, side: THREE.DoubleSide }, extra));
+    matTecho = new M(Object.assign({ map: texPaja, side: THREE.DoubleSide }, extra));
+    matMadera = new M(Object.assign({ color: 0x8a7058, flatShading: true }, extra));
+    matTecho.color.set(0xf3e2bd);              // carrizo algo más cálido que la foto original
+    matPared.color.setScalar(1.2);             // las paredes quedan a la sombra del alero: se aclaran un poco
+    // Barro de las paredes: 1 baldosa cada 2 m; carrizo: 1 baldosa por faldón; corteza en los postes
+    V.ponerFoto(ctx, matPared, 'map', 'barro.jpg', [1, 1]);
+    V.ponerFoto(ctx, matTecho, 'map', 'paja.jpg', [1, 1]);
+    V.ponerFoto(ctx, matMadera, 'map', 'corteza.jpg', [1, 1]);
+    if (alta) {
+      V.ponerFoto(ctx, matPared, 'normalMap', 'barro-normal.jpg', [1, 1], false);
+      V.ponerFoto(ctx, matTecho, 'normalMap', 'paja-normal.jpg', [1, 1], false);
+      V.ponerFoto(ctx, matMadera, 'normalMap', 'corteza-normal.jpg', [1, 1], false);
+    }
+  }
+
+  function cabana(ctx, c) {
+    materiales(ctx);
     const grupo = new THREE.Group();
     grupo.name = 'cabana-' + c.id;
     const nv = c.nivel === N.DOC ? null : N.HIP;     // las hipotéticas: todo nivel 3
@@ -82,12 +106,12 @@
     gPared.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
     gPared.setIndex(idx);
     gPared.computeVertexNormals();
-    const pared = new THREE.Mesh(gPared, new THREE.MeshLambertMaterial({ map: texPared, side: THREE.DoubleSide }));
+    const pared = new THREE.Mesh(gPared, matPared);
     pared.castShadow = true; pared.receiveShadow = true;
     grupo.add(V.marcar(pared, nv || N.DED, 'Paredes de ramas y barro'));
 
     // --- Postes perimetrales y del caballete (hipótesis: no se hallaron agujeros de poste) ---
-    const madera = V.mat(0x5a4330, { flatShading: true });
+    const madera = matMadera;
     const postes = [];
     for (let i = 0; i < n; i += 4) {
       const th = i / n * Math.PI * 2;
@@ -134,7 +158,7 @@
       if (previo) lon += Math.hypot(e.x - previo.x, e.y - previo.y);
       previo = e;
       rp.push(e.x, hAlero - 0.12, -e.y, k.x, hCab + 0.12, -k.y);
-      ru.push(lon / 1.5, 0, lon / 1.5, 2.2);
+      ru.push(lon / 2.5, 0, lon / 2.5, 1);   // el carrizo cae desde el caballete hasta el alero
       if (i > 0) { const a = (i - 1) * 2; ri.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
     }
     const gTecho = new THREE.BufferGeometry();
@@ -142,7 +166,7 @@
     gTecho.setAttribute('uv', new THREE.Float32BufferAttribute(ru, 2));
     gTecho.setIndex(ri);
     gTecho.computeVertexNormals();
-    const techo = new THREE.Mesh(gTecho, new THREE.MeshLambertMaterial({ map: texPaja, side: THREE.DoubleSide }));
+    const techo = new THREE.Mesh(gTecho, matTecho);
     techo.castShadow = true; techo.receiveShadow = true;
     techo.name = 'techo-' + c.id;
     grupo.add(V.marcar(techo, nv || N.HIP, 'Cubierta vegetal'));

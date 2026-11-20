@@ -167,6 +167,27 @@ window.VALDE = window.VALDE || {};
     return cache[k];
   };
 
+  /*
+    Texturas fotográficas con licencia libre (CC0, Poly Haven; ver CREDITOS.md).
+    Se cargan en segundo plano: mientras llegan, el material usa la textura dibujada
+    por código, así la escena aparece igual de rápido. Al llegar se cambia y se redibuja.
+  */
+  const cargador = new THREE.TextureLoader();
+  V.RUTA_TEXTURAS = 'assets/texturas/';
+  V.ponerFoto = function (ctx, material, prop, archivo, repetir, color) {
+    cargador.load(V.RUTA_TEXTURAS + archivo, (t) => {
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      if (repetir) t.repeat.set(repetir[0], repetir[1]);
+      t.encoding = color === false ? THREE.LinearEncoding : THREE.sRGBEncoding;
+      t.anisotropy = 8;
+      material[prop] = t;
+      material.needsUpdate = true;
+      if (ctx && ctx.pedirRender) ctx.pedirRender();
+    }, undefined, () => { /* si falla, se queda la textura dibujada por código */ });
+  };
+  // ¿Usar texturas de relieve (mapas normales)? Solo en calidad alta
+  V.fotosAltas = (ctx) => ctx && ctx.calidad !== 'baja';
+
   // Textura procedural en un canvas
   V.texturaCanvas = function (w, h, pintar, repetir) {
     const c = document.createElement('canvas');
