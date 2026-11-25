@@ -39,6 +39,7 @@ claros y cercanos, con rigor histórico.
 - `egipto.html` + `egipto/` — 1.º ESO: mapa SVG del antiguo Egipto (enclaves en `enclaves.js`,
   geografía en `mapa-geo.js`), ficha de datos de la Gran Pirámide (`piramide-datos.js`, con nivel
   Medido/Estimación/Documentado y fuentes), «Reto del escriba» y lectura fácil. Sin GoatCounter.
+- `mesopotamia.html` — 1.º ESO: pirámide social de Mesopotamia (ilustración IA con logo en `img/mesopotamia/`).
 - `materiales/1eso/gran-piramide/` — reconstrucción 3D de la Gran Pirámide (three.js r147 local),
   usa los datos de `egipto/piramide-datos.js`. Fotos propias para comparar en `img/egipto/`.
 

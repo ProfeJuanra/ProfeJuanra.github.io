@@ -242,6 +242,10 @@ const MATERIAS = {
         enlace: "materiales/1eso/dolmen-moina-ii/index.html" },
     ]},
     { titulo: "6. Mesopotamia y Egipto", bloque: "Historia", materiales: [
+      { tipo: "actividad", titulo: "La pirámide social de Mesopotamia",
+        descripcion: "Del rey a los esclavos: quién era quién en las ciudades de Mesopotamia.",
+        vista: "img/materiales/mesopotamia-piramide-social.jpg",
+        enlace: "mesopotamia.html" },
       { tipo: "video", titulo: "Mesopotamia contada por una niña de Uruk",
         descripcion: "La tierra entre dos ríos: vídeo de mi canal de YouTube.",
         vista: "img/materiales/video-mesopotamia-uruk.jpg",
