@@ -52,7 +52,8 @@
         if (f < v.muslo) c = ropa;
       }
       if (z === ZONAS.PIE && op.calzado) c = cuero;
-      col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
+      const ao = V.cuerpoAO ? V.cuerpoAO[i] : 1;      // sombra de los pliegues, cocinada con Blender
+      col[i * 3] = c.r * ao; col[i * 3 + 1] = c.g * ao; col[i * 3 + 2] = c.b * ao;
     }
     g.setAttribute('color', new THREE.BufferAttribute(col, 3));
     // Huesos

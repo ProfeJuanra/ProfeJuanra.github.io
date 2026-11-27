@@ -19,6 +19,9 @@
 ## Texturas fotográficas
 - Las texturas de la cubierta de carrizo, el barro de las paredes, la corteza de los postes y el detalle del suelo proceden de **Poly Haven** (polyhaven.com), con licencia **CC0 1.0** (dominio público): `reed_roof_04`, `clay_plaster`, `brown_mud_dry`, `bark_brown_02` y `withered_grass`. Se han recortado, reducido y retocado para este proyecto (`assets/texturas/`). Son materiales actuales usados como aspecto, no restos arqueológicos.
 
+## Modelos hechos con Blender
+- La cabaña, los árboles, el matorral y la hierba (`assets/modelos/`) se generan con Blender 4.0 desde los guiones de `herramientas/` (`cabana_blender.py`, `vegetacion_blender.py`); la sombra del cuerpo humano, con `cuerpo_ao_blender.py`. Son de creación propia, con las mismas medidas e hipótesis que el resto de la reconstrucción.
+
 ## Modelos, texturas y sonidos
 - Salvo el cuerpo humano base y las texturas fotográficas (ver arriba), todos los modelos 3D, texturas y gráficos SVG son de creación propia: los genera el código del proyecto.
 - No hay modelos 3D de terceros ni imágenes generadas por IA.
