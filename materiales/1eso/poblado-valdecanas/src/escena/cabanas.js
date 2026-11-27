@@ -178,7 +178,52 @@
     ctx.cabanas = (ctx.cabanas || []).concat({ id: c.id, c, hSuelo, hBase, puerta, grupo });
   }
 
+  /*
+    Modelo hecho en Blender (assets/modelos/cabana.glb, ver herramientas/cabana_blender.py):
+    las mismas medidas e hipótesis, con más detalle y la luz ambiental «cocinada» en los
+    colores de vértice. Se carga en segundo plano y sustituye a la cabaña dibujada por
+    código; si no llega (o en calidad baja), se queda la de código.
+    El modelo está hecho para la estructura 30 (10,56 × 2,59 m): se escala para las demás.
+  */
+  const L0 = 10.56, W0 = 2.59;
+  function ponerModelos(ctx) {
+    if (!THREE.GLTFLoader || ctx.calidad === 'baja' || /cabana=codigo/.test(location.search)) return;
+    new THREE.GLTFLoader().load('assets/modelos/cabana.glb', (gltf) => {
+      // Materiales: las mismas texturas que la cabaña de código, multiplicadas por la oclusión cocinada
+      const mats = {};
+      const deCodigo = { pared: matPared, techo: matTecho, madera: matMadera };
+      const etiquetas = { pared: ['Paredes de ramas y barro', N.DED], techo: ['Cubierta vegetal', N.HIP], madera: ['Postes de madera', N.HIP] };
+      for (const k in deCodigo) { mats[k] = deCodigo[k].clone(); mats[k].vertexColors = true; mats[k].flatShading = false; }
+      // Las texturas fotográficas pueden llegar más tarde: copiarlas cuando estén
+      const sincronizar = () => { for (const k in mats) { mats[k].map = deCodigo[k].map; mats[k].normalMap = deCodigo[k].normalMap; mats[k].needsUpdate = true; } };
+      sincronizar(); setTimeout(sincronizar, 1500); setTimeout(sincronizar, 5000);
+      for (const cb of ctx.cabanas || []) {
+        const c = cb.c, g = c.giro * Math.PI / 180;
+        const nv = c.nivel === N.DOC ? null : N.HIP;
+        const modelo = gltf.scene.clone(true);
+        modelo.position.set(c.x, cb.hBase, -c.y);
+        modelo.rotation.y = -g;
+        modelo.scale.set(c.ancho / W0, 1, c.largo / L0);
+        modelo.traverse(o => {
+          if (!o.isMesh) return;
+          const k = ['pared', 'techo', 'madera'].find(n => (o.name + ' ' + (o.parent && o.parent.name)).includes(n)) || 'madera';
+          o.material = mats[k];
+          o.castShadow = o.receiveShadow = true;
+          V.marcar(o, nv || etiquetas[k][1], etiquetas[k][0]);
+          if (k === 'techo') ctx.techos = (ctx.techos || []).concat(o);
+        });
+        // Ocultar la cabaña de código y poner el modelo en su lugar (misma capa para la comparación 2008)
+        cb.grupo.children.forEach(o => { o.visible = false; });
+        cb.grupo.add(modelo);
+        modelo.traverse(o => { o.layers.mask = cb.grupo.layers.mask; });
+      }
+      if (ctx.recopilarEvidencia) ctx.recopilarEvidencia();
+      ctx.pedirRender();
+    }, undefined, () => { /* sin modelo: se queda la cabaña de código */ });
+  }
+
   V.construirCabanas = function (ctx) {
     for (const c of V.plano.cabanas) cabana(ctx, c);
+    ponerModelos(ctx);
   };
 })(window.VALDE);

@@ -35,6 +35,13 @@
       });
     }
 
+    // Si llegan modelos nuevos (cabañas de Blender), volver a recopilar y repintar
+    ctx.recopilarEvidencia = function () {
+      const on = !!ctx.evidenciaActiva;
+      if (on) ctx.capaEvidencia(false);
+      lista = null;
+      if (on) ctx.capaEvidencia(true);
+    };
     ctx.capaEvidencia = function (on) {
       if (!lista) recopilar();
       for (const it of lista) {
